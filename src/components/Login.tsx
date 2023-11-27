@@ -43,7 +43,7 @@ const Login = () => {
                 const nextYear = new Date();
                 nextYear.setFullYear(current.getFullYear() + 1);
                 setCookie('user', d.data, {path: '/', secure: true, expires: nextYear})
-                router.push("/");
+                router.replace("/");
                 isLoading(false);
             }
             isLoading(false);

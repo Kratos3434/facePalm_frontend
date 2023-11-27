@@ -38,7 +38,7 @@ const VerifyEmail = ({ data }: { data: any }) => {
             } else {
                 removeCookie("retrieveToken");
                 isSubmitting(false)
-                router.push("/login");
+                router.replace("/login");
             }
         } catch (err) {
             console.log(err)
@@ -157,7 +157,8 @@ const VerifyEmail = ({ data }: { data: any }) => {
                                     <div className='tw-flex tw-flex-col tw-px-[16px] tw-gap-3'>
                                         <input type="text"
                                             className='tw-rounded-md tw-border-[1px] tw-border-[#DEE1E4] tw-px-[40px] tw-py-[18px] tw-outline-[#0866FF] tw-max-w-[137px] tw-w-full'
-                                            onChange={(e) => setOtp(e.target.value)} />
+                                            onChange={(e) => setOtp(e.target.value)} 
+                                            maxLength={6}/>
                                         {error.status && <small className='tw-text-red-900'>*{error.msg}</small>}
                                         <span className='tw-text-[15px] tw-text-[#1877F2] tw-mb-5 tw-cursor-pointer' onClick={handleResend}>Send email again</span>
                                     </div>
