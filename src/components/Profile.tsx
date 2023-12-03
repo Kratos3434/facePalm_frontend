@@ -161,7 +161,7 @@ const Profile = ({ User }: { User: UserProps }) => {
                 </div>
             </div> */}
 
-            <div className="tw-shadow-md tw-w-full">
+            <div className="tw-shadow-md tw-w-full tw-bg-white">
                 <div className="tw-flex tw-justify-center tw-w-full">
                     <div className="tw-relative tw-flex tw-flex-col tw-h-full">
                         <Image src="/images/cat.jpg" width={1250} height={462.95} alt="cover photo" className="tw-h-[462.95px]  tw-rounded-t-[0px] tw-rounded-b-md" />
