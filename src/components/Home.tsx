@@ -1,22 +1,16 @@
+"use client"
 import Image from "next/image";
+import { useAtom } from "jotai";
+import { userAtom } from "@/store";
+import { useHydrateAtoms } from 'jotai/utils';
+import WhatsOnYourMind from "./WhatsOnYourMind";
+import { UserProps } from "@/type";
 
-interface Props {
-    user: {
-        id: number,
-        firstName: string,
-        lastName: string,
-        email: string,
-        phone?: string,
-        gender: string,
-        birthday?: string,
-        createdAt: string,
-        updatedAt?: string,
-        disabledAt?: string
-    }
-}
+const Home = ({ user }: {user: UserProps}) => {
+    useHydrateAtoms([[userAtom, user]]);
 
-const Home = ({ user }: Props) => {
-    console.log("User:", user);
+    const [User] = useAtom(userAtom);
+
     const sideBar = [
         {
             image: {
@@ -25,7 +19,7 @@ const Home = ({ user }: Props) => {
                 height: 36
             },
             path: "/",
-            name: `${user.firstName} ${user.lastName}`
+            name: `${User.firstName} ${User.lastName}`
         },
         {
             image: {
@@ -74,9 +68,9 @@ const Home = ({ user }: Props) => {
         },
     ]
     return (
-        <main className="flex flex-col tw-pt-[70px]">
+        <main className="flex flex-col">
             <div className="tw-flex tw-justify-center tw-gap-[32px]">
-                <div className="tw-sticky tw-top-[70px] tw-h-[1185px] tw-z-0 tw-overflow-x-hidden tw-overflow-y-hidden">
+                <div className="tw-sticky tw-top-[70px] tw-h-full tw-z-0 tw-overflow-x-hidden tw-overflow-y-hidden">
                     <div className="tw-flex">
                         <div className="tw-flex tw-flex-col tw-w-[360px] tw-text-[15px] tw-font-bold tw-gap-3">
                             {
@@ -96,11 +90,11 @@ const Home = ({ user }: Props) => {
                 </div>
 
                 <div className="tw-flex tw-flex-col tw-h-[200vh] tw-w-[680px]">
-                    <h1>Hello</h1>
+                    <WhatsOnYourMind />
                 </div>
 
                 <div className="tw-flex tw-flex-col">
-
+                    <span className="tw-text-[17px] tw-text-[#65676B]">Friends</span>
                 </div>
             </div>
         </main>
