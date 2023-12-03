@@ -1,3 +1,4 @@
+"use client"
 import Image from "next/image";
 import SearchIcon from '@mui/icons-material/Search';
 import Link from "next/link";
@@ -9,33 +10,36 @@ import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import AppsIcon from '@mui/icons-material/Apps';
 import ChatIcon from '@mui/icons-material/Chat';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import { usePathname } from "next/navigation";
 
 const NavBar = () => {
+    const pathName = usePathname();
+
     const links = [
         {
             path: '/',
-            icon: <HomeIcon className="tw-w-[22px] tw-h-[22px] tw-text-[#65676B]"/>
+            icon: <HomeIcon className="tw-w-[22px] tw-h-[22px] " style={{color: `${pathName == "/" ? "#0866FF" : "#65676B"}`}} />
         },
         {
             path: '/watch',
-            icon: <LiveTvIcon className="tw-w-[22px] tw-h-[22px] tw-text-[#65676B]" />
+            icon: <LiveTvIcon className="tw-w-[22px] tw-h-[22px] tw-text-[#65676B]" style={{color: `${pathName == "/watch" ? "#0866FF" : "#65676B"}`}} />
         },
         {
             path: '/marketplace',
-            icon: <StorefrontIcon className="tw-w-[22px] tw-h-[22px] tw-text-[#65676B]" />
+            icon: <StorefrontIcon className="tw-w-[22px] tw-h-[22px] tw-text-[#65676B]" style={{color: `${pathName == "/marketplace" ? "#0866FF" : "#65676B"}`}} />
         },
         {
             path: '/groups',
-            icon: <GroupsIcon className="tw-w-[22px] tw-h-[22px] tw-text-[#65676B]" />
+            icon: <GroupsIcon className="tw-w-[22px] tw-h-[22px] tw-text-[#65676B]" style={{color: `${pathName == "/groups" ? "#0866FF" : "#65676B"}`}}/>
         },
         {
             path: '/gaming',
-            icon: <SportsEsportsIcon className="tw-w-[22px] tw-h-[22px] tw-text-[#65676B]" />
+            icon: <SportsEsportsIcon className="tw-w-[22px] tw-h-[22px] tw-text-[#65676B]" style={{color: `${pathName == "/gaming" ? "#0866FF" : "#65676B"}`}} />
         }
     ];
 
     return (
-        <nav className="tw-fixed tw-top-0 tw-w-full tw-px-[16px] tw-bg-white tw-py-[6px] tw-shadow-md">
+        <nav className="tw-fixed tw-top-0 tw-w-full tw-px-[16px] tw-bg-white tw-py-[6px] tw-shadow-md tw-z-[1000]">
             <div className="tw-flex tw-justify-between">
                 <div className="tw-flex tw-gap-[8px] tw-items-centerr">
                     <Image src="/images/fb_logo.png"
@@ -53,7 +57,7 @@ const NavBar = () => {
                     {
                         links.map((e, idx) => {
                             return (
-                                <Link passHref href={e.path} className="tw-flex tw-justify-center tw-w-[111.59px]" key={idx}>
+                                <Link passHref href={e.path} className="tw-flex tw-justify-center tw-w-[111.59px] tw-h-full tw-items-center hover:tw-rounded-md hover:tw-bg-gray-200 tw-transition-all" key={idx}>
                                     {e.icon}
                                 </Link>
                             )
@@ -62,15 +66,15 @@ const NavBar = () => {
                 </div>
 
                 <div className="tw-flex tw-items-center tw-gap-2">
-                    <div className="tw-rounded-[1000px] tw-bg-[#F0F2F5] tw-p-2">
+                    <div className="tw-rounded-[1000px] tw-bg-[#F0F2F5] tw-p-2 tw-cursor-pointer hover:tw-bg-gray-200 active:tw-scale-[.9] tw-overflow-hidden tw-transition-all">
                         <AppsIcon className="tw-w-[20px] tw-h-[20px]" />
                     </div>
 
-                    <div className="tw-rounded-[50%] tw-bg-[#F0F2F5] tw-p-2">
+                    <div className="tw-rounded-[50%] tw-bg-[#F0F2F5] tw-p-2 tw-cursor-pointer hover:tw-bg-gray-200 active:tw-scale-[.9] tw-overflow-hidden tw-transition-all">
                         <ChatIcon className="tw-w-[20px] tw-h-[20px]" />
                     </div>
 
-                    <div className="tw-rounded-[50%] tw-bg-[#F0F2F5] tw-p-2">
+                    <div className="tw-rounded-[50%] tw-bg-[#F0F2F5] tw-p-2 tw-cursor-pointer hover:tw-bg-gray-200 active:tw-scale-[.9] tw-overflow-hidden tw-transition-all">
                         <NotificationsIcon className="tw-w-[20px] tw-h-[20px]" />
                     </div>
                 </div>

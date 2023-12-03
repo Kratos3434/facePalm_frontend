@@ -1,11 +1,32 @@
 import { atom } from "jotai";
+import { UserProps } from "./type";
 
-interface UserProps {
-    firstName: string,
-    lastName: string,
-    email: string,
-    password: string,
-    password2: string,
-    gender: string
-}
-export const userAtom = atom<UserProps>({firstName: "", lastName: "", email: "", password: "", password2: "", gender: ""});
+export const userAtom = atom<UserProps>(
+    {
+        id: 0,
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        gender: "",
+        birthday: "",
+        createdAt: "",
+        updatedAt: "",
+        disabledAt: ""
+    }
+);
+
+export const userProfileAtom = atom<UserProps>(
+    {
+        id: 0,
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        gender: "",
+        birthday: "",
+        createdAt: "",
+        updatedAt: "",
+        disabledAt: ""
+    }
+);
