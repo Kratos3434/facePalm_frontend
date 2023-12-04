@@ -17,6 +17,8 @@ const config: Config = {
         'login-xl': '900px',
         'signup-md': '448px',
         'signup-sm': '449px',
+
+        'nav-xl': '1000px'
       }
     },
   },

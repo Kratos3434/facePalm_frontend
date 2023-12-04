@@ -11,9 +11,17 @@ import AppsIcon from '@mui/icons-material/Apps';
 import ChatIcon from '@mui/icons-material/Chat';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { usePathname } from "next/navigation";
+import MenuIcon from '@mui/icons-material/Menu';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useState } from 'react';
+import { useCookies } from "react-cookie";
+import { useRouter } from "next/navigation";
 
 const NavBar = () => {
     const pathName = usePathname();
+    const [cookies, setCookie, removeCookie] = useCookies();
+    const router = useRouter();
 
     const links = [
         {
@@ -38,6 +46,18 @@ const NavBar = () => {
         }
     ];
 
+    const [showModal, setShowModal] = useState(false);
+
+    const handleNavClick = () => {
+        setShowModal(!showModal);
+    }
+
+    const handleLogOut = () => {
+        removeCookie("token");
+        removeCookie("user");
+        router.replace("/login");
+    }
+
     return (
         <nav className="tw-fixed tw-top-0 tw-w-full tw-px-[16px] tw-bg-white tw-py-[6px] tw-shadow-md tw-z-[1000]">
             <div className="tw-flex tw-justify-between">
@@ -51,9 +71,12 @@ const NavBar = () => {
                                 placeholder="Search facePalm" />
                         </div>
                     </form>
+                    <div className="tw-flex tw-flex-col tw-justify-center nav-xl:tw-hidden">
+                        <MenuIcon className="tw-w-[24px] tw-h-[24px]" />
+                    </div>
                 </div>
 
-                <div className="tw-flex tw-items-center">
+                <div className="nav-xl:tw-flex tw-items-center tw-hidden">
                     {
                         links.map((e, idx) => {
                             return (
@@ -76,6 +99,23 @@ const NavBar = () => {
 
                     <div className="tw-rounded-[50%] tw-bg-[#F0F2F5] tw-p-2 tw-cursor-pointer hover:tw-bg-gray-200 active:tw-scale-[.9] tw-overflow-hidden tw-transition-all">
                         <NotificationsIcon className="tw-w-[20px] tw-h-[20px]" />
+                    </div>
+
+                    <div className="tw-relative" onClick={handleNavClick}>
+                        <Image src="/images/cat2.jpg" width={36} height={40} alt="profile pic" className="tw-rounded-[50%] tw-bg-[#F0F2F5] tw-cursor-pointer hover:tw-bg-gray-200 active:tw-scale-[.9] tw-overflow-hidden tw-transition-all tw-h-[40px]"/>
+                        <KeyboardArrowDownIcon className="tw-w-[14px] tw-h-[14px] tw-absolute tw-bottom-0 tw-right-0 tw-rounded-[1000px] tw-bg-gray-300 tw-cursor-pointer" />
+                    </div>
+                </div>
+                <div className="tw-absolute tw-right-0 tw-top-[52px] tw-pr-5" style={{display: `${showModal ? "block" : "none"}`}}>
+                    <div className="tw-rounded-md tw-bg-white tw-w-[360px] tw-shadow-md tw-flex tw-flex-col tw-text-[15px] tw-text-black tw-font-bold">
+                        <div className="tw-px-[8px] tw-flex tw-py-[12px] tw-items-center tw-gap-2 hover:tw-rounded-md hover:tw-bg-gray-200 tw-cursor-pointer" onClick={handleLogOut}>
+                            <div className="tw-rounded-[1000px] tw-bg-[#F0F2F5] tw-p-1">
+                                <LogoutIcon className="tw-w-[20px] tw-h-[20px]" />
+                            </div>
+                            <span>
+                                Log Out
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
