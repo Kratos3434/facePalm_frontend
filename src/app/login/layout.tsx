@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Login",
-    description: "This is where you login"
+    title: "facePalm - log in or sign up",
+    description: "Login or sign up to facePalm and connect with people around the world"
 }
 
 interface Props {
