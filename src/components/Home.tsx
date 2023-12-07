@@ -5,6 +5,7 @@ import { userAtom } from "@/store";
 import { useHydrateAtoms } from 'jotai/utils';
 import WhatsOnYourMind from "./WhatsOnYourMind";
 import { UserProps } from "@/type";
+import AddPost from "./AddPost";
 
 const Home = ({ user }: {user: UserProps}) => {
     useHydrateAtoms([[userAtom, user]]);
@@ -72,7 +73,7 @@ const Home = ({ user }: {user: UserProps}) => {
             <div className="tw-flex tw-justify-center tw-gap-[32px]">
                 <div className="tw-sticky tw-top-[70px] tw-h-full tw-z-0 tw-overflow-x-hidden tw-overflow-y-hidden">
                     <div className="tw-flex">
-                        <div className="tw-flex tw-flex-col tw-w-[360px] tw-text-[15px] tw-font-bold tw-gap-3">
+                        <div className="tw-flex tw-flex-col tw-max-w-[360px] tw-w-full tw-text-[15px] tw-font-bold tw-gap-3">
                             {
                                 sideBar.map((e, idx) => {
                                     return (
@@ -90,6 +91,7 @@ const Home = ({ user }: {user: UserProps}) => {
                 </div>
 
                 <div className="tw-flex tw-flex-col tw-h-[200vh] tw-w-[680px]">
+                    <AddPost />
                     <WhatsOnYourMind />
                 </div>
 

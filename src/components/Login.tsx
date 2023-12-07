@@ -44,9 +44,9 @@ const Login = () => {
                 nextYear.setFullYear(current.getFullYear() + 1);
                 setCookie('user', d.data, {path: '/', secure: true, expires: nextYear})
                 router.replace("/");
-                isLoading(false);
+                //isLoading(false);
             }
-            isLoading(false);
+            //isLoading(false);
         } catch (err) {
             console.log(err)
             isLoading(false);
