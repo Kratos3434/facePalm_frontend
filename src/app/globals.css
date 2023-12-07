@@ -6,3 +6,7 @@
   margin: auto;
   width: 80%;
 }
+
+.statusBox:empty::before {
+  content: attr(placeholder);
+}

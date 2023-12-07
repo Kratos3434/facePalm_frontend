@@ -15,7 +15,7 @@ export default async function middleware(req: NextRequest) {
         });
 
         const data = await res.json();
-        console.log(req.nextUrl.pathname)
+        //console.log(req.nextUrl.pathname)
         if (!data.status && protectedRoutes.includes(req.nextUrl.pathname)) {
             console.log("Truw")
             const absoluteURL = new URL("/login", req.nextUrl.origin);
