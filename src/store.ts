@@ -30,3 +30,5 @@ export const userProfileAtom = atom<UserProps>(
         disabledAt: ""
     }
 );
+
+export const AddPostModalAtom = atom(false);

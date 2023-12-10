@@ -1,7 +1,7 @@
 "use client"
 import Image from "next/image";
 import { useAtom } from "jotai";
-import { userAtom } from "@/store";
+import { AddPostModalAtom, userAtom } from "@/store";
 import { useHydrateAtoms } from 'jotai/utils';
 import WhatsOnYourMind from "./WhatsOnYourMind";
 import { UserProps } from "@/type";
@@ -11,7 +11,8 @@ const Home = ({ user }: {user: UserProps}) => {
     useHydrateAtoms([[userAtom, user]]);
 
     const [User] = useAtom(userAtom);
-
+    const [openAddPost, setOpenAddPost] = useAtom(AddPostModalAtom);
+    
     const sideBar = [
         {
             image: {
@@ -91,7 +92,9 @@ const Home = ({ user }: {user: UserProps}) => {
                 </div>
 
                 <div className="tw-flex tw-flex-col tw-h-[200vh] tw-w-[680px]">
-                    <AddPost />
+                    {
+                        openAddPost && <AddPost />
+                    }
                     <WhatsOnYourMind />
                 </div>
 

@@ -5,9 +5,11 @@ import Image from "next/image";
 import VideoCameraBackIcon from '@mui/icons-material/VideoCameraBack';
 import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
+import { AddPostModalAtom } from "@/store";
 
 const WhatsOnYourMind = () => {
     const [user] = useAtom(userAtom);
+    const [openAddPost, setOpenAddPost] = useAtom(AddPostModalAtom);
     const postType = [
         {
             icon: <VideoCameraBackIcon className="tw-w-[24px] tw-h-[24px] tw-text-red-600" />,
@@ -35,7 +37,9 @@ const WhatsOnYourMind = () => {
                 {
                     postType.map((e, idx) => {
                         return(
-                            <div key={idx} className="tw-w-full tw-flex tw-justify-center tw-items-center tw-gap-1 hover:tw-rounded-md hover:tw-bg-gray-200 tw-p-[8px] tw-transition-all tw-cursor-pointer">
+                            <div key={idx} className="tw-w-full tw-flex tw-justify-center tw-items-center tw-gap-1 hover:tw-rounded-md hover:tw-bg-gray-200 tw-p-[8px] tw-transition-all tw-cursor-pointer" onClick={() => {
+                                idx == 1 && setOpenAddPost(true)
+                            }}>
                                 {e.icon}
                                 <span className="tw-text-[15px] tw-text-[#65676B]">
                                     {e.type}
