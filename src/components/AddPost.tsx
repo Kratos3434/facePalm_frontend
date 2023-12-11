@@ -7,23 +7,51 @@ import PublicIcon from '@mui/icons-material/Public';
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
 import CloseIcon from '@mui/icons-material/Close';
 import { useState, useRef } from "react";
-import { useForm } from 'react-hook-form';
+import { useCookies } from "react-cookie";
+import CircularProgress from '@mui/material/CircularProgress';
 
 const AddPost = () => {
     const [user, setUser] = useAtom(userAtom);
     const [openConfModal, setOpenConfModal] = useState(false);
     const [openAddPost, setOpenAddPost] = useAtom(AddPostModalAtom);
-    const { register, handleSubmit, formState: { errors } } = useForm();
     const [description, setDescription] = useState("");
-    const textboxRef = useRef<HTMLDivElement>(null);
+    const textboxRef = useRef<HTMLSpanElement>(null);
+    const [photo, setPhoto] = useState<File | null>();
+    const [cookies] = useCookies();
+    const [loading, isLoading] = useState(false);
+    const [error, setError] = useState({ status: false, msg: "" });
 
-    console.log(user)
-    const handlePost = (e: any) => {
+    const handlePost = async (e: any) => {
         // console.log("Data:", data);
+        isLoading(true);
         e.preventDefault();
-        if(textboxRef.current)
+        console.log("DESC:", description);
+        console.log(photo)
+        const formdata: any = new FormData();
+        formdata.append("email", user.email);
+        formdata.append("description", description);
+        formdata.append("featureImage", photo);
+        const res = await fetch("http://localhost:8080/user/add/post", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${cookies.token}`
+            },
+            body: formdata
+        })
+        const data = await res.json();
+
+        if (!data.status) {
+            setError({ status: true, msg: data.error });
+            isLoading(false);
+        } else {
+            setOpenAddPost(false);
+        }
+
+    }
+
+    const handleDescription = () => {
+        if (textboxRef.current)
             setDescription(textboxRef.current?.innerText);
-        console.log(description);
     }
     return (
         <>
@@ -55,25 +83,50 @@ const AddPost = () => {
                             <form onSubmit={handlePost}>
                                 <div className="tw-flex tw-flex-col tw-gap-5">
                                     <span contentEditable={true} spellCheck={false} className="tw-w-full tw-outline-none tw-resize-none tw-relative statusBox tw-cursor-text" aria-label={`What's on your mind ${user.lastName}`} tabIndex={0} role="textbox" placeholder={`What's on your mind, ${user.lastName}?`}
-                                    ref={textboxRef}>
+                                        ref={textboxRef} onInput={handleDescription}>
 
                                     </span>
-                                    <label className="tw-w-full tw-rounded-md tw-border-[1px] tw-border-gray-400 tw-p-2 tw-relative tw-items-center">
-                                        <div className="tw-w-full tw-bg-gray-100 tw-rounded-md tw-h-[221px] tw-flex tw-flex-col tw-justify-center tw-text-center tw-cursor-pointer hover:tw-bg-gray-200 tw-transition-all">
-                                            <input type="file" className="tw-w-full tw-hidden" />
-                                            <div className="tw-flex tw-w-full tw-justify-center tw-items-center">
-                                                <div className="tw-rounded-[1000px] tw-bg-gray-300 tw-p-2">
-                                                    <AddToPhotosIcon className="tw-w-[20px] tw-h-[20px]" />
+                                    {
+                                        !photo ?
+                                            (
+                                                <label className="tw-w-full tw-rounded-md tw-border-[1px] tw-border-gray-400 tw-p-2 tw-relative tw-items-center">
+                                                    <div className="tw-w-full tw-bg-gray-100 tw-rounded-md tw-h-[221px] tw-flex tw-flex-col tw-justify-center tw-text-center tw-cursor-pointer hover:tw-bg-gray-200 tw-transition-all">
+                                                        <input type="file" className="tw-w-full tw-hidden" onChange={(e) => {
+                                                            e.target.files && setPhoto(e.target.files[0])
+                                                        }} />
+                                                        <div className="tw-flex tw-w-full tw-justify-center tw-items-center">
+                                                            <div className="tw-rounded-[1000px] tw-bg-gray-300 tw-p-2">
+                                                                <AddToPhotosIcon className="tw-w-[20px] tw-h-[20px]" />
+                                                            </div>
+                                                        </div>
+                                                        <span className="tw-text-[17px] tw-text-black tw-font-bold">
+                                                            Add Photos/Video
+                                                        </span>
+                                                        <span className="tw-text-[12px] tw-text-gray-400">
+                                                            or drag and drop
+                                                        </span>
+                                                    </div>
+                                                </label>
+                                            ) :
+                                            (
+                                                <div className="tw-w-full tw-rounded-md tw-border-[1px] tw-border-gray-400 tw-p-2 tw-relative tw-items-center">
+                                                    <Image src={URL.createObjectURL(photo)} width={450} height={221} alt="chosen photo" className="tw-w-full tw-bg-gray-100 tw-rounded" />
+                                                    <div className="tw-absolute tw-top-0 tw-right-0  tw-flex tw-justify-center tw-items-center tw-p-3">
+                                                        <div className="tw-rounded-[1234px] tw-bg-gray-200 tw-p-1 tw-px-2 tw-cursor-pointer hover:tw-brightness-75" onClick={() => setPhoto(null)}>
+                                                            <CloseIcon className="tw-w-[16px] tw-h-[16px]" />
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <span className="tw-text-[17px] tw-text-black tw-font-bold">
-                                                Add Photos/Video
-                                            </span>
-                                            <span className="tw-text-[12px] tw-text-gray-400">
-                                                or drag and drop
-                                            </span>
-                                        </div>
-                                    </label>
+                                            )
+                                    }
+                                    {
+                                        error.status &&
+                                        (
+                                            <small className="tw-font-bold tw-text-red-600">
+                                                *{error.msg}
+                                            </small>
+                                        )
+                                    }
                                     <button className="tw-text-center tw-rounded-md tw-bg-gray-200 tw-text-[15px] tw-text-gray-400 tw-font-bold tw-py-2">
                                         Post
                                     </button>
@@ -102,6 +155,19 @@ const AddPost = () => {
                                     No
                                 </span>
                             </div>
+                        </div>
+                    </Modal>
+                )
+            }
+            {
+                loading &&
+                (
+                    <Modal className='tw-flex tw-flex-col tw-h-[100vh] tw-justify-center tw-items-center'>
+                        <div className='tw-flex tw-flex-col tw-items-center tw-gap-1'>
+                            <CircularProgress size={70} />
+                            <span className="tw-text-white tw-font-bold tw-text-[20px]">
+                                Please wait, this may take a while...
+                            </span>
                         </div>
                     </Modal>
                 )
