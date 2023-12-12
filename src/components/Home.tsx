@@ -6,6 +6,8 @@ import { useHydrateAtoms } from 'jotai/utils';
 import WhatsOnYourMind from "./WhatsOnYourMind";
 import { UserProps } from "@/type";
 import AddPost from "./AddPost";
+import PostCard from "./PostCard";
+import { useQuery } from "react-query";
 
 const Home = ({ user }: {user: UserProps}) => {
     useHydrateAtoms([[userAtom, user]]);
@@ -13,6 +15,18 @@ const Home = ({ user }: {user: UserProps}) => {
     const [User] = useAtom(userAtom);
     const [openAddPost, setOpenAddPost] = useAtom(AddPostModalAtom);
     
+    const getCars = async () => {
+        const res = await fetch("http://localhost:8080/admin/post/list", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer dfsdfsdsdfsfssfvgthgbh"
+            }
+        });
+        return res.json();
+    }
+    const { data, status } = useQuery('posts', getCars);
+
     const sideBar = [
         {
             image: {
@@ -91,11 +105,22 @@ const Home = ({ user }: {user: UserProps}) => {
                     </div>
                 </div>
 
-                <div className="tw-flex tw-flex-col tw-h-[200vh] tw-w-[680px]">
+                <div className="tw-flex tw-flex-col tw-w-[680px] tw-gap-4">
                     {
                         openAddPost && <AddPost />
                     }
                     <WhatsOnYourMind />
+                    {
+                        status === "loading" ?
+                        (
+                            <h1>Loading...</h1>
+                        ):
+                        (
+                            data.data.map((e: any, idx: any) => {
+                                return <PostCard description={e.description} photo={e.featureImage} likes={e.likes} author={e.author} key={idx}/>
+                            })
+                        )
+                    }
                 </div>
 
                 <div className="tw-flex tw-flex-col">
