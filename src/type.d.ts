@@ -10,3 +10,10 @@ export interface UserProps {
     updatedAt?: string,
     disabledAt?: string
 }
+
+export interface PostProps {
+    photo: string,
+    description: string,
+    likes: number,
+    author: UserProps
+}
