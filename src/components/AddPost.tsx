@@ -9,8 +9,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useState, useRef } from "react";
 import { useCookies } from "react-cookie";
 import CircularProgress from '@mui/material/CircularProgress';
+import { useQueryClient } from "react-query";
 
 const AddPost = () => {
+    const queryClient = useQueryClient();
+
     const [user, setUser] = useAtom(userAtom);
     const [openConfModal, setOpenConfModal] = useState(false);
     const [openAddPost, setOpenAddPost] = useAtom(AddPostModalAtom);
@@ -44,6 +47,7 @@ const AddPost = () => {
             setError({ status: true, msg: data.error });
             isLoading(false);
         } else {
+            queryClient.invalidateQueries('posts');
             setOpenAddPost(false);
         }
 
@@ -136,6 +140,7 @@ const AddPost = () => {
                     </div>
                 </div>
             </Modal>
+            {/** This modal opens when user decides to exit adding post */}
             {
                 openConfModal &&
                 (
@@ -159,6 +164,7 @@ const AddPost = () => {
                     </Modal>
                 )
             }
+            {/** Show loading screen when user adds a post to let them know it's being processed */}
             {
                 loading &&
                 (
