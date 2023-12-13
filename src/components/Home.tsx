@@ -4,18 +4,23 @@ import { useAtom } from "jotai";
 import { AddPostModalAtom, userAtom } from "@/store";
 import { useHydrateAtoms } from 'jotai/utils';
 import WhatsOnYourMind from "./WhatsOnYourMind";
-import { UserProps } from "@/type";
+import { PostProps, UserProps } from "@/type";
 import AddPost from "./AddPost";
 import PostCard from "./PostCard";
 import { useQuery } from "react-query";
 
-const Home = ({ user }: {user: UserProps}) => {
+interface Props {
+    user: UserProps,
+    posts: PostProps
+};
+
+const Home = ({ user, posts }: Props) => {
     useHydrateAtoms([[userAtom, user]]);
 
     const [User] = useAtom(userAtom);
     const [openAddPost, setOpenAddPost] = useAtom(AddPostModalAtom);
     
-    const getCars = async () => {
+    const getPosts = async () => {
         const res = await fetch("http://localhost:8080/admin/post/list", {
             method: "GET",
             headers: {
@@ -23,9 +28,15 @@ const Home = ({ user }: {user: UserProps}) => {
                 "Authorization": "Bearer dfsdfsdsdfsfssfvgthgbh"
             }
         });
-        return res.json();
+        const data = await res.json();
+        return data.data;
     }
-    const { data, status } = useQuery('posts', getCars);
+
+    const { data, status } = useQuery({
+        queryKey: ['posts'],
+        queryFn: getPosts,
+        initialData: posts
+    });
 
     const sideBar = [
         {
@@ -86,7 +97,8 @@ const Home = ({ user }: {user: UserProps}) => {
     return (
         <main className="flex flex-col">
             <div className="tw-flex tw-justify-center tw-gap-[32px]">
-                <div className="tw-sticky tw-top-[70px] tw-h-full tw-z-0 tw-overflow-x-hidden tw-overflow-y-hidden">
+                {/** Side Bar Navigation */}
+                <div className="tw-sticky tw-top-[70px] tw-h-full tw-z-0 tw-overflow-x-hidden tw-overflow-y-hidden tw-hidden home-xl:tw-block">
                     <div className="tw-flex">
                         <div className="tw-flex tw-flex-col tw-max-w-[360px] tw-w-full tw-text-[15px] tw-font-bold tw-gap-3">
                             {
@@ -104,7 +116,7 @@ const Home = ({ user }: {user: UserProps}) => {
                         </div>
                     </div>
                 </div>
-
+                {/** Main Content Driver Area */}
                 <div className="tw-flex tw-flex-col tw-w-[680px] tw-gap-4">
                     {
                         openAddPost && <AddPost />
@@ -116,14 +128,18 @@ const Home = ({ user }: {user: UserProps}) => {
                             <h1>Loading...</h1>
                         ):
                         (
-                            data.data.map((e: any, idx: any) => {
+                            data.map((e: any, idx: any) => {
                                 return <PostCard description={e.description} photo={e.featureImage} likes={e.likes} author={e.author} key={idx}/>
                             })
                         )
                     }
+                    <hr />
+                    <small className="tw-text-center tw-mb-3">
+                        You are updated ; {")"}
+                    </small>
                 </div>
-
-                <div className="tw-flex tw-flex-col">
+                {/** Friend requests/Ads in the future */}
+                <div className="home-xl:tw-flex tw-flex-col tw-hidden">
                     <span className="tw-text-[17px] tw-text-[#65676B]">Friends</span>
                 </div>
             </div>
