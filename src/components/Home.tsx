@@ -129,7 +129,7 @@ const Home = ({ user, posts }: Props) => {
                         ):
                         (
                             data.map((e: any, idx: any) => {
-                                return <PostCard description={e.description} photo={e.featureImage} likes={e.likes} author={e.author} key={idx}/>
+                                return <PostCard description={e.description} photo={e.featureImage} likes={e.likes} author={e.author} shares={e.shares} key={idx}/>
                             })
                         )
                     }
