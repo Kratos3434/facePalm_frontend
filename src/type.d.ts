@@ -15,5 +15,6 @@ export interface PostProps {
     photo: string,
     description: string,
     likes: number,
+    shares: number,
     author: UserProps
 }
