@@ -3,21 +3,18 @@ import { PostProps } from "@/type";
 import Image from "next/image";
 import CloseIcon from '@mui/icons-material/Close';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import ReplyIcon from '@mui/icons-material/Reply';
 
 const PostCard = ({ photo, description, likes, author, shares }: PostProps) => {
-    const router = useRouter();
-
     return (
         <div className="tw-rounded-md tw-shadow-md tw-max-w-[680px] tw-w-full tw-bg-white tw-flex tw-flex-col">
             <div className="tw-flex tw-flex-col tw-px-[16px] tw-pt-[12px] tw-pb-[16px]">
                 <div className="tw-flex tw-gap-2">
                     <Link href={`${author.firstName}.${author.lastName}.${author.id}`} className="tw-max-w-[40px] tw-max-h-[40px] tw-w-full tw-h-full tw-rounded-[1000px]">
-                        <Image src="/images/cat2.jpg" width={40} height={40} alt="profile pic" className="tw-max-w-[40px] tw-max-h-[40px] tw-w-full tw-h-full tw-rounded-[1000px]" />
+                        <Image src={`${author.profilePicture ? author.profilePicture : "/images/placeholder.png"}`} width={40} height={40} alt="profile pic" className="tw-max-w-[40px] tw-h-[40px] tw-w-full tw-rounded-[1000px]" />
                     </Link>
                     <div className="tw-flex tw-justify-between tw-flex-1">
                         <span className="tw-text-[15px] tw-font-bold tw-whitespace-nowrapp">{`${author.firstName} ${author.lastName}`}</span>

@@ -6,6 +6,8 @@ export interface UserProps {
     phone?: string,
     gender: string,
     birthday?: string,
+    profilePicture?: string,
+    coverPicture?: string,
     createdAt: string,
     updatedAt?: string,
     disabledAt?: string
