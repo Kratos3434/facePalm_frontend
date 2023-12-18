@@ -17,7 +17,10 @@ const PostCard = ({ photo, description, likes, author, shares }: PostProps) => {
                         <Image src={`${author.profilePicture ? author.profilePicture : "/images/placeholder.png"}`} width={40} height={40} alt="profile pic" className="tw-max-w-[40px] tw-h-[40px] tw-w-full tw-rounded-[1000px]" />
                     </Link>
                     <div className="tw-flex tw-justify-between tw-flex-1">
-                        <span className="tw-text-[15px] tw-font-bold tw-whitespace-nowrapp">{`${author.firstName} ${author.lastName}`}</span>
+                        {/* <span className="tw-text-[15px] tw-font-bold tw-whitespace-nowrapp">{`${author.firstName} ${author.lastName}`}</span> */}
+                        <Link href={`${author.firstName}.${author.lastName}.${author.id}`} className="tw-text-[15px] tw-font-bold tw-whitespace-nowrapp hover:tw-underline">
+                            {`${author.firstName} ${author.lastName}`}
+                        </Link>
                         <div className="tw-flex tw-gap-4">
                             <MoreHorizIcon className="tw-w-[20px] tw-h-[20px] tw-cursor-pointer" />
                             <CloseIcon className="tw-w-[20px] tw-h-[20px] tw-cursor-pointer" />

@@ -2,13 +2,19 @@
 import Home from '@/components/Home';
 import { cookies } from 'next/headers';
 
-const getUser = () => {
+const getUser = async () => {
   const store = cookies();
-  const user = store.get('user')?.value;
-  console.log(user)
-  if (user) {
-    return JSON.parse(user);
-  }
+  const token = store.get('token')?.value;
+  const res = await fetch('http://localhost:8080/user/current', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  })
+
+  const data = await res.json();
+  return data.data;
 }
 
 const getPosts = async () => {
@@ -25,7 +31,7 @@ const getPosts = async () => {
 }
 
 export default async function HomePage() {
-  const user = getUser();
+  const user = await getUser();
   const posts = await getPosts();
   return (
     <Home user={user} posts={posts} />
