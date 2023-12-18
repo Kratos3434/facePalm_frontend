@@ -8,6 +8,7 @@ import { PostProps, UserProps } from "@/type";
 import AddPost from "./AddPost";
 import PostCard from "./PostCard";
 import { useQuery } from "react-query";
+import LoadingScreen from "./LoadingScreen";
 
 interface Props {
     user: UserProps,
@@ -125,7 +126,7 @@ const Home = ({ user, posts }: Props) => {
                     {
                         status === "loading" ?
                         (
-                            <h1>Loading...</h1>
+                            <LoadingScreen />
                         ):
                         (
                             data.map((e: any, idx: any) => {

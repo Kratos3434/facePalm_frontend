@@ -17,10 +17,33 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { useState } from 'react';
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";
+import { UserProps } from "@/type";
+import { useQuery } from "react-query";
 
-const NavBar = () => {
-    const pathName = usePathname();
+const NavBar = ({User}: {User: UserProps}) => {
     const [cookies, setCookie, removeCookie] = useCookies();
+    const getUser = async () => {
+        const token = cookies.token;
+        const res = await fetch('http://localhost:8080/user/current', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        })
+      
+        const data = await res.json();
+        return data.data;
+    }
+
+    const {data, status} = useQuery({
+        queryKey: ['user'],
+        initialData: User,
+        queryFn: getUser
+    });
+
+    const pathName = usePathname();
+
     const router = useRouter();
 
     const links = [
@@ -105,7 +128,7 @@ const NavBar = () => {
                     </div>
 
                     <div className="tw-relative" onClick={handleNavClick}>
-                        <Image src="/images/cat2.jpg" width={36} height={40} alt="profile pic" className="tw-rounded-[50%] tw-bg-[#F0F2F5] tw-cursor-pointer hover:tw-bg-gray-200 active:tw-scale-[.9] tw-overflow-hidden tw-transition-all tw-h-[40px]" />
+                        <Image src={status == "success" && data.profilePicture ? data.profilePicture : "/images/placeholder.png"} width={36} height={40} alt="profile pic" className="tw-rounded-[50%] tw-bg-[#F0F2F5] tw-cursor-pointer hover:tw-bg-gray-200 active:tw-scale-[.9] tw-overflow-hidden tw-transition-all tw-h-[40px]" />
                         <KeyboardArrowDownIcon className="tw-w-[14px] tw-h-[14px] tw-absolute tw-bottom-0 tw-right-0 tw-rounded-[1000px] tw-bg-gray-300 tw-cursor-pointer" />
                     </div>
                 </div>

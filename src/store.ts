@@ -32,3 +32,4 @@ export const userProfileAtom = atom<UserProps>(
 );
 
 export const AddPostModalAtom = atom(false);
+export const ChangeProfilePicModalAtom = atom(false);

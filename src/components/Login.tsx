@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import useCookies from 'react-cookie/es6/useCookies';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import Signup from './Signup';
+import LoadingScreen from './LoadingScreen';
 
 const Login = () => {
     const [cookies, setCookie, removeCookie] = useCookies();
@@ -65,11 +66,7 @@ const Login = () => {
             {
                 loading &&
                 (
-                    <Modal className='tw-flex tw-flex-col tw-h-[100vh] tw-justify-center'>
-                        <div className='tw-flex tw-justify-center'>
-                            <CircularProgress size={70} />
-                        </div>
-                    </Modal>
+                    <LoadingScreen />
                 )
             }
             <div className="tw-flex tw-justify-center tw-flex-col tw-h-[100vh] tw-items-center tw-py-5">
