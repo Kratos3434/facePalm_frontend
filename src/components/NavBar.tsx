@@ -14,29 +14,30 @@ import { usePathname } from "next/navigation";
 import MenuIcon from '@mui/icons-material/Menu';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";
 import { UserProps } from "@/type";
 import { useQuery } from "react-query";
+import CloseIcon from '@mui/icons-material/Close';
 
-const NavBar = ({User}: {User: UserProps}) => {
+const NavBar = ({ User }: { User: UserProps }) => {
     const [cookies, setCookie, removeCookie] = useCookies();
     const getUser = async () => {
         const token = cookies.token;
         const res = await fetch('http://localhost:8080/user/current', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
         })
-      
+
         const data = await res.json();
         return data.data;
     }
 
-    const {data, status} = useQuery({
+    const { data, status } = useQuery({
         queryKey: ['user'],
         initialData: User,
         queryFn: getUser
@@ -49,27 +50,36 @@ const NavBar = ({User}: {User: UserProps}) => {
     const links = [
         {
             path: '/',
-            icon: <HomeIcon className="tw-w-[22px] tw-h-[22px] " style={{ color: `${pathName == "/" ? "#0866FF" : "#65676B"}` }} />
+            icon: <HomeIcon className="tw-w-[22px] tw-h-[22px] " style={{ color: `${pathName == "/" ? "#0866FF" : "#65676B"}` }} />,
+            name: "Home"
         },
         {
             path: '/watch',
-            icon: <LiveTvIcon className="tw-w-[22px] tw-h-[22px] tw-text-[#65676B]" style={{ color: `${pathName == "/watch" ? "#0866FF" : "#65676B"}` }} />
+            icon: <LiveTvIcon className="tw-w-[22px] tw-h-[22px] tw-text-[#65676B]" style={{ color: `${pathName == "/watch" ? "#0866FF" : "#65676B"}` }} />,
+            name: "Watch"
         },
         {
             path: '/marketplace',
-            icon: <StorefrontIcon className="tw-w-[22px] tw-h-[22px] tw-text-[#65676B]" style={{ color: `${pathName == "/marketplace" ? "#0866FF" : "#65676B"}` }} />
+            icon: <StorefrontIcon className="tw-w-[22px] tw-h-[22px] tw-text-[#65676B]" style={{ color: `${pathName == "/marketplace" ? "#0866FF" : "#65676B"}` }} />,
+            name: "Marketplace"
         },
         {
             path: '/groups',
-            icon: <GroupsIcon className="tw-w-[22px] tw-h-[22px] tw-text-[#65676B]" style={{ color: `${pathName == "/groups" ? "#0866FF" : "#65676B"}` }} />
+            icon: <GroupsIcon className="tw-w-[22px] tw-h-[22px] tw-text-[#65676B]" style={{ color: `${pathName == "/groups" ? "#0866FF" : "#65676B"}` }} />,
+            name: "Groups"
         },
         {
             path: '/gaming',
-            icon: <SportsEsportsIcon className="tw-w-[22px] tw-h-[22px] tw-text-[#65676B]" style={{ color: `${pathName == "/gaming" ? "#0866FF" : "#65676B"}` }} />
+            icon: <SportsEsportsIcon className="tw-w-[22px] tw-h-[22px] tw-text-[#65676B]" style={{ color: `${pathName == "/gaming" ? "#0866FF" : "#65676B"}` }} />,
+            name: "Gaming"
         }
     ];
 
     const [showModal, setShowModal] = useState(false);
+
+    const [openMenu, isOpenMenu] = useState(false);
+
+    const [sideNavWidth, setSideNavWidth] = useState(0);
 
     const handleNavClick = () => {
         setShowModal(!showModal);
@@ -94,7 +104,10 @@ const NavBar = ({User}: {User: UserProps}) => {
                                 placeholder="Search facePalm" />
                         </div>
                     </form>
-                    <div className="tw-flex tw-flex-col tw-justify-center nav-xl:tw-hidden">
+                    <div className="tw-flex tw-flex-col tw-justify-center nav-xl:tw-hidden tw-cursor-pointer" onClick={() => {
+                        isOpenMenu(true);
+                        setSideNavWidth(300);
+                    }}>
                         <MenuIcon className="tw-w-[24px] tw-h-[24px]" />
                     </div>
                 </div>
@@ -105,7 +118,7 @@ const NavBar = ({User}: {User: UserProps}) => {
                             links.map((e, idx) => {
                                 return (
                                     <Link passHref href={e.path} className="tw-flex tw-justify-center tw-w-[111.59px] tw-h-full tw-items-center hover:tw-rounded-md hover:tw-bg-gray-200 tw-transition-all tw-border-b-[4px]" key={idx}
-                                    style={{borderColor: `${pathName == e.path ? "#0866FF" : "#fff"}`}}>
+                                        style={{ borderColor: `${pathName == e.path ? "#0866FF" : "#fff"}` }}>
                                         {e.icon}
                                     </Link>
                                 )
@@ -143,6 +156,27 @@ const NavBar = ({User}: {User: UserProps}) => {
                             </span>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div className={`tw-fixed  tw-left-0 tw-top-0 tw-w-full tw-h-full tw-overflow-auto tw-bg-[rgb(0,0,0)] tw-bg-[rgba(0,0,0,0.4)] ${openMenu ? 'tw-hidden nav-xxl:tw-block' : 'tw-hidden'}`}>
+                <div className="tw-bg-white tw-shadow-2xl tw-h-full tw-p-5 tw-pr-0 tw-flex tw-flex-col tw-ease-out tw-duration-[0.5s] tw-gap-10" style={{ width: sideNavWidth }}>
+                    <div className="tw-flex tw-justify-end tw-p-5">
+                        <span onClick={() => {
+                            isOpenMenu(false);
+                            setSideNavWidth(0);
+                        }}>
+                            <CloseIcon className="tw-w-[30px] tw-h-[30px] tw-cursor-pointer" />
+                        </span>
+                    </div>
+                    {
+                        links.map((e, idx) => {
+                            return (
+                                <Link href={e.path} className="tw-text-[20px] tw-font-bold tw-border-r-[4px] tw-border-white" style={{ borderColor: `${pathName == e.path ? "#0866FF" : "#fff"}` }}>
+                                    {e.name}
+                                </Link>
+                            )
+                        })
+                    }
                 </div>
             </div>
         </nav>
