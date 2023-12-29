@@ -12,7 +12,8 @@ export const userAtom = atom<UserProps>(
         birthday: "",
         createdAt: "",
         updatedAt: "",
-        disabledAt: ""
+        disabledAt: "",
+        posts: []
     }
 );
 
@@ -27,9 +28,12 @@ export const userProfileAtom = atom<UserProps>(
         birthday: "",
         createdAt: "",
         updatedAt: "",
-        disabledAt: ""
+        disabledAt: "",
+        posts: []
     }
 );
 
 export const AddPostModalAtom = atom(false);
+export const AddPostProfileAtom = atom(false);
 export const ChangeProfilePicModalAtom = atom(false);
+export const ChangeCoverPicModalAtom = atom(false);

@@ -120,9 +120,9 @@ const Home = ({ user, posts }: Props) => {
                 {/** Main Content Driver Area */}
                 <div className="tw-flex tw-flex-col tw-w-[680px] tw-gap-4">
                     {
-                        openAddPost && <AddPost />
+                        openAddPost && <AddPost type="HOME" user={User}/>
                     }
-                    <WhatsOnYourMind />
+                    <WhatsOnYourMind user={User} type="HOME"/>
                     {
                         status === "loading" ?
                         (
@@ -130,7 +130,7 @@ const Home = ({ user, posts }: Props) => {
                         ):
                         (
                             data.map((e: any, idx: any) => {
-                                return <PostCard description={e.description} photo={e.featureImage} likes={e.likes} author={e.author} shares={e.shares} key={idx}/>
+                                return <PostCard description={e.description} featureImage={e.featureImage} likes={e.likes} author={e.author} shares={e.shares} key={idx}/>
                             })
                         )
                     }

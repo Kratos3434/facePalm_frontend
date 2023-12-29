@@ -1,7 +1,7 @@
 "use client"
 import Modal from "./Modal"
 import { useAtom } from "jotai";
-import { userAtom, AddPostModalAtom } from "@/store";
+import { userAtom, AddPostModalAtom, AddPostProfileAtom } from "@/store";
 import Image from "next/image";
 import PublicIcon from '@mui/icons-material/Public';
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
@@ -10,13 +10,19 @@ import { useState, useRef } from "react";
 import { useCookies } from "react-cookie";
 import CircularProgress from '@mui/material/CircularProgress';
 import { useQueryClient } from "react-query";
+import { useRouter } from "next/navigation";
+import { UserProps } from "@/type";
 
-const AddPost = () => {
+interface Props {
+    type: string,
+    user: UserProps
+}
+const AddPost = ({ type, user }: Props) => {
     const queryClient = useQueryClient();
-
-    const [user, setUser] = useAtom(userAtom);
+    const router = useRouter();
     const [openConfModal, setOpenConfModal] = useState(false);
     const [openAddPost, setOpenAddPost] = useAtom(AddPostModalAtom);
+    const [openAddPostProfile, setAddPostProfile] = useAtom(AddPostProfileAtom);
     const [description, setDescription] = useState("");
     const textboxRef = useRef<HTMLSpanElement>(null);
     const [photo, setPhoto] = useState<File | null>();
@@ -47,8 +53,9 @@ const AddPost = () => {
             setError({ status: true, msg: data.error });
             isLoading(false);
         } else {
+            router.refresh();
             queryClient.invalidateQueries('posts');
-            setOpenAddPost(false);
+            type == "HOME" ? setOpenAddPost(false) : setAddPostProfile(false);
         }
 
     }
@@ -153,7 +160,7 @@ const AddPost = () => {
                             </div>
                             <hr />
                             <div className="tw-flex tw-justify-center tw-gap-2 tw-p-3">
-                                <span className="tw-p-1 tw-rounded-md tw-bg-green-500 tw-font-bold tw-px-3 tw-text-[18px] tw-cursor-pointer hover:tw-brightness-75" onClick={() => setOpenAddPost(false)}>
+                                <span className="tw-p-1 tw-rounded-md tw-bg-green-500 tw-font-bold tw-px-3 tw-text-[18px] tw-cursor-pointer hover:tw-brightness-75" onClick={() => type == "HOME" ? setOpenAddPost(false) : setAddPostProfile(false)}>
                                     Yes
                                 </span>
                                 <span className="tw-p-1 tw-rounded-md tw-bg-red-600 tw-font-bold tw-px-3 tw-text-[18px] tw-cursor-pointer hover:tw-brightness-75" onClick={() => setOpenConfModal(false)}>

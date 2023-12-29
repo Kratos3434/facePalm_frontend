@@ -10,11 +10,12 @@ export interface UserProps {
     coverPicture?: string,
     createdAt: string,
     updatedAt?: string,
-    disabledAt?: string
+    disabledAt?: string,
+    posts: PostProps[]
 }
 
 export interface PostProps {
-    photo: string,
+    featureImage: string,
     description: string,
     likes: number,
     shares: number,
