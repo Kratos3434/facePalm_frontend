@@ -21,7 +21,7 @@ import { UserProps } from "@/type";
 import { useQuery } from "react-query";
 import CloseIcon from '@mui/icons-material/Close';
 
-const NavBar = ({ User }: { User: UserProps }) => {
+const NavBar = ({ User }: { User?: UserProps }) => {
     const [cookies, setCookie, removeCookie] = useCookies();
     const getUser = async () => {
         const token = cookies.token;
@@ -118,7 +118,7 @@ const NavBar = ({ User }: { User: UserProps }) => {
                             links.map((e, idx) => {
                                 return (
                                     <Link passHref href={e.path} className="tw-flex tw-justify-center tw-w-[111.59px] tw-h-full tw-items-center hover:tw-rounded-md hover:tw-bg-gray-200 tw-transition-all tw-border-b-[4px]" key={idx}
-                                        style={{ borderColor: `${pathName == e.path ? "#0866FF" : "#fff"}` }}>
+                                        style={{ borderColor: `${pathName == e.path ? "#0866FF" : "#fff"}` }} title={e.name}>
                                         {e.icon}
                                     </Link>
                                 )
@@ -171,7 +171,7 @@ const NavBar = ({ User }: { User: UserProps }) => {
                     {
                         links.map((e, idx) => {
                             return (
-                                <Link href={e.path} className="tw-text-[20px] tw-font-bold tw-border-r-[4px] tw-border-white" style={{ borderColor: `${pathName == e.path ? "#0866FF" : "#fff"}` }}>
+                                <Link href={e.path} className="tw-text-[20px] tw-font-bold tw-border-r-[4px] tw-border-white" style={{ borderColor: `${pathName == e.path ? "#0866FF" : "#fff"}` }} key={idx}>
                                     {e.name}
                                 </Link>
                             )

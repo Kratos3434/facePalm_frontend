@@ -1,9 +1,7 @@
-import Profile from "@/components/Profile";
+import HomeProfile from "@/components/HomeProfile";
 import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-
-//export const dynamic = 'force-dynamic';
 
 const getUserProfile = async (name: string) => {
     const cookie = cookies();
@@ -30,7 +28,7 @@ const getUserProfile = async (name: string) => {
 const ProfilePage = async ({ params }: any) => {
     const user = await getUserProfile(params.name);
 
-    return <Profile User={user} />
+    return <HomeProfile user={user} />
 }
 
 export default ProfilePage;

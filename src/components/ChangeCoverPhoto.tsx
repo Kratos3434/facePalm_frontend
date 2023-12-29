@@ -1,7 +1,7 @@
 "use client"
 import Modal from "./Modal";
 import { useAtom } from "jotai";
-import { ChangeProfilePicModalAtom, userProfileAtom } from "@/store";
+import { ChangeCoverPicModalAtom, userProfileAtom } from "@/store";
 import { useQueryClient } from "react-query";
 import { useState } from "react";
 import Image from "next/image";
@@ -11,22 +11,22 @@ import { useCookies } from "react-cookie";
 import LoadingScreen from "./LoadingScreen";
 import { useRouter } from "next/navigation";
 
-const ChangeProfilePhoto = () => {
+const ChangeCoverPhoto = () => {
     const router = useRouter();
     const [user, setUser] = useAtom(userProfileAtom);
     const queryClient = useQueryClient();
     const [photo, setPhoto] = useState<File | null>();
     const [cookies] = useCookies();
-    const [openChangeProfilePicModal, setOpenChangeProfilePicModal] = useAtom(ChangeProfilePicModalAtom);
+    const [openCoverPicModal, setOpenCoverPicModal] = useAtom(ChangeCoverPicModalAtom);
     const [loading, isLoading] = useState(false);
 
-    const handleChangeProfilePic = async (e: any) => {
+    const handleChangeCoverPic = async (e: any) => {
         e.preventDefault();
         isLoading(true);
         const formdata: any = new FormData();
         formdata.append("email", user.email);
-        formdata.append("profilepicture", photo);
-        const res = await fetch('http://localhost:8080/user/update/profilepicture', {
+        formdata.append("coverpicture", photo);
+        const res = await fetch('http://localhost:8080/user/update/coverpicture', {
             method: 'PATCH',
             headers: {
                 "Authorization": `Bearer ${cookies.token}`
@@ -40,7 +40,7 @@ const ChangeProfilePhoto = () => {
             // setUser(data.data);
             router.refresh();
             queryClient.invalidateQueries('user');
-            setOpenChangeProfilePicModal(false);
+            setOpenCoverPicModal(false);
         } else {
             console.log("Something went wrong :(");
         }
@@ -51,14 +51,14 @@ const ChangeProfilePhoto = () => {
             <div className="tw-flex tw-flex-col tw-max-w-[500px] tw-w-full tw-bg-white tw-rounded-md tw-shadow-md tw-p-3 tw-gap-2">
                 <div className="tw-flex tw-justify-center tw-relative">
                     <span className="tw-text-[20px] tw-font-bold">
-                        Choose Profile Photo
+                        Choose Cover Photo
                     </span>
-                    <div className="tw-absolute tw-right-0 tw-pr-[16px] tw-cursor-pointer" onClick={() => setOpenChangeProfilePicModal(false)}>
+                    <div className="tw-absolute tw-right-0 tw-pr-[16px] tw-cursor-pointer" onClick={() => setOpenCoverPicModal(false)}>
                         <CloseIcon className="tw-w-[24px] tw-h-[24px]" />
                     </div>
                 </div>
                 <hr />
-                <form onSubmit={handleChangeProfilePic}>
+                <form onSubmit={handleChangeCoverPic}>
                     <div className="tw-flex tw-flex-col tw-gap-5">
                         {
                             !photo ?
@@ -97,12 +97,12 @@ const ChangeProfilePhoto = () => {
                             photo ?
                                 (
                                     <button className="tw-text-center tw-rounded-md tw-bg-[#0866FF] tw-text-[15px] tw-text-black tw-font-bold tw-py-2">
-                                        Change Profile
+                                        Change Cover Photo
                                     </button>
                                 ) :
                                 (
                                     <span className="tw-text-center tw-rounded-md tw-bg-gray-200 tw-text-[15px] tw-text-gray-400 tw-font-bold tw-py-2">
-                                        Change Profile
+                                        Change Cover Photo
                                     </span>
                                 )
                         }
@@ -117,4 +117,4 @@ const ChangeProfilePhoto = () => {
 
 }
 
-export default ChangeProfilePhoto;
+export default ChangeCoverPhoto;

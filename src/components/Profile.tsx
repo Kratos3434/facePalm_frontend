@@ -1,6 +1,6 @@
 "use client"
 import { UserProps } from "@/type";
-import { ChangeProfilePicModalAtom, userProfileAtom } from "@/store";
+import { ChangeCoverPicModalAtom, ChangeProfilePicModalAtom, userProfileAtom } from "@/store";
 import { useAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
 import Image from "next/image";
@@ -11,28 +11,30 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { usePathname } from "next/navigation";
 import ChangeProfilePhoto from "./ChangeProfilePhoto";
 import Link from "next/link";
+import ChangeCoverPhoto from "./ChangeCoverPhoto";
+import { useParams } from "next/navigation";
 
 const Profile = ({ User }: { User: UserProps }) => {
     useHydrateAtoms([[userProfileAtom, User]], {
         dangerouslyForceHydrate: true
     });
     // const [user, setUser] = useAtom(userProfileAtom);
-
+    const params = useParams();
     const pathName = usePathname();
     const [openChangeProfilePicModal, setOpenChangeProfilePicModal] = useAtom(ChangeProfilePicModalAtom);
-
+    const [openCoverPicModal, setOpenCoverPicModal] = useAtom(ChangeCoverPicModalAtom);
 
     const links = [
         {
-            path: `${pathName}/`,
+            path: `/${params.name}`,
             name: "Posts"
         },
         {
-            path: `${pathName}/about`,
+            path: `/${params.name}/about`,
             name: "About"
         },
         {
-            path: `${pathName}/friends`,
+            path: `/${params.name}/friends`,
             name: "Friends"
         },
         // {
@@ -48,6 +50,7 @@ const Profile = ({ User }: { User: UserProps }) => {
         //     name: "Reels"
         // }
     ]
+
     return (
         <div className="tw-w-full tw-h-full">
             <div className="tw-shadow-md tw-w-full tw-bg-white">
@@ -55,7 +58,8 @@ const Profile = ({ User }: { User: UserProps }) => {
                     <div className="tw-relative tw-flex tw-flex-col tw-h-full">
                         <Image src={User.coverPicture ? User.coverPicture : "/images/temp_cover.png"} width={1250} height={462.95} alt="cover photo" className="tw-h-[462.95px]  tw-rounded-t-[0px] tw-rounded-b-md" />
                         <div className="tw-absolute tw-flex tw-justify-end tw-top-[400px] tw-w-full tw-px-[20px] tw-pb-5">
-                            <div className="tw-flex tw-rounded-md tw-h-full tw-items-center tw-text-white tw-bg-[rgba(0,0,0,0.5)] tw-px-[12px] tw-gap-1 tw-py-2 tw-cursor-pointer hover:tw-brightness-95">
+                            <div className="tw-flex tw-rounded-md tw-h-full tw-items-center tw-text-white tw-bg-[rgba(0,0,0,0.5)] tw-px-[12px] tw-gap-1 tw-py-2 tw-cursor-pointer hover:tw-brightness-95" 
+                            onClick={() => setOpenCoverPicModal(true)}>
                                 <CameraAltIcon className="tw-w-[16px] tw-h-[16px] " />
                                 <span className="tw-text-[15px] tw-font-bold">
                                     Edit cover photo
@@ -112,7 +116,7 @@ const Profile = ({ User }: { User: UserProps }) => {
                                 {
                                     links.map((e, idx) => {
                                         return (
-                                            <Link className="tw-flex tw-justify-center tw-items-center tw-h-full tw-px-[16px] tw-py-5 hover:tw-bg-gray-200 tw-border-bb-[4px] tw-border-white hover:tw-rounded-md" key={idx} href={e.path} >
+                                            <Link className={`tw-flex tw-justify-center tw-items-center tw-h-full tw-px-[16px] tw-py-5 hover:tw-bg-gray-200 tw-border-bb-[4px] tw-border-white hover:tw-rounded-md tw-border-b-[4px] ${pathName === e.path ? "tw-border-b-[#0866FF]" : "tw-border-b-white"}`} key={idx} href={e.path} >
                                                 <span className="tw-text-[15px] tw-font-bold">
                                                     {e.name}
                                                 </span>
@@ -128,6 +132,9 @@ const Profile = ({ User }: { User: UserProps }) => {
             {/* Open this modal when user wants to change profile picture */}
             {
                 openChangeProfilePicModal && <ChangeProfilePhoto />
+            }
+            {
+                openCoverPicModal && <ChangeCoverPhoto />
             }
         </div>
     )
