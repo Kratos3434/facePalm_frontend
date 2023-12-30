@@ -20,7 +20,8 @@ const config: Config = {
 
         'nav-xl': '1190px',
         'nav-xxl': {max: '1190px'},
-        'home-xl': '769px'
+        'home-xl': '769px',
+        'homeprof-md': '908px',
       }
     },
   },

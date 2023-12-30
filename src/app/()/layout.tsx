@@ -24,9 +24,9 @@ const HomeLayout = async ({ children }: Props) => {
     return (
         <>
             <NavBar User={user}/>
-            <div className="tw-bg-[#F0F2F5] tw-pt-[70px]">
+            <main className="tw-bg-[#F0F2F5] tw-pt-[70px]">
                 {children}
-            </div>
+            </main>
         </>
     )
 }
