@@ -36,10 +36,10 @@ const ProfileLayout = async ({ children, params }: Props) => {
     return (
         <>
             <NavBar />
-            <div className="tw-bg-[#F0F2F5] tw-pt-[52px]">
+            <main className="tw-bg-[#F0F2F5] tw-pt-[52px]">
                 <Profile User={user} />
                 {children}
-            </div>
+            </main>
         </>
     )
 }

@@ -10,9 +10,9 @@ interface Props {
 }
 const LoginLayout = ( { children }: Props ) => {
     return(
-        <div className="tw-bg-[#F0F2F5]">
+        <main className="tw-bg-[#F0F2F5]">
             {children}
-        </div>
+        </main>
     )
 }
 

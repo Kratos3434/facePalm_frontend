@@ -12,6 +12,8 @@ export interface UserProps {
     updatedAt?: string,
     disabledAt?: string,
     posts: PostProps[]
+    bio?: string,
+    addressFrom?: string
 }
 
 export interface PostProps {
