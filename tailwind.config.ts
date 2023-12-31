@@ -21,6 +21,8 @@ const config: Config = {
         'nav-xl': '1190px',
         'nav-xxl': {max: '1190px'},
         'home-xl': '769px',
+        'home-xxl': {max: '768px'},
+        'home-lg': '1100px',
         'homeprof-md': '908px',
       }
     },

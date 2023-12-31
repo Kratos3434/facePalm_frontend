@@ -9,6 +9,12 @@ import AddPost from "./AddPost";
 import PostCard from "./PostCard";
 import { useQuery } from "react-query";
 import LoadingScreen from "./LoadingScreen";
+import Link from "next/link";
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import TurnedInIcon from '@mui/icons-material/TurnedIn';
+import RestoreIcon from '@mui/icons-material/Restore';
+import Groups2Icon from '@mui/icons-material/Groups2';
+import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 
 interface Props {
     user: UserProps,
@@ -42,7 +48,7 @@ const Home = ({ user, posts }: Props) => {
     const sideBar = [
         {
             image: {
-                source: "/images/placeholder.png",
+                source: user.profilePicture ? user.profilePicture : "/images/placeholder.png",
                 width: 36,
                 height: 36
             },
@@ -50,48 +56,28 @@ const Home = ({ user, posts }: Props) => {
             name: `${User.firstName} ${User.lastName}`
         },
         {
-            image: {
-                source: "/images/placeholder.png",
-                width: 36,
-                height: 36
-            },
-            path: "/",
+            icon: <PeopleAltIcon className="tw-w-[36px] tw-h-[36px] tw-text-[#1C89F6]" />,
+            path: "/friends",
             name: `Friends`
         },
         {
-            image: {
-                source: "/images/placeholder.png",
-                width: 36,
-                height: 36
-            },
-            path: "/",
+            icon: <TurnedInIcon className="tw-w-[36px] tw-h-[36px] tw-text-[#BE45C5]" />,
+            path: "/saved",
             name: `Saved`
         },
         {
-            image: {
-                source: "/images/placeholder.png",
-                width: 36,
-                height: 36
-            },
-            path: "/",
+            icon: <RestoreIcon className="tw-w-[36px] tw-h-[36px] tw-text-[#31B5FD]" />,
+            path: "/memories",
             name: `Memories`
         },
         {
-            image: {
-                source: "/images/placeholder.png",
-                width: 36,
-                height: 36
-            },
-            path: "/",
+            icon: <Groups2Icon className="tw-w-[36px] tw-h-[36px] tw-text-[#24B2FE]" />,
+            path: "/groups",
             name: `Groups`
         },
         {
-            image: {
-                source: "/images/placeholder.png",
-                width: 36,
-                height: 36
-            },
-            path: "/",
+            icon: <OndemandVideoIcon className="tw-w-[36px] tw-h-[36px] tw-text-[#24B2FE]" />,
+            path: "/watch",
             name: `Video`
         },
     ]
@@ -99,18 +85,26 @@ const Home = ({ user, posts }: Props) => {
         <main className="flex flex-col">
             <div className="tw-flex tw-justify-center tw-gap-[32px]">
                 {/** Side Bar Navigation */}
-                <div className="tw-sticky tw-top-[70px] tw-h-full tw-z-0 tw-overflow-x-hidden tw-overflow-y-hidden tw-hidden home-xl:tw-block">
+                <div className="tw-sticky tw-top-[70px] tw-h-full tw-z-0 tw-overflow-x-hidden tw-overflow-y-hidden tw-hidden home-lg:tw-block tw-w-[344px]">
                     <div className="tw-flex">
-                        <div className="tw-flex tw-flex-col tw-max-w-[360px] tw-w-full tw-text-[15px] tw-font-bold tw-gap-3">
+                        <div className="tw-flex tw-flex-col tw-max-w-[360px] tw-w-full tw-text-[15px] tw-font-bold tw-gapp-3">
                             {
                                 sideBar.map((e, idx) => {
                                     return (
-                                        <div className="tw-flex tw-items-center tw-gap-2" key={idx}>
-                                            <Image src={e.image.source} width={e.image.width} height={e.image.height} alt="Feature Image" className="tw-rounded-[50%]" />
+                                        <Link className="tw-flex tw-items-center tw-gap-2 tw-rounded-md hover:tw-bg-gray-200 tw-px-[8px] tw-py-3" key={idx} href={e.path}>
+                                            {
+                                                e.image ?
+                                                (
+                                                    <Image src={e.image.source} width={e.image.width} height={e.image.height} alt="Feature Image" className="tw-rounded-[50%] tw-w-[36px] tw-h-[36px]" />
+                                                ):
+                                                (
+                                                    e.icon
+                                                )
+                                            }
                                             <span>
                                                 {e.name}
                                             </span>
-                                        </div>
+                                        </Link>
                                     )
                                 })
                             }
@@ -118,7 +112,7 @@ const Home = ({ user, posts }: Props) => {
                     </div>
                 </div>
                 {/** Main Content Driver Area */}
-                <div className="tw-flex tw-flex-col tw-w-[680px] tw-gap-4">
+                <div className="tw-flex tw-flex-col tw-w-[680px] tw-gap-4 home-lg:tw-pl-0 tw-pl-5 home-xxl:tw-pl-0">
                     {
                         openAddPost && <AddPost type="HOME" user={User}/>
                     }
@@ -140,7 +134,7 @@ const Home = ({ user, posts }: Props) => {
                     </small>
                 </div>
                 {/** Friend requests/Ads in the future */}
-                <div className="home-xl:tw-flex tw-flex-col tw-hidden">
+                <div className="home-xl:tw-flex tw-flex-col tw-hidden tw-w-[260px]">
                     <span className="tw-text-[17px] tw-text-[#65676B]">Friends</span>
                 </div>
             </div>
