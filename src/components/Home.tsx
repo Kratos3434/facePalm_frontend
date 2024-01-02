@@ -52,8 +52,8 @@ const Home = ({ user, posts }: Props) => {
                 width: 36,
                 height: 36
             },
-            path: "/",
-            name: `${User.firstName} ${User.lastName}`
+            path: `${user.firstName}.${user.lastName}.${user.id}`,
+            name: `${user.firstName} ${user.lastName}`
         },
         {
             icon: <PeopleAltIcon className="tw-w-[36px] tw-h-[36px] tw-text-[#1C89F6]" />,
@@ -114,9 +114,9 @@ const Home = ({ user, posts }: Props) => {
                 {/** Main Content Driver Area */}
                 <div className="tw-flex tw-flex-col tw-w-[680px] tw-gap-4 home-lg:tw-pl-0 tw-pl-5 home-xxl:tw-pl-0">
                     {
-                        openAddPost && <AddPost type="HOME" user={User}/>
+                        openAddPost && <AddPost type="HOME" user={user}/>
                     }
-                    <WhatsOnYourMind user={User} type="HOME"/>
+                    <WhatsOnYourMind user={user} type="HOME"/>
                     {
                         status === "loading" ?
                         (

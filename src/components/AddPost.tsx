@@ -138,9 +138,19 @@ const AddPost = ({ type, user }: Props) => {
                                             </small>
                                         )
                                     }
-                                    <button className="tw-text-center tw-rounded-md tw-bg-gray-200 tw-text-[15px] tw-text-gray-400 tw-font-bold tw-py-2">
-                                        Post
-                                    </button>
+                                    {
+                                        !photo || !description ?
+                                            (
+                                                <span className="tw-text-center tw-rounded-md tw-bg-gray-200 tw-text-[15px] tw-text-gray-400 tw-font-bold tw-py-2">
+                                                    Post
+                                                </span>
+                                            ) :
+                                            (
+                                                <button className="tw-text-center tw-rounded-md tw-bg-[#0866FF] tw-text-[15px] tw-text-black tw-font-bold tw-py-2">
+                                                    Post
+                                                </button>
+                                            )
+                                    }
                                 </div>
                             </form>
                         </div>

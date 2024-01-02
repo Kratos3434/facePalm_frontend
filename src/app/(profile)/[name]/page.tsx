@@ -2,6 +2,7 @@ import HomeProfile from "@/components/HomeProfile";
 import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import OtherHomeProfile from "@/components/OtherHomeProfile";
 
 const getUserProfile = async (name: string) => {
     const cookie = cookies();
@@ -18,17 +19,26 @@ const getUserProfile = async (name: string) => {
     const data = await res.json();
 
     if(data.status) {
-        console.log("User:", data.data)
-        return data.data;
+        const verify = await fetch(`http:localhost:8080/user/validate/current/${name}`, {
+            cache: 'no-store',
+            headers: {
+                "Content-Type": 'application/json',
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const verifyData = await verify.json();
+
+        return [data.data, verifyData.status];
     } else {
         notFound();
     }
 }
 
 const ProfilePage = async ({ params }: any) => {
-    const user = await getUserProfile(params.name);
+    const [user, verified] = await getUserProfile(params.name);
 
-    return <HomeProfile user={user} />
+    return verified ? <HomeProfile user={user} /> : <OtherHomeProfile user={user} />;
 }
 
 export default ProfilePage;

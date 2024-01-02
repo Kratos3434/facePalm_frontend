@@ -48,18 +48,18 @@ const PostCard = ({ featureImage, description, likes, author, shares }: PostProp
             <div className="tw-px-5">
                 <hr />
             </div>
-            <div className="tw-flex tw-justify-evenly tw-text-[#65676B] tw-text-[15px] tw-py-3 tw-font-bold">
-                <div className="tw-flex tw-gap-2 tw-items-center">
+            <div className="tw-flex tw-justify-evenly tw-text-[#65676B] tw-text-[15px] tw-font-bold tw-items-center tw-px-[20px] tw-py-1">
+                <div className="tw-flex tw-gap-2 tw-items-center hover:tw-bg-gray-200 tw-cursor-pointer hover:tw-rounded-md tw-w-full tw-justify-center tw-py-3">
                     <ThumbUpOffAltIcon className="tw-w-[20px] tw-h-[20px]" />
                     Like
                 </div>
 
-                <div className="tw-flex tw-gap-2 tw-items-center">
+                <div className="tw-flex tw-gap-2 tw-items-center hover:tw-bg-gray-200 tw-cursor-pointer hover:tw-rounded-md tw-w-full tw-justify-center tw-py-3">
                     <ChatBubbleOutlineIcon className="tw-w-[20px] tw-h-[20px]" />
                     Comment
                 </div>
 
-                <div className="tw-flex tw-gap-2 tw-items-center">
+                <div className="tw-flex tw-gap-2 tw-items-center hover:tw-bg-gray-200 tw-cursor-pointer hover:tw-rounded-md tw-w-full tw-justify-center tw-py-3">
                     <ReplyIcon className="tw-w-[20px] tw-h-[20px]" />
                     Share
                 </div>

@@ -6,6 +6,7 @@ const getUser = async () => {
   const store = cookies();
   const token = store.get('token')?.value;
   const res = await fetch('http://localhost:8080/user/current', {
+    cache: 'no-store',
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
