@@ -121,7 +121,7 @@ const AddPost = ({ type, user }: Props) => {
                                             ) :
                                             (
                                                 <div className="tw-w-full tw-rounded-md tw-border-[1px] tw-border-gray-400 tw-p-2 tw-relative tw-items-center">
-                                                    <Image src={URL.createObjectURL(photo)} width={450} height={221} alt="chosen photo" className="tw-w-full tw-bg-gray-100 tw-rounded" />
+                                                    <Image src={URL.createObjectURL(photo)} width={450} height={221} alt="chosen photo" className="tw-w-[450px] tw-h-[221px] tw-bg-gray-100 tw-rounded" />
                                                     <div className="tw-absolute tw-top-0 tw-right-0  tw-flex tw-justify-center tw-items-center tw-p-3">
                                                         <div className="tw-rounded-[1234px] tw-bg-gray-200 tw-p-1 tw-px-2 tw-cursor-pointer hover:tw-brightness-75" onClick={() => setPhoto(null)}>
                                                             <CloseIcon className="tw-w-[16px] tw-h-[16px]" />

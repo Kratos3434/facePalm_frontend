@@ -7,8 +7,12 @@ import Link from "next/link";
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import ReplyIcon from '@mui/icons-material/Reply';
+import linkifyHtml from 'linkify-html';
 
 const PostCard = ({ featureImage, description, likes, author, shares }: PostProps) => {
+    const linkifyDescrip = () => {
+        return { __html: linkifyHtml(description, {defaultProtocol: 'https', target: '_blank'})}
+    }
     return (
         <div className="tw-rounded-md tw-shadow-md tw-max-w-[680px] tw-w-full tw-bg-white tw-flex tw-flex-col">
             <div className="tw-flex tw-flex-col tw-px-[16px] tw-pt-[12px] tw-pb-[16px]">
@@ -27,8 +31,8 @@ const PostCard = ({ featureImage, description, likes, author, shares }: PostProp
                         </div>
                     </div>
                 </div>
-                <span className="tw-text-[15px] tw-pt-2">
-                    {description}
+                <span className="tw-text-[15px] tw-pt-2" dangerouslySetInnerHTML={linkifyDescrip()} id="descrip">
+                    {/* {description} */}
                 </span>
             </div>
             <Image src={featureImage} width={680} height={680} alt="photo" className="tw-max-w-[680px] tw-max-h-[680px] tw-w-full tw-h-full" priority />
