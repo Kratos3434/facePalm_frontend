@@ -36,7 +36,7 @@ const WhatsOnYourMind = ({ user, type }: Props) => {
             <div className="tw-flex tw-gap-2 tw-items-center">
                 <Image src={user.profilePicture ? user.profilePicture : "/images/placeholder.png"} width={40} height={40} alt="profile pic" className="tw-rounded-[1000px] tw-w-[40px] tw-h-[40px]" />
                 <div className="tw-rounded-[20px] tw-py-[8px] tw-px-[12px] tw-w-full tw-cursor-pointer tw-bg-[#F0F2F5] hover:tw-bg-gray-300">
-                    <span className="tw-text-[17px] tw-text-[#65676B]">What's on your mind, {user.firstName} {user.lastName}?</span>
+                    <span className="tw-text-[17px] tw-text-[#65676B]">What{"'"}s on your mind, {user.firstName} {user.lastName}?</span>
                 </div>
             </div>
             <hr />
