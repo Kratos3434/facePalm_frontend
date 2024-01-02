@@ -10,3 +10,11 @@
 .statusBox:empty::before {
   content: attr(placeholder);
 }
+
+#descrip a {
+  color: blue;
+}
+
+#descrip a:hover {
+  text-decoration: underline;
+}
