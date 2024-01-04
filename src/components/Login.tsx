@@ -44,7 +44,8 @@ const Login = () => {
                 const nextYear = new Date();
                 nextYear.setFullYear(current.getFullYear() + 1);
                 setCookie('user', d.data, {path: '/', secure: true, expires: nextYear})
-                router.replace("/");
+                // router.replace("/");
+                window.location.href = "/";
                 //isLoading(false);
             }
             //isLoading(false);
