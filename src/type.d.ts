@@ -18,6 +18,7 @@ export interface UserProps {
 }
 
 export interface PostProps {
+    id: number,
     featureImage: string,
     description: string,
     likes: LikeProps[],

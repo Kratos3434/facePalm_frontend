@@ -8,11 +8,43 @@ import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import ReplyIcon from '@mui/icons-material/Reply';
 import linkifyHtml from 'linkify-html';
+import { useCookies } from "react-cookie";
+import { useRouter } from "next/navigation";
+import { useAtom } from "jotai";
+import { userAtom } from "@/store";
+import { useQueryClient } from "react-query";
 
-const PostCard = ({ featureImage, description, likes, author, shares }: PostProps) => {
+const PostCard = ({ featureImage, description, likes, author, shares, id }: PostProps) => {
+    const queryClient = useQueryClient();
+    const [user] = useAtom(userAtom);
+    const router = useRouter();
+    const [cookies, setCookie, removeCookie] = useCookies();
+
     const linkifyDescrip = () => {
         return { __html: linkifyHtml(description, {defaultProtocol: 'https', target: '_blank'})}
     }
+
+    const likePost = async () => {
+        const res = await fetch("http://localhost:8080/user/like/post", {
+            method: 'PUT',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${cookies.token}`
+            },
+            body: JSON.stringify({
+                email: user.email,
+                postId: id
+            })
+        });
+
+        const data = await res.json();
+
+        if (data.status) {
+            router.refresh();
+            queryClient.invalidateQueries('posts');
+        }
+    }
+
     return (
         <div className="tw-rounded-md tw-shadow-md tw-max-w-[680px] tw-w-full tw-bg-white tw-flex tw-flex-col">
             <div className="tw-flex tw-flex-col tw-px-[16px] tw-pt-[12px] tw-pb-[16px]">
@@ -53,7 +85,7 @@ const PostCard = ({ featureImage, description, likes, author, shares }: PostProp
                 <hr />
             </div>
             <div className="tw-flex tw-justify-evenly tw-text-[#65676B] tw-text-[15px] tw-font-bold tw-items-center tw-px-[20px] tw-py-1">
-                <div className="tw-flex tw-gap-2 tw-items-center hover:tw-bg-gray-200 tw-cursor-pointer hover:tw-rounded-md tw-w-full tw-justify-center tw-py-3">
+                <div className={`tw-flex tw-gap-2 tw-items-center hover:tw-bg-gray-200 tw-cursor-pointer hover:tw-rounded-md tw-w-full tw-justify-center tw-py-3`} onClick={likePost}>
                     <ThumbUpOffAltIcon className="tw-w-[20px] tw-h-[20px]" />
                     Like
                 </div>
