@@ -38,7 +38,7 @@ const PostCard = ({ featureImage, description, likes, author, shares }: PostProp
             <Image src={featureImage} width={680} height={680} alt="photo" className="tw-max-w-[680px] tw-max-h-[680px] tw-w-full tw-h-full" priority />
             <div className="tw-flex tw-justify-between tw-px-5 tw-text-[#65676B] tw-text-[15px] tw-py-2">
                 <span>
-                    {likes} likes
+                    {likes.length} likes
                 </span>
                 <div className="tw-flex tw-gap-3">
                     <span>
