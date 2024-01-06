@@ -11,7 +11,8 @@ export interface UserProps {
     createdAt: string,
     updatedAt?: string,
     disabledAt?: string,
-    posts: PostProps[]
+    posts: PostProps[],
+    likes: LikeProps[]
     bio?: string,
     addressFrom?: string
 }
@@ -19,7 +20,15 @@ export interface UserProps {
 export interface PostProps {
     featureImage: string,
     description: string,
-    likes: number,
+    likes: LikeProps[],
     shares: number,
     author: UserProps
+}
+
+export interface LikeProps {
+    id: number,
+    post: PostProps,
+    user: UserProps,
+    createdAt: string,
+    updatedAt?: string
 }

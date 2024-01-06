@@ -13,7 +13,8 @@ export const userAtom = atom<UserProps>(
         createdAt: "",
         updatedAt: "",
         disabledAt: "",
-        posts: []
+        posts: [],
+        likes: []
     }
 );
 
@@ -29,7 +30,8 @@ export const userProfileAtom = atom<UserProps>(
         createdAt: "",
         updatedAt: "",
         disabledAt: "",
-        posts: []
+        posts: [],
+        likes: []
     }
 );
 
