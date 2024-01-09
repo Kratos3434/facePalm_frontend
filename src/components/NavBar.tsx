@@ -94,9 +94,11 @@ const NavBar = ({ User }: { User?: UserProps }) => {
     return (
         <nav className="tw-fixed tw-top-0 tw-w-full tw-px-[16px] tw-bg-white tw-pt-[6px] tw-shadow-md tw-z-[1000]">
             <div className="tw-flex tw-justify-between tw-relative tw-h-[52px]">
-                <div className="tw-flex tw-gap-[8px] tw-items-centerr tw-absolute tw-left-0">
-                    <Image src="/images/fb_logo.png"
-                        width={40} height={40} alt="facePalm logo" className=" tw-object-cover" unoptimized />
+                <div className="tw-flex tw-gap-[8px] tw-items-center tw-absolute tw-left-0">
+                    <Link href="/" className="tw-w-[40px] tw-h-[40px] ">
+                        <Image src="/images/fb_logo.png"
+                            width={40} height={40} alt="facePalm logo" unoptimized className="tw-w-[40px] tw-h-[40px]"/>
+                    </Link>
                     <form>
                         <div className="tw-flex tw-items-center tw-rounded-[1000px] tw-bg-[#F0F2F5] tw-pl-2">
                             <SearchIcon className="tw-w-[16px] tw-h-[16px]" />
