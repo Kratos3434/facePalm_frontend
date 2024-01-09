@@ -16,9 +16,10 @@ import { useQueryClient } from "react-query";
 
 const PostCard = ({ featureImage, description, likes, author, shares, id }: PostProps) => {
     const queryClient = useQueryClient();
-    const [user] = useAtom(userAtom);
-    const router = useRouter();
     const [cookies, setCookie, removeCookie] = useCookies();
+    // const [user] = useAtom(userAtom);
+
+    const router = useRouter();
 
     const linkifyDescrip = () => {
         return { __html: linkifyHtml(description, {defaultProtocol: 'https', target: '_blank'})}
@@ -32,7 +33,7 @@ const PostCard = ({ featureImage, description, likes, author, shares, id }: Post
                 "Authorization": `Bearer ${cookies.token}`
             },
             body: JSON.stringify({
-                email: user.email,
+                email: cookies.user.email,
                 postId: id
             })
         });
@@ -85,7 +86,7 @@ const PostCard = ({ featureImage, description, likes, author, shares, id }: Post
                 <hr />
             </div>
             <div className="tw-flex tw-justify-evenly tw-text-[#65676B] tw-text-[15px] tw-font-bold tw-items-center tw-px-[20px] tw-py-1">
-                <div className={`tw-flex tw-gap-2 tw-items-center hover:tw-bg-gray-200 tw-cursor-pointer hover:tw-rounded-md tw-w-full tw-justify-center tw-py-3`} onClick={likePost}>
+                <div className={`tw-flex tw-gap-2 tw-items-center hover:tw-bg-gray-200 tw-cursor-pointer hover:tw-rounded-md tw-w-full tw-justify-center tw-py-3 ${likes.some(e => e.userId === cookies.user?.id) && " tw-text-blue-600"}`} onClick={likePost}>
                     <ThumbUpOffAltIcon className="tw-w-[20px] tw-h-[20px]" />
                     Like
                 </div>

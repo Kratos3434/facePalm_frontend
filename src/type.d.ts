@@ -28,6 +28,7 @@ export interface PostProps {
 
 export interface LikeProps {
     id: number,
+    userId: number,
     post: PostProps,
     user: UserProps,
     createdAt: string,

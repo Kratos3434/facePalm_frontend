@@ -109,7 +109,7 @@ const OtherHomeProfile = ({ user }: Props) => {
                         user.posts.map((e, idx) => {
                             return (
                                 <span key={idx}>
-                                    <PostCard featureImage={e.featureImage} description={e.description} likes={e.likes} shares={e.shares} author={user} />
+                                    <PostCard featureImage={e.featureImage} description={e.description} likes={e.likes} shares={e.shares} author={user} id={e.id} />
                                 </span>
                             )
                         })
