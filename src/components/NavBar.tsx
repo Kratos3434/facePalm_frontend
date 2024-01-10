@@ -100,9 +100,9 @@ const NavBar = ({ User }: { User?: UserProps }) => {
                             width={40} height={40} alt="facePalm logo" unoptimized className="tw-w-[40px] tw-h-[40px]"/>
                     </Link>
                     <form>
-                        <div className="tw-flex tw-items-center tw-rounded-[1000px] tw-bg-[#F0F2F5] tw-pl-2">
+                        <div className="tw-flex tw-items-center tw-rounded-[1000px] tw-bg-[#F0F2F5] nav-ssm:tw-pl-2 nav-ssm:tw-w-full nav-ssm:tw-h-full tw-w-[40px] tw-py-[7px] tw-justify-center nav-ssm:tw-py-0">
                             <SearchIcon className="tw-w-[16px] tw-h-[16px]" />
-                            <input type="text" className="tw-max-w-[212px] tw-w-full tw-px-[8px] tw-pt-[7px] tw-pb-[9px] tw-bg-[#F0F2F5] tw-rounded-[1000px] tw-outline-none"
+                            <input type="text" className="tw-max-w-[212px] tw-w-full tw-px-[8px] tw-pt-[7px] tw-pb-[9px] tw-bg-[#F0F2F5] tw-rounded-[1000px] tw-outline-none nav-ssm:tw-block tw-hidden"
                                 placeholder="Search facePalm" />
                         </div>
                     </form>
@@ -130,15 +130,15 @@ const NavBar = ({ User }: { User?: UserProps }) => {
                 </div>
 
                 <div className="tw-flex tw-items-center tw-gap-2 tw-absolute tw-right-0">
-                    <div className="tw-rounded-[1000px] tw-bg-[#F0F2F5] tw-p-2 tw-cursor-pointer hover:tw-bg-gray-200 active:tw-scale-[.9] tw-overflow-hidden tw-transition-all">
+                    <div className="tw-rounded-[1000px] tw-bg-[#F0F2F5] tw-p-2 tw-cursor-pointer hover:tw-bg-gray-200 active:tw-scale-[.9] tw-overflow-hidden tw-transition-all nav-sm:tw-block tw-hidden">
                         <AppsIcon className="tw-w-[20px] tw-h-[20px]" />
                     </div>
 
-                    <div className="tw-rounded-[50%] tw-bg-[#F0F2F5] tw-p-2 tw-cursor-pointer hover:tw-bg-gray-200 active:tw-scale-[.9] tw-overflow-hidden tw-transition-all">
+                    <div className="tw-rounded-[50%] tw-bg-[#F0F2F5] tw-p-2 tw-cursor-pointer hover:tw-bg-gray-200 active:tw-scale-[.9] tw-overflow-hidden tw-transition-all nav-sm:tw-block tw-hidden">
                         <ChatIcon className="tw-w-[20px] tw-h-[20px]" />
                     </div>
 
-                    <div className="tw-rounded-[50%] tw-bg-[#F0F2F5] tw-p-2 tw-cursor-pointer hover:tw-bg-gray-200 active:tw-scale-[.9] tw-overflow-hidden tw-transition-all">
+                    <div className="tw-rounded-[50%] tw-bg-[#F0F2F5] tw-p-2 tw-cursor-pointer hover:tw-bg-gray-200 active:tw-scale-[.9] tw-overflow-hidden tw-transition-all nav-sm:tw-block tw-hidden">
                         <NotificationsIcon className="tw-w-[20px] tw-h-[20px]" />
                     </div>
 

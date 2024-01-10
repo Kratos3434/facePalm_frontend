@@ -19,6 +19,8 @@ const config: Config = {
         'signup-sm': '449px',
 
         'nav-xl': '1190px',
+        'nav-sm': '510px',
+        'nav-ssm': '376px',
         'nav-xxl': {max: '1190px'},
         'home-xl': '769px',
         'home-xxl': {max: '768px'},
