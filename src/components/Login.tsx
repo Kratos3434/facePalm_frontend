@@ -24,7 +24,7 @@ const Login = () => {
     const signin = async (data: FieldValues) => {
         isLoading(true);
         try {
-            const res = await fetch("http://localhost:8080/public/signin", {
+            const res = await fetch("https://li8metxwbc.execute-api.ca-central-1.amazonaws.com/dev/v1/public/signin", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
