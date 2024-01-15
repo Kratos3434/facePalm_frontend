@@ -21,10 +21,10 @@ import { UserProps } from "@/type";
 import { useQuery } from "react-query";
 import CloseIcon from '@mui/icons-material/Close';
 
-const NavBar = ({ User }: { User?: UserProps }) => {
+const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
     const [cookies, setCookie, removeCookie] = useCookies();
     const getUser = async () => {
-        const token = cookies.token;
+        // const token = cookies.token;
         const res = await fetch('http://localhost:8080/user/current', {
             method: 'GET',
             headers: {
@@ -85,10 +85,18 @@ const NavBar = ({ User }: { User?: UserProps }) => {
         setShowModal(!showModal);
     }
 
-    const handleLogOut = () => {
+    const handleLogOut = async () => {
         removeCookie("token");
         removeCookie("user");
-        router.replace("/login");
+        const res = await fetch('/api/logout', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        const data = await res.json();
+        if (data.status)
+            router.replace("/login");
     }
 
     return (

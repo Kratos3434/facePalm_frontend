@@ -35,17 +35,17 @@ const getUserProfile = async (name: string) => {
 
         const verifyData = await verify.json();
 
-        return [data.data, verifyData.status];
+        return [data.data, verifyData.status, token];
     } else {
         notFound();
     }
 }
 
 const ProfileLayout = async ({ children, params }: Props) => {
-    const [user, verify] = await getUserProfile(params.name);
+    const [user, verify, token] = await getUserProfile(params.name);
     return (
         <>
-            <NavBar />
+            <NavBar token={token} />
             <main className="tw-bg-[#F0F2F5] tw-pt-[52px]">
                 {
                     verify ? <Profile User={user} /> : <OtherProfile User={user} />

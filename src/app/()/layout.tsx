@@ -13,17 +13,17 @@ const getUser = async () => {
     })
   
     const data = await res.json();
-    return data.data;
+    return [data.data, token];
 }
 
 interface Props {
     children: React.ReactNode
 }
 const HomeLayout = async ({ children }: Props) => {
-    const user = await getUser();
+    const [user, token] = await getUser();
     return (
         <>
-            <NavBar User={user}/>
+            <NavBar User={user} token={token} />
             <main className="tw-bg-[#F0F2F5] tw-pt-[70px]">
                 {children}
             </main>
