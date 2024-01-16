@@ -6,7 +6,7 @@ const protectedRoutes = ["/", "/:name"];
 export default async function middleware(req: NextRequest) {
     const token = req.cookies.get('token')?.value;
 
-    const res = await fetch("http://localhost:8080/admin/user/authenticate", {
+    const res = await fetch("https://2w2s4hgj97.execute-api.ca-central-1.amazonaws.com/dev/v1/user/authenticate", {
             method: "GET",
             headers: {
                 "Content-Type": 'application/json',
