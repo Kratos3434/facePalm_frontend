@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && echo '/api/* https://extinct-teal-coveralls.cyclic.app/:splat 200' cat >build/_redirects",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
