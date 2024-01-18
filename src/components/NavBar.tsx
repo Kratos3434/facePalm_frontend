@@ -20,12 +20,13 @@ import { useRouter } from "next/navigation";
 import { UserProps } from "@/type";
 import { useQuery } from "react-query";
 import CloseIcon from '@mui/icons-material/Close';
+import { baseURL } from "@/env";
 
 const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
     const [cookies, setCookie, removeCookie] = useCookies();
     const getUser = async () => {
         // const token = cookies.token;
-        const res = await fetch('http://localhost:8080/user/current', {
+        const res = await fetch(`${baseURL}/user/current`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

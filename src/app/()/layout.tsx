@@ -1,10 +1,11 @@
 import NavBar from "@/components/NavBar";
+import { baseURL } from "@/env";
 import { cookies } from "next/headers";
 
 const getUser = async () => {
     const store = cookies();
     const token = store.get('token')?.value;
-    const res = await fetch('http://localhost:8080/user/current', {
+    const res = await fetch(`${baseURL}/user/current`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

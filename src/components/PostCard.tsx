@@ -13,8 +13,14 @@ import { useRouter } from "next/navigation";
 import { useAtom } from "jotai";
 import { userAtom } from "@/store";
 import { useQueryClient } from "react-query";
+import { baseURL } from "@/env";
 
-const PostCard = ({ featureImage, description, likes, author, shares, id }: PostProps) => {
+interface Props {
+    post: PostProps,
+    userId: number,
+    token: string
+}
+const PostCard = ({ post, userId, token }: Props) => {
     const queryClient = useQueryClient();
     const [cookies, setCookie, removeCookie] = useCookies();
     const [user] = useAtom(userAtom);
@@ -22,19 +28,19 @@ const PostCard = ({ featureImage, description, likes, author, shares, id }: Post
     const router = useRouter();
 
     const linkifyDescrip = () => {
-        return { __html: linkifyHtml(description, {defaultProtocol: 'https', target: '_blank'})}
+        return { __html: linkifyHtml(post.description, {defaultProtocol: 'https', target: '_blank'})}
     }
 
     const likePost = async () => {
-        const res = await fetch("http://localhost:8080/user/like/post", {
+        const res = await fetch(`${baseURL}/user/like/post`, {
             method: 'PUT',
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${cookies.token}`
+                "Authorization": `Bearer ${token}`
             },
             body: JSON.stringify({
                 email: user.email,
-                postId: id
+                postId: post.id
             })
         });
 
@@ -50,13 +56,13 @@ const PostCard = ({ featureImage, description, likes, author, shares, id }: Post
         <div className="tw-rounded-md tw-shadow-md tw-max-w-[680px] tw-w-full tw-bg-white tw-flex tw-flex-col">
             <div className="tw-flex tw-flex-col tw-px-[16px] tw-pt-[12px] tw-pb-[16px]">
                 <div className="tw-flex tw-gap-2">
-                    <Link href={`${author.firstName}.${author.lastName}.${author.id}`} className="tw-max-w-[40px] tw-max-h-[40px] tw-w-full tw-h-full tw-rounded-[1000px]">
-                        <Image src={`${author.profilePicture ? author.profilePicture : "/images/placeholder.png"}`} width={40} height={40} alt="profile pic" className="tw-max-w-[40px] tw-h-[40px] tw-w-full tw-rounded-[1000px]" />
+                    <Link href={`${post.author.firstName}.${post.author.lastName}.${post.author.id}`} className="tw-max-w-[40px] tw-max-h-[40px] tw-w-full tw-h-full tw-rounded-[1000px]">
+                        <Image src={`${post.author.profilePicture ? post.author.profilePicture : "/images/placeholder.png"}`} width={40} height={40} alt="profile pic" className="tw-max-w-[40px] tw-h-[40px] tw-w-full tw-rounded-[1000px]" />
                     </Link>
                     <div className="tw-flex tw-justify-between tw-flex-1">
                         {/* <span className="tw-text-[15px] tw-font-bold tw-whitespace-nowrapp">{`${author.firstName} ${author.lastName}`}</span> */}
-                        <Link href={`${author.firstName}.${author.lastName}.${author.id}`} className="tw-text-[15px] tw-font-bold tw-whitespace-nowrapp hover:tw-underline">
-                            {`${author.firstName} ${author.lastName}`}
+                        <Link href={`${post.author.firstName}.${post.author.lastName}.${post.author.id}`} className="tw-text-[15px] tw-font-bold tw-whitespace-nowrapp hover:tw-underline">
+                            {`${post.author.firstName} ${post.author.lastName}`}
                         </Link>
                         <div className="tw-flex tw-gap-4">
                             <MoreHorizIcon className="tw-w-[20px] tw-h-[20px] tw-cursor-pointer" />
@@ -68,17 +74,17 @@ const PostCard = ({ featureImage, description, likes, author, shares, id }: Post
                     {/* {description} */}
                 </span>
             </div>
-            <Image src={featureImage} width={680} height={680} alt="photo" className="tw-max-w-[680px] tw-max-h-[680px] tw-w-full tw-h-full" priority />
+            <Image src={post.featureImage} width={680} height={680} alt="photo" className="tw-max-w-[680px] tw-max-h-[680px] tw-w-full tw-h-full" priority />
             <div className="tw-flex tw-justify-between tw-px-5 tw-text-[#65676B] tw-text-[15px] tw-py-2">
                 <span>
-                    {likes.length} likes
+                    {post.likes.length} likes
                 </span>
                 <div className="tw-flex tw-gap-3">
                     <span>
                         0 comments
                     </span>
                     <span>
-                        {shares} shares
+                        {post.shares} shares
                     </span>
                 </div>
             </div>
@@ -86,7 +92,7 @@ const PostCard = ({ featureImage, description, likes, author, shares, id }: Post
                 <hr />
             </div>
             <div className="tw-flex tw-justify-evenly tw-text-[#65676B] tw-text-[15px] tw-font-bold tw-items-center tw-px-[20px] tw-py-1">
-                <div className={`tw-flex tw-gap-2 tw-items-center hover:tw-bg-gray-200 tw-cursor-pointer hover:tw-rounded-md tw-w-full tw-justify-center tw-py-3 ${likes.some(e => e.userId === user.id) && " tw-text-blue-600"}`} onClick={likePost}>
+                <div className={`tw-flex tw-gap-2 tw-items-center hover:tw-bg-gray-200 tw-cursor-pointer hover:tw-rounded-md tw-w-full tw-justify-center tw-py-3 ${post.likes.some(e => e.userId === userId) && " tw-text-blue-600"}`} onClick={likePost}>
                     <ThumbUpOffAltIcon className="tw-w-[20px] tw-h-[20px]" />
                     Like
                 </div>

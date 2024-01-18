@@ -15,4 +15,12 @@ module.exports = {
         },
       ],
     },
+    async rewrites() {
+      return [
+        {
+          source: '/api/:path*',
+          destination: 'https://extinct-teal-coveralls.cyclic.app/:path*'
+        }
+      ]
+    }
   }

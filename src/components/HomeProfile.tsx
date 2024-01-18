@@ -13,10 +13,11 @@ import { useCookies } from "react-cookie";
 import EditIcon from '@mui/icons-material/Edit';
 
 interface Props {
-    user: UserProps
+    user: UserProps,
+    token: string
 }
 
-const HomeProfile = ({ user }: Props) => {
+const HomeProfile = ({ user, token }: Props) => {
     const router = useRouter();
     const [openAddPostProfile, setOpenAddPostProfile] = useAtom(AddPostProfileAtom);
     const [editBio, setEditBio] = useState(false);
@@ -186,7 +187,7 @@ const HomeProfile = ({ user }: Props) => {
                         user.posts.map((e, idx) => {
                             return (
                                 <span key={idx}>
-                                    <PostCard featureImage={e.featureImage} description={e.description} likes={e.likes} shares={e.shares} author={user} id={e.id} />
+                                    <PostCard post={e} userId={user.id} token={token} />
                                 </span>
                             )
                         })
@@ -200,7 +201,7 @@ const HomeProfile = ({ user }: Props) => {
             </div>
             {
                 openAddPostProfile &&
-                <AddPost type="PROFILE" user={user} />
+                <AddPost type="PROFILE" user={user} token={token} />
             }
         </div>
     )

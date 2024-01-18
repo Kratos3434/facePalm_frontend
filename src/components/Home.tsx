@@ -15,20 +15,22 @@ import TurnedInIcon from '@mui/icons-material/TurnedIn';
 import RestoreIcon from '@mui/icons-material/Restore';
 import Groups2Icon from '@mui/icons-material/Groups2';
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
+import { baseURL } from "@/env";
 
 interface Props {
     user: UserProps,
-    posts: PostProps
+    posts: PostProps,
+    token: string
 };
 
-const Home = ({ user, posts }: Props) => {
+const Home = ({ user, posts, token }: Props) => {
     useHydrateAtoms([[userAtom, user]]);
 
     const [User] = useAtom(userAtom);
     const [openAddPost, setOpenAddPost] = useAtom(AddPostModalAtom);
     
     const getPosts = async () => {
-        const res = await fetch("http://localhost:8080/admin/post/list", {
+        const res = await fetch(`${baseURL}/admin/post/list`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -114,7 +116,7 @@ const Home = ({ user, posts }: Props) => {
                 {/** Main Content Driver Area */}
                 <div className="tw-flex tw-flex-col tw-w-[680px] tw-gap-4 home-lg:tw-pl-0 tw-pl-5 home-xxl:tw-pl-0">
                     {
-                        openAddPost && <AddPost type="HOME" user={user}/>
+                        openAddPost && <AddPost type="HOME" user={user} token={token} />
                     }
                     <WhatsOnYourMind user={user} type="HOME"/>
                     {
@@ -123,8 +125,12 @@ const Home = ({ user, posts }: Props) => {
                             <LoadingScreen />
                         ):
                         (
-                            data.map((e: any, idx: any) => {
-                                return <PostCard description={e.description} featureImage={e.featureImage} likes={e.likes} author={e.author} shares={e.shares} key={idx} id={e.id} />
+                            data.map((e: any, idx: number) => {
+                                return (
+                                    <span key={idx}>
+                                        <PostCard post={e} userId={user.id} token={token} />
+                                    </span>
+                                )
                             })
                         )
                     }
