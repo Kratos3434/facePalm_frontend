@@ -12,12 +12,14 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { useQueryClient } from "react-query";
 import { useRouter } from "next/navigation";
 import { UserProps } from "@/type";
+import { baseURL } from "@/env";
 
 interface Props {
     type: string,
-    user: UserProps
+    user: UserProps,
+    token: string
 }
-const AddPost = ({ type, user }: Props) => {
+const AddPost = ({ type, user, token }: Props) => {
     const queryClient = useQueryClient();
     const router = useRouter();
     const [openConfModal, setOpenConfModal] = useState(false);
@@ -40,10 +42,10 @@ const AddPost = ({ type, user }: Props) => {
         formdata.append("email", user.email);
         formdata.append("description", description);
         formdata.append("featureImage", photo);
-        const res = await fetch("http://localhost:8080/user/add/post", {
+        const res = await fetch(`${baseURL}/user/add/post`, {
             method: "POST",
             headers: {
-                "Authorization": `Bearer ${cookies.token}`
+                "Authorization": `Bearer ${token}`
             },
             body: formdata
         })

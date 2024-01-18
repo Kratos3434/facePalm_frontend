@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import OtherProfile from "@/components/OtherProfile";
+import { baseURL } from "@/env";
 
 interface Props {
     children: React.ReactNode,
@@ -18,14 +19,14 @@ const getUserProfile = async (name: string) => {
         redirect("/login");
     }
     
-    const res = await fetch(`http:localhost:8080/public/user/${name}`, {
+    const res = await fetch(`${baseURL}/public/user/${name}`, {
         cache: 'no-store'
     });
 
     const data = await res.json();
 
     if(data.status) {
-        const verify = await fetch(`http:localhost:8080/user/validate/current/${name}`, {
+        const verify = await fetch(`${baseURL}/user/validate/current/${name}`, {
             cache: 'no-store',
             headers: {
                 "Content-Type": 'application/json',

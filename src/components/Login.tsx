@@ -11,6 +11,7 @@ import useCookies from 'react-cookie/es6/useCookies';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import Signup from './Signup';
 import LoadingScreen from './LoadingScreen';
+import axios from 'axios';
 
 const Login = () => {
     const [cookies, setCookie, removeCookie] = useCookies();
@@ -22,19 +23,18 @@ const Login = () => {
     const [showPass, isShowPass] = useState(false);
 
     const signin = async (data: FieldValues) => {
-        //"https://li8metxwbc.execute-api.ca-central-1.amazonaws.com/dev/v1/public/signin"
         isLoading(true);
         try {
-            const res = await fetch("https://li8metxwbc.execute-api.ca-central-1.amazonaws.com/dev/v1/public/signin", {
+            const res = await fetch("/api/public/signin", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                credentials: 'include',
                 body: JSON.stringify({ email: data.email, password: data.password })
             });
 
             const d = await res.json();
+            // const d = await (await res).data;
             console.log(d);
             if(!d.status) {
                 setError({status: true, msg: d.error});
@@ -45,7 +45,7 @@ const Login = () => {
                 const nextYear = new Date();
                 nextYear.setFullYear(current.getFullYear() + 1);
                 setCookie('user', d.data, {path: '/', secure: true, expires: nextYear})
-                //router.replace("/");
+                // router.replace("/");
                 window.location.href = "/";
                 //isLoading(false);
             }

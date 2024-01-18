@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from 'next/server';
+import { baseURL } from "./env";
 
 const protectedRoutes = ["/", "/:name"];
 
 export default async function middleware(req: NextRequest) {
     const token = req.cookies.get('token')?.value;
 
-    const res = await fetch("https://2w2s4hgj97.execute-api.ca-central-1.amazonaws.com/dev/v1/user/authenticate", {
+    const res = await fetch(`${baseURL}/admin/user/authenticate`, {
             method: "GET",
             headers: {
                 "Content-Type": 'application/json',
