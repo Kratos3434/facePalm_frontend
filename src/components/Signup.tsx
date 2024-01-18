@@ -24,7 +24,7 @@ const Signup = ({ isVisible }: { isVisible: any }) => {
     const signup: SubmitHandler<FormValues> = async (data) => {
         isSubmitting(true);
         try {
-            const res = await fetch(`${baseURL}/public/send/otp`, {
+            const res = await fetch(`/api/public/send/otp`, {
                 method: "POST",
                 credentials: "include",
                 headers: {
