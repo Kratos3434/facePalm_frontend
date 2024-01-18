@@ -6,6 +6,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import CircularProgress from '@mui/material/CircularProgress';
 import CloseIcon from '@mui/icons-material/Close';
 import Modal from './Modal';
+import { baseURL } from '@/env';
 
 const VerifyEmail = ({ data }: { data: any }) => {
     const router = useRouter();
@@ -22,7 +23,7 @@ const VerifyEmail = ({ data }: { data: any }) => {
         e.preventDefault();
         isSubmitting(true);
         try {
-            const res = await fetch("http://localhost:8080/public/signup", {
+            const res = await fetch(`${baseURL}/public/signup`, {
                 method: "POST",
                 headers: {
                     "Content-Type": 'application/json'
@@ -51,7 +52,7 @@ const VerifyEmail = ({ data }: { data: any }) => {
         modalOpen(true);
         try {
             isLoading(true);
-            const res = await fetch(`http://localhost:8080/public/resend/otp/${data.email}`, {
+            const res = await fetch(`${baseURL}/public/resend/otp/${data.email}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
