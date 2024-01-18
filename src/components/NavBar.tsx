@@ -89,7 +89,7 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
     const handleLogOut = async () => {
         removeCookie("token");
         removeCookie("user");
-        const res = await fetch('/api/logout', {
+        const res = await fetch('/API/logout', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
