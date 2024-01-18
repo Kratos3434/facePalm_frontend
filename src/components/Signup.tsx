@@ -4,6 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useRouter } from "next/navigation";
 import LinearProgress from '@mui/material/LinearProgress';
 import { useState } from "react";
+import { baseURL } from "@/env";
 
 type FormValues = {
     firstName: string,
@@ -23,7 +24,7 @@ const Signup = ({ isVisible }: { isVisible: any }) => {
     const signup: SubmitHandler<FormValues> = async (data) => {
         isSubmitting(true);
         try {
-            const res = await fetch("http://localhost:8080/public/send/otp", {
+            const res = await fetch(`${baseURL}/public/send/otp`, {
                 method: "POST",
                 credentials: "include",
                 headers: {
