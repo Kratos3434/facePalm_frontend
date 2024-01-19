@@ -11,6 +11,7 @@ import { useForm, FieldValues } from 'react-hook-form';
 import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
 import EditIcon from '@mui/icons-material/Edit';
+import { baseURL } from "@/env";
 
 interface Props {
     user: UserProps,
@@ -57,7 +58,7 @@ const HomeProfile = ({ user, token }: Props) => {
 
     const handleEditBio = async (e: any) => {
         e.preventDefault();
-        const res = await fetch("http://localhost:8080/user/update/bio", {
+        const res = await fetch(`${baseURL}/user/update/bio`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",

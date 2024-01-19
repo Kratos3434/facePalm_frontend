@@ -10,6 +10,7 @@ import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
 import { useCookies } from "react-cookie";
 import LoadingScreen from "./LoadingScreen";
 import { useRouter } from "next/navigation";
+import { baseURL } from "@/env";
 
 const ChangeCoverPhoto = () => {
     const router = useRouter();
@@ -26,7 +27,7 @@ const ChangeCoverPhoto = () => {
         const formdata: any = new FormData();
         formdata.append("email", user.email);
         formdata.append("coverpicture", photo);
-        const res = await fetch('http://localhost:8080/user/update/coverpicture', {
+        const res = await fetch(`${baseURL}/user/update/coverpicture`, {
             method: 'PATCH',
             headers: {
                 "Authorization": `Bearer ${cookies.token}`
