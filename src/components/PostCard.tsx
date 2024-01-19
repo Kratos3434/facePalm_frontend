@@ -74,7 +74,17 @@ const PostCard = ({ post, userId, token }: Props) => {
                     {/* {description} */}
                 </span>
             </div>
-            <Image src={post.featureImage} width={680} height={680} alt="photo" className="tw-max-w-[680px] tw-max-h-[680px] tw-w-full tw-h-full" priority />
+            {
+                post.featureImage.substring(post.featureImage.lastIndexOf('.')) === '.mp4' ?
+                (
+                    <video width={680} height={680} controls loop>
+                        <source src={post.featureImage} type="video/mp4" />
+                    </video>
+                ):
+                (
+                    <Image src={post.featureImage} width={680} height={680} alt="photo" className="tw-max-w-[680px] tw-max-h-[680px] tw-w-full tw-h-full" priority />
+                )
+            }
             <div className="tw-flex tw-justify-between tw-px-5 tw-text-[#65676B] tw-text-[15px] tw-py-2">
                 <span>
                     {post.likes.length} likes
