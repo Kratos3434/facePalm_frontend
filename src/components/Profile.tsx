@@ -14,7 +14,7 @@ import Link from "next/link";
 import ChangeCoverPhoto from "./ChangeCoverPhoto";
 import { useParams } from "next/navigation";
 
-const Profile = ({ User }: { User: UserProps }) => {
+const Profile = ({ User, token }: { User: UserProps, token: string }) => {
     useHydrateAtoms([[userProfileAtom, User]], {
         dangerouslyForceHydrate: true
     });
@@ -131,10 +131,10 @@ const Profile = ({ User }: { User: UserProps }) => {
             </div>
             {/* Open this modal when user wants to change profile picture */}
             {
-                openChangeProfilePicModal && <ChangeProfilePhoto />
+                openChangeProfilePicModal && <ChangeProfilePhoto token={token} />
             }
             {
-                openCoverPicModal && <ChangeCoverPhoto />
+                openCoverPicModal && <ChangeCoverPhoto token={token} />
             }
         </div>
     )
