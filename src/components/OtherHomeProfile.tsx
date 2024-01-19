@@ -9,7 +9,6 @@ interface Props {
 }
 
 const OtherHomeProfile = ({ user, token }: Props) => {
-
     const monthToString = (month: number) => {
         switch (month) {
             case 0:
