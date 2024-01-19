@@ -12,7 +12,11 @@ import LoadingScreen from "./LoadingScreen";
 import { useRouter } from "next/navigation";
 import { baseURL } from "@/env";
 
-const ChangeCoverPhoto = () => {
+interface Props {
+    token: string
+}
+
+const ChangeCoverPhoto = ({ token }: Props) => {
     const router = useRouter();
     const [user, setUser] = useAtom(userProfileAtom);
     const queryClient = useQueryClient();
@@ -30,7 +34,7 @@ const ChangeCoverPhoto = () => {
         const res = await fetch(`${baseURL}/user/update/coverpicture`, {
             method: 'PATCH',
             headers: {
-                "Authorization": `Bearer ${cookies.token}`
+                "Authorization": `Bearer ${token}`
             },
             body: formdata
         })
