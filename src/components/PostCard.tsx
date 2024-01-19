@@ -78,7 +78,7 @@ const PostCard = ({ post, userId, token }: Props) => {
                 post.featureImage.substring(post.featureImage.lastIndexOf('.')) === '.mp4' ?
                 (
                     <video width={680} height={680} controls loop>
-                        <source src={post.featureImage} type="video/mp4" />
+                        <source src={`https${post.featureImage.substring(post.featureImage.indexOf(':'))}`} type="video/mp4" />
                     </video>
                 ):
                 (
