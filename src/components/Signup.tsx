@@ -39,7 +39,6 @@ const Signup = ({ isVisible }: { isVisible: any }) => {
                 isSubmitting(false);
             } else {
                 router.replace("/verifyemail");
-                isSubmitting(false);
             }
         } catch (err) {
             console.log(err);
