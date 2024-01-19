@@ -6,8 +6,8 @@ import Providers from './providers';
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'facePalm',
-  description: 'facePalm is an ordinary social app for very social people',
+  title: 'faceClam',
+  description: 'faceClam is an ordinary social app for very social people',
 }
 
 export default function RootLayout({

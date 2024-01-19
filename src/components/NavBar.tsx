@@ -106,13 +106,13 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
                 <div className="tw-flex tw-gap-[8px] tw-items-center tw-absolute tw-left-0">
                     <Link href="/" className="tw-w-[40px] tw-h-[40px] ">
                         <Image src="/images/fb_logo.png"
-                            width={40} height={40} alt="facePalm logo" unoptimized className="tw-w-[40px] tw-h-[40px]"/>
+                            width={40} height={40} alt="faceClam logo" unoptimized className="tw-w-[40px] tw-h-[40px]"/>
                     </Link>
                     <form>
                         <div className="tw-flex tw-items-center tw-rounded-[1000px] tw-bg-[#F0F2F5] nav-ssm:tw-pl-2 nav-ssm:tw-w-full nav-ssm:tw-h-full tw-w-[40px] tw-py-[7px] tw-justify-center nav-ssm:tw-py-0">
                             <SearchIcon className="tw-w-[16px] tw-h-[16px]" />
                             <input type="text" className="tw-max-w-[212px] tw-w-full tw-px-[8px] tw-pt-[7px] tw-pb-[9px] tw-bg-[#F0F2F5] tw-rounded-[1000px] tw-outline-none nav-ssm:tw-block tw-hidden"
-                                placeholder="Search facePalm" />
+                                placeholder="Search faceClam" />
                         </div>
                     </form>
                     <div className="tw-flex tw-flex-col tw-justify-center nav-xl:tw-hidden tw-cursor-pointer" onClick={() => {

@@ -74,8 +74,8 @@ const Login = () => {
             <div className="tw-flex tw-justify-center tw-flex-col tw-h-[100vh] tw-items-center tw-py-5">
                 <div className="tw-flex tw-gap-10 login-xl:tw-gap-24 login-xl:tw-flex-nowrap tw-flex-wrap tw-justify-center">
                     <div className="tw-flex tw-flex-col tw-justify-center login-xl:tw-text-start tw-text-center">
-                        <span className="tw-text-[#0866FF] sm:tw-text-[60px] tw-text-[50px] tw-font-bold">facePalm</span>
-                        <span className="sm:tw-text-[28px] tw-text-[20px] tw-max-w-[500px] tw-w-full">Connect with friends and the world around you on facePalm</span>
+                        <span className="tw-text-[#0866FF] sm:tw-text-[60px] tw-text-[50px] tw-font-bold">faceClam</span>
+                        <span className="sm:tw-text-[28px] tw-text-[20px] tw-max-w-[500px] tw-w-full">Connect with friends and the world around you on faceClam</span>
                     </div>
                     <div className="tw-flex tw-flex-col tw-rounded-xl tw-shadow-md tw-max-w-[396px] tw-w-full tw-bg-white tw-p-5 tw-justify-center tw-gap-4">
                         <form onSubmit={handleSubmit(signin)}>
