@@ -62,7 +62,7 @@ const HomeProfile = ({ user, token }: Props) => {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${cookies.token}`
+                "Authorization": `Bearer ${token}`
             },
             body: JSON.stringify({ bio, email: user.email })
         });
