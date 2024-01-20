@@ -11,6 +11,7 @@ import { useCookies } from "react-cookie";
 import LoadingScreen from "./LoadingScreen";
 import { useRouter } from "next/navigation";
 import { baseURL } from "@/env";
+import { checkImageType } from "@/helper";
 
 interface Props {
     token: string
@@ -24,10 +25,19 @@ const ChangeCoverPhoto = ({ token }: Props) => {
     const [cookies] = useCookies();
     const [openCoverPicModal, setOpenCoverPicModal] = useAtom(ChangeCoverPicModalAtom);
     const [loading, isLoading] = useState(false);
+    const [error, setError] = useState({ status: false, msg: "" });
 
     const handleChangeCoverPic = async (e: any) => {
         e.preventDefault();
         isLoading(true);
+        if (photo) {
+            const fileType = photo.name.substring(photo.name.lastIndexOf('.'));
+            if (!checkImageType(fileType)) {
+                setError({ status: true, msg: "Invalid image" });
+                isLoading(false);
+                return false;
+            }
+        }
         const formdata: any = new FormData();
         formdata.append("email", user.email);
         formdata.append("coverpicture", photo);
@@ -97,6 +107,14 @@ const ChangeCoverPhoto = ({ token }: Props) => {
                                         </div>
                                     </div>
                                 )
+                        }
+                        {
+                            error.status &&
+                            (
+                                <small className="tw-font-bold tw-text-red-600">
+                                    *{error.msg}
+                                </small>
+                            )
                         }
                         {
                             photo ?
