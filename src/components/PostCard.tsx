@@ -11,7 +11,7 @@ import linkifyHtml from 'linkify-html';
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";
 import { useAtom } from "jotai";
-import { userAtom } from "@/store";
+import { ViewPostAtom, userAtom } from "@/store";
 import { useQueryClient } from "react-query";
 import { baseURL } from "@/env";
 
@@ -24,7 +24,7 @@ const PostCard = ({ post, userId, token }: Props) => {
     const queryClient = useQueryClient();
     const [cookies, setCookie, removeCookie] = useCookies();
     const [user] = useAtom(userAtom);
-
+    const [viewPost, setViewPost] = useAtom(ViewPostAtom);
     const router = useRouter();
 
     const linkifyDescrip = () => {
@@ -107,7 +107,8 @@ const PostCard = ({ post, userId, token }: Props) => {
                     Like
                 </div>
 
-                <div className="tw-flex tw-gap-2 tw-items-center hover:tw-bg-gray-200 tw-cursor-pointer hover:tw-rounded-md tw-w-full tw-justify-center tw-py-3">
+                <div className="tw-flex tw-gap-2 tw-items-center hover:tw-bg-gray-200 tw-cursor-pointer hover:tw-rounded-md tw-w-full tw-justify-center tw-py-3"
+                onClick={() => setViewPost({ status: true, post: post, userId })}>
                     <ChatBubbleOutlineIcon className="tw-w-[20px] tw-h-[20px]" />
                     Comment
                 </div>

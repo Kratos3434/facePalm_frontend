@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { UserProps } from "./type";
+import { PostProps, UserProps } from "./type";
 
 export const userAtom = atom<UserProps>(
     {
@@ -39,3 +39,11 @@ export const AddPostModalAtom = atom(false);
 export const AddPostProfileAtom = atom(false);
 export const ChangeProfilePicModalAtom = atom(false);
 export const ChangeCoverPicModalAtom = atom(false);
+
+interface ViewPostProps {
+    status: boolean,
+    post: PostProps | null,
+    userId?: number
+}
+
+export const ViewPostAtom = atom<ViewPostProps>({status: false, post: null, userId: 0});

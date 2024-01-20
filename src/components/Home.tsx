@@ -1,7 +1,7 @@
 "use client"
 import Image from "next/image";
 import { useAtom } from "jotai";
-import { AddPostModalAtom, userAtom } from "@/store";
+import { AddPostModalAtom, ViewPostAtom, userAtom } from "@/store";
 import { useHydrateAtoms } from 'jotai/utils';
 import WhatsOnYourMind from "./WhatsOnYourMind";
 import { PostProps, UserProps } from "@/type";
@@ -16,6 +16,7 @@ import RestoreIcon from '@mui/icons-material/Restore';
 import Groups2Icon from '@mui/icons-material/Groups2';
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 import { baseURL } from "@/env";
+import ViewPost from "./ViewPost";
 
 interface Props {
     user: UserProps,
@@ -28,7 +29,7 @@ const Home = ({ user, posts, token }: Props) => {
 
     const [User] = useAtom(userAtom);
     const [openAddPost, setOpenAddPost] = useAtom(AddPostModalAtom);
-    
+    const [viewPost, setViewPost] = useAtom(ViewPostAtom);
     const getPosts = async () => {
         const res = await fetch(`${baseURL}/admin/post/list`, {
             method: "GET",
@@ -144,6 +145,7 @@ const Home = ({ user, posts, token }: Props) => {
                     <span className="tw-text-[17px] tw-text-[#65676B]">Friends</span>
                 </div>
             </div>
+            {viewPost.status && <ViewPost />}
         </main>
     )
 }
