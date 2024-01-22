@@ -32,12 +32,36 @@ const AddPost = ({ type, user, token }: Props) => {
     const [loading, isLoading] = useState(false);
     const [error, setError] = useState({ status: false, msg: "" });
 
+    const checkFileType = (ext: string) => {
+        switch (ext) {
+            case ".gif":
+            case ".jpg":
+            case ".png":
+            case "jpeg":
+            case "jfif":
+            case ".avi":
+            case ".mp4":
+            case ".mov":
+                return true;
+            default:
+                return false;
+        }
+    }
+
     const handlePost = async (e: any) => {
         // console.log("Data:", data);
         isLoading(true);
         e.preventDefault();
         console.log("DESC:", description);
-        console.log(photo)
+        console.log(photo?.name)
+        if (photo) {
+            const fileType = photo.name.substring(photo.name.lastIndexOf('.'));
+            if (!checkFileType(fileType)) {
+                setError({ status: true, msg: "Invalid image or video"});
+                isLoading(false);
+                return false;
+            }
+        }
         const formdata: any = new FormData();
         formdata.append("email", user.email);
         formdata.append("description", description);

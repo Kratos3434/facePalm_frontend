@@ -31,11 +31,11 @@ const ViewPost = () => {
                             </div>
                         </div>
                         <hr />
-                        <div className="tw-overflow-y-auto">
+                        <div className="tw-overflow-y-auto tw-max-h-[796px] tw-h-full">
                             <div className="tw-px-[16px] tw-flex tw-flex-col tw-py-2 tw-gap-2">
                                 <div className="tw-flex tw-justify-between tw-items-center">
                                     <div className="tw-flex tw-gap-2">
-                                        <Image src={`${view.post.author.profilePicture ? view.post.author.profilePicture : "/images/placeholder.png"}`} width={40} height={40} alt="photo" className="tw-rounded-[1000px]" />
+                                        <Image src={`${view.post.author.profilePicture ? view.post.author.profilePicture : "/images/placeholder.png"}`} width={40} height={40} alt="photo" className="tw-rounded-[1000px] tw-w-[40px] tw-h-[40px]" />
                                         <span className="tw-text-[15px] tw-font-bold">
                                             {view.post.author.firstName} {view.post.author.lastName}
                                         </span>
