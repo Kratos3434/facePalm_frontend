@@ -17,7 +17,7 @@ const ViewPost = () => {
         (
             <div className="tw-fixed tw-top-0 tw-w-full tw-h-full tw-overflow-auto tw-left-0 tw-bg-[rgb(0,0,0)] tw-bg-[rgba(0,0,0,0.4)] tw-py-5 tw-px-[16px] tw-z-[1000] tw-overflow-y-hidden" onClick={(e) => setView({ status: false, post: null })}>
                 <div className="tw-flex tw-flex-col tw-justify-center tw-items-center tw-max-h-[100vh] tw-h-full">
-                    <div className="tw-rounded-md tw-shadow-xl tw-bg-white tw-max-w-[700px] tw-w-full tw-h-[842px] tw-overflow-hidden" onClick={(e) => {
+                    <div className="tw-rounded-md tw-shadow-xl tw-bg-white tw-max-w-[700px] tw-w-full tw-h-full" onClick={(e) => {
                         e.stopPropagation()
                     }}>
                         <div className="tw-relative tw-text-center tw-p-2">
@@ -31,7 +31,7 @@ const ViewPost = () => {
                             </div>
                         </div>
                         <hr />
-                        <div className="tw-overflow-y-auto tw-max-h-[796px] tw-h-full">
+                        <div className="tw-overflow-y-auto">
                             <div className="tw-px-[16px] tw-flex tw-flex-col tw-py-2 tw-gap-2">
                                 <div className="tw-flex tw-justify-between tw-items-center">
                                     <div className="tw-flex tw-gap-2">
