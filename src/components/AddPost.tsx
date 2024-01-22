@@ -43,6 +43,7 @@ const AddPost = ({ type, user, token }: Props) => {
             case ".mp4":
             case ".mov":
             case ".heif":
+            case ".heic":
                 return true;
             default:
                 return false;
