@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import LinearProgress from '@mui/material/LinearProgress';
+import { baseURL } from "@/env";
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState("");
@@ -12,7 +13,7 @@ const ForgotPassword = () => {
     const handleSendResetPasswordLink = async (e: any) => {
         e.preventDefault();
         isLoading(true);
-        const res = await fetch(`http://localhost:8080/public/forgot/link/${email}`);
+        const res = await fetch(`${baseURL}/public/forgot/link/${email}`);
         const data = await res.json();
 
         if (data.status) {
