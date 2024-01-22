@@ -31,7 +31,7 @@ const ViewPost = () => {
                             </div>
                         </div>
                         <hr />
-                        <div className="tw-overflow-y-auto tw-max-h-[796px] tw-h-full">
+                        <div className="tw-overflow-y-auto">
                             <div className="tw-px-[16px] tw-flex tw-flex-col tw-py-2 tw-gap-2">
                                 <div className="tw-flex tw-justify-between tw-items-center">
                                     <div className="tw-flex tw-gap-2">
