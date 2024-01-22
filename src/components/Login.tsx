@@ -101,7 +101,7 @@ const Login = () => {
                                 </button>
                             </div>
                         </form>
-                        <Link href="/login/identify" className='tw-text-center tw-text-[14px] tw-text-[#2989F4]'>Forgot password?</Link>
+                        <Link href="/login/identify" className='tw-text-center tw-text-[14px] tw-text-[#2989F4] hover:tw-underline'>Forgot password?</Link>
                         <hr className='tw-my-5' />
                         <div className='tw-flex tw-justify-center tw-text-center'>
                             <div className='tw-text-white tw-rounded tw-bg-[#42B72A] tw-text-center  tw-px-[16px] tw-py-3 tw-cursor-pointer' onClick={() => isVisible(true)}>
