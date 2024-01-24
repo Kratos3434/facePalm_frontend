@@ -13,19 +13,57 @@ import SendIcon from '@mui/icons-material/Send';
 import Link from "next/link";
 import ForumIcon from '@mui/icons-material/Forum';
 import Comment from "./Comment";
-import React from "react";
-
+import React, { useState } from "react";
+import { useRef } from "react";
+import { baseURL } from "@/env";
 interface Props {
-    currentUser: UserProps
+    currentUser: UserProps,
+    token: string
 }
 
-const ViewPost = ({ currentUser }: Props) => {
+const ViewPost = ({ currentUser, token }: Props) => {
     const [view, setView] = useAtom(ViewPostAtom);
+    const [loading, isLoading] = useState(false);
+    const textboxRef = useRef<HTMLDivElement>(null);
+    const [comment, setComment] = useState("");
+    const commentRef = useRef<HTMLDivElement>(null);
 
     const closeViewPost = () => {
         setView({ status: false, post: null });
     }
 
+    const handleComment = () => {
+        if (textboxRef.current)
+            setComment(textboxRef.current?.innerText);
+    }
+
+    const handlePostComment = async (e: any) => {
+        e.preventDefault();
+        isLoading(true);
+        const res = await fetch(`${baseURL}/user/add/comment`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                comment,
+                postId: view.post?.id
+            })
+        });
+
+        const data = await res.json();
+
+        if (data.status) {
+            isLoading(false);
+            setComment("");
+            if (textboxRef.current) {
+                textboxRef.current.innerText = "";
+            }
+            setView({ status: true, post: data.data.post });
+            commentRef.current?.scrollIntoView({behavior: "smooth"});
+        }
+    }
     return (
         view.post &&
         (
@@ -113,31 +151,20 @@ const ViewPost = ({ currentUser }: Props) => {
                                 <ArrowDropDownIcon className="tw-w-[20px] tw-h-[20px] tw-font-bold" />
                             </div>
                             {/* Array of comments */}
-                            <div className="tw-px-[16px] tw-flex tw-flex-col">
+                            <div className="tw-px-[16px] tw-flex tw-flex-col tw-py-[16px] tw-gap-3">
                                 {
                                     view.post.comments.length === 0 ?
                                         (
                                             <div className="tw-text-center tw-p-[16px] tw-flex tw-flex-col tw-gap-1 tw-items-center tw-font-bold tw-text-[#65676B]">
-                                                <ForumIcon className="tw-w-[50px] tw-h-[50px]"/>
+                                                <ForumIcon className="tw-w-[50px] tw-h-[50px]" />
                                                 <p>No comments yet, be the first person to comment :{")"}</p>
                                             </div>
                                         ) :
                                         (
-                                            // <div className="tw-flex tw-gap-1">
-                                            //     <Link href="/">
-                                            //         <Image src="/images/placeholder.png" width={32} height={32} alt="Profile" className="tw-rounded-[1000px] tw-w-[32px] tw-h-[32px]" />
-                                            //     </Link>
-                                            //     <div className="tw-flex tw-flex-col tw-items-start tw-px-[12px] tw-py-[8px] tw-rounded-xl tw-bg-gray-100">
-                                            //         <Link className="tw-text-[13px] tw-font-bold hover:tw-underline" href="/">
-                                            //             Daniel Esser
-                                            //         </Link>
-                                            //         <span>You{"'"}re dead Mister!</span>
-                                            //     </div>
-                                            // </div>
                                             view.post.comments.map((e, idx) => {
                                                 return (
                                                     <React.Fragment key={idx}>
-                                                        <Comment comment={e} /> 
+                                                        <Comment comment={e} />
                                                     </React.Fragment>
                                                 )
                                             })
@@ -146,20 +173,33 @@ const ViewPost = ({ currentUser }: Props) => {
                             </div>
                             {/* --- Array of comments end ---*/}
                         </div>
+                        <div ref={commentRef}></div>
                     </div>
                     <div className="tw-fixed tw-w-full tw-bottom-[20px] tw-flex tw-justify-center tw-px-[16px]" onClick={(e) => {
                         e.stopPropagation();
                     }}>
                         <div className="tw-flex tw-px-[16px] tw-py-[9px] tw-max-w-[700px] tw-w-full tw-bg-white tw-rounded-b-md tw-gap-[4px] tw-shadow-2xl tw-border-t-[1px]">
                             <Image src={currentUser.profilePicture ? currentUser.profilePicture : "/images/placeholder.png"} width={32} height={32} alt={`${currentUser.firstName} ${currentUser.lastName}`} className="tw-rounded-[1000px] tw-w-[32px] tw-h-[32px]" />
-                            <div className="tw-w-full tw-rounded-md tw-bg-gray-200 tw-break-words tw-flex tw-flex-col tw-px-[12px] tw-py-[8px]">
-                                <div contentEditable={true} className="tw-outline-none tw-whitespace-pre-wrap">
+                            <form onSubmit={handlePostComment} className="tw-w-full tw-rounded-md tw-bg-gray-200 tw-break-words tw-flex tw-flex-col tw-px-[12px] tw-py-[8px]">
+                                <div contentEditable={true} className="tw-outline-none tw-whitespace-pre-wrap commentBox tw-cursor-text" role="textbox" tabIndex={0} placeholder="Write a comment..." onInput={handleComment} ref={textboxRef}>
 
                                 </div>
                                 <div className="tw-flex tw-justify-end">
-                                    <SendIcon className="tw-w-[16px] tw-h-[16px] tw-text-[#0866FF]" />
+                                    {
+                                        comment && !loading ?
+                                            (
+                                                <button>
+                                                    <SendIcon className="tw-w-[16px] tw-h-[16px] tw-text-[#0866FF]" />
+                                                </button>
+                                            ) :
+                                            (
+                                                <span>
+                                                    <SendIcon className="tw-w-[16px] tw-h-[16px] tw-text-gray-400" />
+                                                </span>
+                                            )
+                                    }
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>

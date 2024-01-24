@@ -11,6 +11,10 @@
   content: attr(placeholder);
 }
 
+.commentBox:empty::before {
+  content: attr(placeholder);
+}
+
 #descrip a {
   color: blue;
 }
