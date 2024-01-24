@@ -16,12 +16,17 @@ import Comment from "./Comment";
 import React, { useState } from "react";
 import { useRef } from "react";
 import { baseURL } from "@/env";
+import { useRouter } from "next/navigation";
+import { useQueryClient } from "react-query";
+
 interface Props {
     currentUser: UserProps,
     token: string
 }
 
 const ViewPost = ({ currentUser, token }: Props) => {
+    const queryClient = useQueryClient();
+    const router = useRouter();
     const [view, setView] = useAtom(ViewPostAtom);
     const [loading, isLoading] = useState(false);
     const textboxRef = useRef<HTMLDivElement>(null);
@@ -62,6 +67,8 @@ const ViewPost = ({ currentUser, token }: Props) => {
             }
             setView({ status: true, post: data.data.post });
             commentRef.current?.scrollIntoView({behavior: "smooth"});
+            router.refresh();
+            queryClient.invalidateQueries('posts');
         }
     }
     return (
