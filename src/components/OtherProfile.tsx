@@ -1,21 +1,18 @@
 "use client"
 import { UserProps } from "@/type";
-import { ChangeCoverPicModalAtom, ChangeProfilePicModalAtom, userProfileAtom } from "@/store";
-import { useAtom } from "jotai";
+import { ViewPostAtom, userProfileAtom } from "@/store";
 import { useHydrateAtoms } from "jotai/utils";
 import Image from "next/image";
-import CameraAltIcon from '@mui/icons-material/CameraAlt';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { usePathname } from "next/navigation";
-import ChangeProfilePhoto from "./ChangeProfilePhoto";
 import Link from "next/link";
-import ChangeCoverPhoto from "./ChangeCoverPhoto";
 import { useParams } from "next/navigation";
 
 const OtherProfile = ({ User }: { User: UserProps }) => {
     useHydrateAtoms([[userProfileAtom, User]], {
+        dangerouslyForceHydrate: true
+    });
+
+    useHydrateAtoms([[ViewPostAtom, { status: false, post: null }]] as const, {
         dangerouslyForceHydrate: true
     });
     // const [user, setUser] = useAtom(userProfileAtom);

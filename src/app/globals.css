@@ -18,3 +18,19 @@
 #descrip a:hover {
   text-decoration: underline;
 }
+
+.viewpost::-webkit-scrollbar {
+  width: 16px;
+}
+
+.viewpost::-webkit-scrollbar-track {
+  /* background-color: #e4e4e4; */
+  border-radius: 6px;
+  width: 10px;
+}
+
+.viewpost::-webkit-scrollbar-thumb {
+  background-color: rgb(206, 208, 212);
+  border-radius: 6px;
+  width: 10px;
+}

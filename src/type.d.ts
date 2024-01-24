@@ -17,13 +17,22 @@ export interface UserProps {
     addressFrom?: string
 }
 
+export interface CommentProps {
+    postId: number,
+    comment: string,
+    author: UserProps,
+    post: PostProps,
+    createdAt: string,
+    updatedAt: string
+}
 export interface PostProps {
     id: number,
     featureImage: string,
     description: string,
     likes: LikeProps[],
     shares: number,
-    author: UserProps
+    author: UserProps,
+    comments: CommentProps[]
 }
 
 export interface LikeProps {

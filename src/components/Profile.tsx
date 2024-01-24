@@ -1,6 +1,6 @@
 "use client"
 import { UserProps } from "@/type";
-import { ChangeCoverPicModalAtom, ChangeProfilePicModalAtom, userProfileAtom } from "@/store";
+import { ChangeCoverPicModalAtom, ChangeProfilePicModalAtom, ViewPostAtom, userProfileAtom } from "@/store";
 import { useAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
 import Image from "next/image";
@@ -15,7 +15,11 @@ import ChangeCoverPhoto from "./ChangeCoverPhoto";
 import { useParams } from "next/navigation";
 
 const Profile = ({ User, token }: { User: UserProps, token: string }) => {
-    useHydrateAtoms([[userProfileAtom, User]], {
+    useHydrateAtoms([[userProfileAtom, User]] as const, {
+        dangerouslyForceHydrate: true
+    });
+
+    useHydrateAtoms([[ViewPostAtom, { status: false, post: null }]] as const, {
         dangerouslyForceHydrate: true
     });
     // const [user, setUser] = useAtom(userProfileAtom);
@@ -23,6 +27,7 @@ const Profile = ({ User, token }: { User: UserProps, token: string }) => {
     const pathName = usePathname();
     const [openChangeProfilePicModal, setOpenChangeProfilePicModal] = useAtom(ChangeProfilePicModalAtom);
     const [openCoverPicModal, setOpenCoverPicModal] = useAtom(ChangeCoverPicModalAtom);
+    // const [viewPost, setViewPost] = useAtom(ViewPostAtom);
 
     const links = [
         {
