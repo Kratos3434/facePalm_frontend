@@ -145,7 +145,7 @@ const Home = ({ user, posts, token }: Props) => {
                     <span className="tw-text-[17px] tw-text-[#65676B]">Friends</span>
                 </div>
             </div>
-            {viewPost.status && <ViewPost currentUser={user} />}
+            {viewPost.status && <ViewPost currentUser={user} token={token} />}
         </main>
     )
 }

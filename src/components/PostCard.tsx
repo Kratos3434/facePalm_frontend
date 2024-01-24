@@ -91,7 +91,7 @@ const PostCard = ({ post, userId, token }: Props) => {
                 </span>
                 <div className="tw-flex tw-gap-3">
                     <span>
-                        0 comments
+                        {post.comments.length} comments
                     </span>
                     <span>
                         {post.shares} shares

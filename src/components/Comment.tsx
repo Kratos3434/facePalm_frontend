@@ -13,10 +13,10 @@ const Comment = ({ comment }: Props) => {
         <Image src={comment.author.profilePicture ? comment.author.profilePicture : "/images/placeholder.png"} width={32} height={32} alt={`${comment.author.firstName} ${comment.author.lastName}`} className="tw-rounded-[1000px] tw-w-[32px] tw-h-[32px]" />
       </Link>
       <div className="tw-flex tw-flex-col tw-items-start tw-px-[12px] tw-py-[8px] tw-rounded-xl tw-bg-gray-100">
-        <Link className="tw-text-[13px] tw-font-bold hover:tw-underline" href="/">
+        <Link className="tw-text-[13px] tw-font-bold hover:tw-underline" href={`/${comment.author.firstName}.${comment.author.lastName}.${comment.author.id}`}>
           {comment.author.firstName} {comment.author.lastName}
         </Link>
-        <span>{comment.comment}</span>
+        <span className="tw-text-[15px]">{comment.comment}</span>
       </div>
     </div>
   )
