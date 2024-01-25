@@ -21,10 +21,11 @@ import { useQueryClient } from "react-query";
 
 interface Props {
     currentUser: UserProps,
-    token: string
+    token: string,
+    type: string
 }
 
-const ViewPost = ({ currentUser, token }: Props) => {
+const ViewPost = ({ currentUser, token, type }: Props) => {
     const queryClient = useQueryClient();
     const router = useRouter();
     const [view, setView] = useAtom(ViewPostAtom);
@@ -65,7 +66,7 @@ const ViewPost = ({ currentUser, token }: Props) => {
             if (textboxRef.current) {
                 textboxRef.current.innerText = "";
             }
-            setView({ status: true, post: data.data.post });
+            setView({ status: true, post: data.data.post, type });
             commentRef.current?.scrollIntoView({behavior: "smooth"});
             router.refresh();
             queryClient.invalidateQueries('posts');

@@ -206,7 +206,7 @@ const HomeProfile = ({ user, token }: Props) => {
                 openAddPostProfile &&
                 <AddPost type="PROFILE" user={user} token={token} />
             }
-            {viewPost.status && viewPost.type === "HomeProfile" && <ViewPost currentUser={user} token={token} />}
+            {viewPost.status && viewPost.type === "HomeProfile" && <ViewPost currentUser={user} token={token} type="HomeProfile" />}
         </div>
     )
 }
