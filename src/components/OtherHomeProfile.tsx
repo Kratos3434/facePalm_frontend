@@ -108,7 +108,7 @@ const OtherHomeProfile = ({ user, token, currentUser }: Props) => {
                 </div>
                 {/* Right side end */}
             </div>
-            {viewPost.status && viewPost.type === "OtherHomeProfile" && <ViewPost currentUser={currentUser} token={token} />}
+            {viewPost.status && viewPost.type === "OtherHomeProfile" && <ViewPost currentUser={currentUser} token={token} type="OtherHomeProfile" />}
         </div>
     )
 }
