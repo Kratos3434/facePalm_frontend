@@ -30,16 +30,16 @@ const getUserProfile = async (name: string) => {
 
         const verifyData = await verify.json();
 
-        return [data.data, verifyData.status, token];
+        return [data.data, verifyData.status, token, verifyData?.error?.currentUser];
     } else {
         notFound();
     }
 }
 
 const ProfilePage = async ({ params }: any) => {
-    const [user, verified, token] = await getUserProfile(params.name);
+    const [user, verified, token, currentUser] = await getUserProfile(params.name);
 
-    return verified ? <HomeProfile user={user} token={token} /> : <OtherHomeProfile user={user} token={token} />;
+    return verified ? <HomeProfile user={user} token={token} /> : <OtherHomeProfile user={user} token={token} currentUser={currentUser} />;
 }
 
 export default ProfilePage;

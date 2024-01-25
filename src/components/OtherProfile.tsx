@@ -12,9 +12,6 @@ const OtherProfile = ({ User }: { User: UserProps }) => {
         dangerouslyForceHydrate: true
     });
 
-    useHydrateAtoms([[ViewPostAtom, { status: false, post: null }]] as const, {
-        dangerouslyForceHydrate: true
-    });
     // const [user, setUser] = useAtom(userProfileAtom);
     const params = useParams();
     const pathName = usePathname();

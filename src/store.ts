@@ -43,7 +43,8 @@ export const ChangeCoverPicModalAtom = atom(false);
 interface ViewPostProps {
     status: boolean,
     post: PostProps | null,
-    userId?: number
+    userId?: number,
+    type?: string
 }
 
-export const ViewPostAtom = atom<ViewPostProps>({status: false, post: null, userId: 0});
+export const ViewPostAtom = atom<ViewPostProps>({status: false, post: null, userId: 0, type: ""});
