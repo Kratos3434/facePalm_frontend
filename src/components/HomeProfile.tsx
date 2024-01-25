@@ -190,7 +190,7 @@ const HomeProfile = ({ user, token }: Props) => {
                         user.posts.map((e, idx) => {
                             return (
                                 <span key={idx}>
-                                    <PostCard post={e} userId={user.id} token={token} type="HomeProfile" />
+                                    <PostCard post={e} currentUser={user} token={token} type="HomeProfile" />
                                 </span>
                             )
                         })

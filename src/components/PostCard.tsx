@@ -1,5 +1,5 @@
 "use client"
-import { PostProps } from "@/type";
+import { PostProps, UserProps } from "@/type";
 import Image from "next/image";
 import CloseIcon from '@mui/icons-material/Close';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -17,11 +17,11 @@ import { baseURL } from "@/env";
 
 interface Props {
     post: PostProps,
-    userId: number,
+    currentUser: UserProps
     token: string,
     type: string
 }
-const PostCard = ({ post, userId, token, type }: Props) => {
+const PostCard = ({ post, currentUser, token, type }: Props) => {
     const queryClient = useQueryClient();
     const [cookies, setCookie, removeCookie] = useCookies();
     const [user] = useAtom(userAtom);
@@ -40,7 +40,7 @@ const PostCard = ({ post, userId, token, type }: Props) => {
                 "Authorization": `Bearer ${token}`
             },
             body: JSON.stringify({
-                email: user.email,
+                email: currentUser.email,
                 postId: post.id
             })
         });
@@ -103,13 +103,13 @@ const PostCard = ({ post, userId, token, type }: Props) => {
                 <hr />
             </div>
             <div className="tw-flex tw-justify-evenly tw-text-[#65676B] tw-text-[15px] tw-font-bold tw-items-center tw-px-[20px] tw-py-1">
-                <div className={`tw-flex tw-gap-2 tw-items-center hover:tw-bg-gray-200 tw-cursor-pointer hover:tw-rounded-md tw-w-full tw-justify-center tw-py-3 ${post.likes.some(e => e.userId === userId) && " tw-text-blue-600"}`} onClick={likePost}>
+                <div className={`tw-flex tw-gap-2 tw-items-center hover:tw-bg-gray-200 tw-cursor-pointer hover:tw-rounded-md tw-w-full tw-justify-center tw-py-3 ${post.likes.some(e => e.userId === currentUser.id) && " tw-text-blue-600"}`} onClick={likePost}>
                     <ThumbUpOffAltIcon className="tw-w-[20px] tw-h-[20px]" />
                     Like
                 </div>
 
                 <div className="tw-flex tw-gap-2 tw-items-center hover:tw-bg-gray-200 tw-cursor-pointer hover:tw-rounded-md tw-w-full tw-justify-center tw-py-3"
-                onClick={() => setViewPost({ status: true, post: post, userId, type })}>
+                onClick={() => setViewPost({ status: true, post: post, userId: currentUser.id, type })}>
                     <ChatBubbleOutlineIcon className="tw-w-[20px] tw-h-[20px]" />
                     Comment
                 </div>
