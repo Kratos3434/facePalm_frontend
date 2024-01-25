@@ -96,7 +96,7 @@ const OtherHomeProfile = ({ user, token, currentUser }: Props) => {
                         user.posts.map((e, idx) => {
                             return (
                                 <span key={idx}>
-                                    <PostCard post={e} userId={user.id} token={token} type="OtherHomeProfile" />
+                                    <PostCard post={e} currentUser={currentUser} token={token} type="OtherHomeProfile" />
                                 </span>
                             )
                         })

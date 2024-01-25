@@ -126,7 +126,7 @@ const Home = ({ user, posts, token }: Props) => {
                             data.map((e: any, idx: number) => {
                                 return (
                                     <span key={idx}>
-                                        <PostCard post={e} userId={user.id} token={token} type="Home" />
+                                        <PostCard post={e} currentUser={user} token={token} type="Home" />
                                     </span>
                                 )
                             })
