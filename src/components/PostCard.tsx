@@ -18,9 +18,10 @@ import { baseURL } from "@/env";
 interface Props {
     post: PostProps,
     userId: number,
-    token: string
+    token: string,
+    type: string
 }
-const PostCard = ({ post, userId, token }: Props) => {
+const PostCard = ({ post, userId, token, type }: Props) => {
     const queryClient = useQueryClient();
     const [cookies, setCookie, removeCookie] = useCookies();
     const [user] = useAtom(userAtom);
@@ -108,7 +109,7 @@ const PostCard = ({ post, userId, token }: Props) => {
                 </div>
 
                 <div className="tw-flex tw-gap-2 tw-items-center hover:tw-bg-gray-200 tw-cursor-pointer hover:tw-rounded-md tw-w-full tw-justify-center tw-py-3"
-                onClick={() => setViewPost({ status: true, post: post, userId })}>
+                onClick={() => setViewPost({ status: true, post: post, userId, type })}>
                     <ChatBubbleOutlineIcon className="tw-w-[20px] tw-h-[20px]" />
                     Comment
                 </div>

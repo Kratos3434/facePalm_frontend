@@ -12,6 +12,8 @@ import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
 import EditIcon from '@mui/icons-material/Edit';
 import { baseURL } from "@/env";
+import { ViewPostAtom } from "@/store";
+import ViewPost from "./ViewPost";
 
 interface Props {
     user: UserProps,
@@ -20,12 +22,12 @@ interface Props {
 
 const HomeProfile = ({ user, token }: Props) => {
     const router = useRouter();
+    const [viewPost, setViewPost] = useAtom(ViewPostAtom);
     const [openAddPostProfile, setOpenAddPostProfile] = useAtom(AddPostProfileAtom);
     const [editBio, setEditBio] = useState(false);
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [bioCharacters, setBioCharacters] = useState(101);
     const [bio, setBio] = useState("");
-    const [cookies, setCookie, removeCookie] = useCookies();
 
     const monthToString = (month: number) => {
         switch (month) {
@@ -188,7 +190,7 @@ const HomeProfile = ({ user, token }: Props) => {
                         user.posts.map((e, idx) => {
                             return (
                                 <span key={idx}>
-                                    <PostCard post={e} userId={user.id} token={token} />
+                                    <PostCard post={e} userId={user.id} token={token} type="HomeProfile" />
                                 </span>
                             )
                         })
@@ -204,6 +206,7 @@ const HomeProfile = ({ user, token }: Props) => {
                 openAddPostProfile &&
                 <AddPost type="PROFILE" user={user} token={token} />
             }
+            {viewPost.status && viewPost.type === "HomeProfile" && <ViewPost currentUser={user} token={token} />}
         </div>
     )
 }

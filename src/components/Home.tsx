@@ -25,9 +25,6 @@ interface Props {
 };
 
 const Home = ({ user, posts, token }: Props) => {
-    useHydrateAtoms([[userAtom, user]]);
-
-    // const [User] = useAtom(userAtom);
     const [openAddPost, setOpenAddPost] = useAtom(AddPostModalAtom);
     const [viewPost, setViewPost] = useAtom(ViewPostAtom);
     const getPosts = async () => {
@@ -129,7 +126,7 @@ const Home = ({ user, posts, token }: Props) => {
                             data.map((e: any, idx: number) => {
                                 return (
                                     <span key={idx}>
-                                        <PostCard post={e} userId={user.id} token={token} />
+                                        <PostCard post={e} userId={user.id} token={token} type="Home" />
                                     </span>
                                 )
                             })
@@ -145,7 +142,7 @@ const Home = ({ user, posts, token }: Props) => {
                     <span className="tw-text-[17px] tw-text-[#65676B]">Friends</span>
                 </div>
             </div>
-            {viewPost.status && <ViewPost currentUser={user} token={token} />}
+            {viewPost.status && viewPost.type === "Home" && <ViewPost currentUser={user} token={token} />}
         </main>
     )
 }
