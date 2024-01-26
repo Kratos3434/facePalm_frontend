@@ -49,7 +49,7 @@ const ProfileLayout = async ({ children, params }: Props) => {
             <NavBar token={token} />
             <main className="tw-bg-[#F0F2F5] tw-pt-[52px]">
                 {
-                    verify ? <Profile User={user} token={token} /> : <OtherProfile User={user} />
+                    verify ? <Profile User={user} token={token} /> : <OtherProfile User={user} token={token} />
                 }
                 {children}
             </main>

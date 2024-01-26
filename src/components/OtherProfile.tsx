@@ -1,13 +1,18 @@
 "use client"
 import { UserProps } from "@/type";
-import { ViewPostAtom, userProfileAtom } from "@/store";
+import { userProfileAtom } from "@/store";
 import { useHydrateAtoms } from "jotai/utils";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
+import { useState } from "react";
+import { CircularProgress } from "@mui/material";
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 
-const OtherProfile = ({ User }: { User: UserProps }) => {
+const OtherProfile = ({ User, token }: { User: UserProps, token: string }) => {
     useHydrateAtoms([[userProfileAtom, User]], {
         dangerouslyForceHydrate: true
     });
@@ -43,6 +48,25 @@ const OtherProfile = ({ User }: { User: UserProps }) => {
         // }
     ]
 
+    const [loading, isLoading] = useState(true);
+
+    const sendFriendRequest = async () => {
+        isLoading(true);
+        const res = await fetch(`http://localhost:8080/user/send/request/${User.id}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+
+        if (data.status) {
+
+        }
+    }
+
     return (
         <div className="tw-w-full tw-h-full">
             <div className="tw-shadow-md tw-w-full tw-bg-white">
@@ -66,6 +90,30 @@ const OtherProfile = ({ User }: { User: UserProps }) => {
                                     <span className="tw-text-[15px] tw-text-[#65676B] tw-font-bold">
                                         0 friends
                                     </span>
+                                </div>
+                            </div>
+                            <div className="tw-flex tw-gap-2">
+                                {
+                                    loading ?
+                                        (
+                                            <div className="tw-rounded-md tw-text-white tw-flex tw-items-center tw-font-bold tw-bg-[#0866FF] tw-px-[12px] tw-py-[10px] tw-gap-2 hover:tw-brightness-95 tw-cursor-pointer">
+                                                {/* <PersonAddIcon className="tw-w-[16px] tw-h-[16px]" /> */}
+                                                <CircularProgress className="tw-w-[16px] tw-h-[16px]" size={16} color="inherit" />
+                                                <span className="tw-text-[15px]">Cancel request</span>
+                                            </div>
+                                        ) :
+                                        (
+                                            <div className="tw-rounded-md tw-text-white tw-flex tw-items-center tw-font-bold tw-bg-[#0866FF] tw-px-[12px] tw-py-[10px] tw-gap-2 hover:tw-brightness-95 tw-cursor-pointer">
+                                                <PersonAddIcon className="tw-w-[16px] tw-h-[16px]" />
+                                                {/* <CircularProgress className="tw-w-[16px] tw-h-[16px]" size={16} color="inherit" /> */}
+                                                <span className="tw-text-[15px]">Add friend</span>
+                                            </div>
+                                        )
+                                }
+
+                                <div className="tw-rounded-md tw-text-white tw-flex tw-items-center tw-font-bold tw-bg-[#0866FF] tw-px-[12px] tw-py-[10px] tw-gap-2 hover:tw-brightness-95 tw-cursor-pointer">
+                                    <LibraryAddIcon className="tw-w-[16px] tw-h-[16px]" />
+                                    <span className="tw-text-[15px]">Follow</span>
                                 </div>
                             </div>
                         </div>
