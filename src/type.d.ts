@@ -43,3 +43,12 @@ export interface LikeProps {
     createdAt: string,
     updatedAt?: string
 }
+
+export interface FriendRequestProps {
+    id: number,
+    user: UserProps,
+    requester: UserProps,
+    status: string,
+    createdAt: string,
+    updatedAt: string
+}

@@ -14,13 +14,14 @@ import { usePathname } from "next/navigation";
 import MenuIcon from '@mui/icons-material/Menu';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";
 import { UserProps } from "@/type";
 import { useQuery } from "react-query";
 import CloseIcon from '@mui/icons-material/Close';
 import { baseURL } from "@/env";
+// import { socket } from "@/socket";
 
 const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
     const [cookies, setCookie, removeCookie] = useCookies();
@@ -38,7 +39,7 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
         return data.data;
     }
 
-    const { data, status } = useQuery({
+    const { data: userData, status } = useQuery({
         queryKey: ['user'],
         initialData: User,
         queryFn: getUser
@@ -82,6 +83,8 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
 
     const [sideNavWidth, setSideNavWidth] = useState(0);
 
+    // const [notif, setNotif] = useState([]);
+
     const handleNavClick = () => {
         setShowModal(!showModal);
     }
@@ -96,9 +99,27 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
             }
         })
         const data = await res.json();
-        if (data.status)
+        if (data.status) {
+            // socket.emit("disjoin", {
+            //     email: userData.email
+            // })
+            // socket.disconnect();
             router.replace("/login");
+        }
     }
+
+    // useEffect(() => {
+    //     const notifHandler = (data: any) => {
+    //         console.log("Like notif data:", data.notifications);
+    //         setNotif(data.notifications);
+    //     }
+    //     socket.on("notif", notifHandler);
+    //     console.log(`Notifications: ${notif}`);
+
+    //     return () => {
+    //         socket.off("like_notif", notifHandler);
+    //     }
+    // }, [notif]);
 
     return (
         <nav className="tw-fixed tw-top-0 tw-w-full tw-px-[16px] tw-bg-white tw-pt-[6px] tw-shadow-md tw-z-[1000]">
@@ -106,7 +127,7 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
                 <div className="tw-flex tw-gap-[8px] tw-items-center tw-absolute tw-left-0">
                     <Link href="/" className="tw-w-[40px] tw-h-[40px] ">
                         <Image src="/images/fb_logo.png"
-                            width={40} height={40} alt="faceClam logo" unoptimized className="tw-w-[40px] tw-h-[40px]"/>
+                            width={40} height={40} alt="faceClam logo" unoptimized className="tw-w-[40px] tw-h-[40px]" />
                     </Link>
                     <form>
                         <div className="tw-flex tw-items-center tw-rounded-[1000px] tw-bg-[#F0F2F5] nav-ssm:tw-pl-2 nav-ssm:tw-w-full nav-ssm:tw-h-full tw-w-[40px] tw-py-[7px] tw-justify-center nav-ssm:tw-py-0">
@@ -152,7 +173,7 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
                     </div>
 
                     <div className="tw-relative" onClick={handleNavClick}>
-                        <Image src={status == "success" && data.profilePicture ? data.profilePicture : "/images/placeholder.png"} width={36} height={40} alt="profile pic" className="tw-rounded-[50%] tw-bg-[#F0F2F5] tw-cursor-pointer hover:tw-bg-gray-200 active:tw-scale-[.9] tw-overflow-hidden tw-transition-all tw-h-[40px]" />
+                        <Image src={status == "success" && userData.profilePicture ? userData.profilePicture : "/images/placeholder.png"} width={36} height={40} alt="profile pic" className="tw-rounded-[50%] tw-bg-[#F0F2F5] tw-cursor-pointer hover:tw-bg-gray-200 active:tw-scale-[.9] tw-overflow-hidden tw-transition-all tw-h-[40px]" />
                         <KeyboardArrowDownIcon className="tw-w-[14px] tw-h-[14px] tw-absolute tw-bottom-0 tw-right-0 tw-rounded-[1000px] tw-bg-gray-300 tw-cursor-pointer" />
                     </div>
                 </div>

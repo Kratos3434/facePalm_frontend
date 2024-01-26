@@ -17,6 +17,7 @@ import Groups2Icon from '@mui/icons-material/Groups2';
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 import { baseURL } from "@/env";
 import ViewPost from "./ViewPost";
+// import { socket } from "@/socket";
 
 interface Props {
     user: UserProps,
@@ -38,6 +39,11 @@ const Home = ({ user, posts, token }: Props) => {
         const data = await res.json();
         return data.data;
     }
+
+    // socket.connect();
+    // socket.emit("join", {
+    //     email: user.email
+    // });
 
     const { data, status } = useQuery({
         queryKey: ['posts'],

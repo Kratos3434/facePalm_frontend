@@ -14,6 +14,7 @@ import { useAtom } from "jotai";
 import { ViewPostAtom, userAtom } from "@/store";
 import { useQueryClient } from "react-query";
 import { baseURL } from "@/env";
+// import { socket } from "@/socket";
 
 interface Props {
     post: PostProps,
@@ -48,6 +49,10 @@ const PostCard = ({ post, currentUser, token, type }: Props) => {
         const data = await res.json();
 
         if (data.status) {
+            // socket.emit("like", {
+            //     liker: currentUser.email,
+            //     to: post.author.email
+            // });
             router.refresh();
             queryClient.invalidateQueries('posts');
         }
