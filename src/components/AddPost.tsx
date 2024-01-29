@@ -34,18 +34,27 @@ const AddPost = ({ type, user, token }: Props) => {
 
     const checkFileType = (ext: string) => {
         switch (ext) {
-            case ".gif":
-            case ".jpg":
-            case ".png":
-            case "jpeg":
-            case "jfif":
-            case ".avi":
-            case ".mp4":
-            case ".mov":
-            case ".heif":
-            case ".heic":
-            case ".HEIF":
-            case ".HEIC":
+            case "image/jpg":
+            case "image/jpeg":
+            case "image/png":
+            case "image/gif":
+            case "image/webp":
+            case "image/flif":
+            case "image/cr2":
+            case "image/tif":
+            case "image/bmp":
+            case "image/jxr":
+            case "image/psd":
+            case "image/ico":
+            case "image/bpg":
+            case "image/jp2":
+            case "image/jpm":
+            case "image/jpx":
+            case "image/heic":
+            case "image/cur":
+            case "image/dcm":
+            case "image/svg":
+            case "video/mp4":
                 return true;
             default:
                 return false;
@@ -59,9 +68,10 @@ const AddPost = ({ type, user, token }: Props) => {
         console.log("DESC:", description);
         console.log(photo?.name)
         if (photo) {
-            const fileType = photo.name.substring(photo.name.lastIndexOf('.'));
+            const fileType = photo.type;
+            console.log(photo.type)
             if (!checkFileType(fileType)) {
-                setError({ status: true, msg: "Invalid image or video"});
+                setError({ status: true, msg: "Invalid image or video" });
                 isLoading(false);
                 return false;
             }
@@ -151,7 +161,17 @@ const AddPost = ({ type, user, token }: Props) => {
                                             ) :
                                             (
                                                 <div className="tw-w-full tw-rounded-md tw-border-[1px] tw-border-gray-400 tw-p-2 tw-relative tw-items-center">
-                                                    <Image src={URL.createObjectURL(photo)} width={450} height={221} alt="chosen photo" className="tw-w-[450px] tw-h-[221px] tw-bg-gray-100 tw-rounded" />
+                                                    {
+                                                        photo.type === "video/mp4" ?
+                                                            (
+                                                                <video width={450} height={221} controls loop>
+                                                                    <source src={URL.createObjectURL(photo)} type="video/mp4" />
+                                                                </video>
+                                                            ) :
+                                                            (
+                                                                <Image src={URL.createObjectURL(photo)} width={450} height={221} alt="chosen photo" className="tw-w-[450px] tw-h-[221px] tw-bg-gray-100 tw-rounded" />
+                                                            )
+                                                    }
                                                     <div className="tw-absolute tw-top-0 tw-right-0  tw-flex tw-justify-center tw-items-center tw-p-3">
                                                         <div className="tw-rounded-[1234px] tw-bg-gray-200 tw-p-1 tw-px-2 tw-cursor-pointer hover:tw-brightness-75" onClick={() => setPhoto(null)}>
                                                             <CloseIcon className="tw-w-[16px] tw-h-[16px]" />

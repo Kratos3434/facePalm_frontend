@@ -7,7 +7,6 @@ import Link from "next/link";
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import ReplyIcon from '@mui/icons-material/Reply';
-import linkifyHtml from 'linkify-html';
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";
 import { useAtom } from "jotai";
@@ -15,6 +14,8 @@ import { ViewPostAtom, userAtom } from "@/store";
 import { useQueryClient } from "react-query";
 import { baseURL } from "@/env";
 import { generateDate } from "@/helper";
+import { linkifyDescrip } from "@/helper";
+
 // import { socket } from "@/socket";
 
 interface Props {
@@ -29,10 +30,6 @@ const PostCard = ({ post, currentUser, token, type }: Props) => {
     const [user] = useAtom(userAtom);
     const [viewPost, setViewPost] = useAtom(ViewPostAtom);
     const router = useRouter();
-
-    const linkifyDescrip = () => {
-        return { __html: linkifyHtml(post.description, { defaultProtocol: 'https', target: '_blank' }) }
-    }
 
     const likePost = async () => {
         const res = await fetch(`${baseURL}/user/like/post`, {
@@ -82,7 +79,7 @@ const PostCard = ({ post, currentUser, token, type }: Props) => {
                         </div>
                     </div>
                 </div>
-                <span className="tw-text-[15px] tw-pt-2" dangerouslySetInnerHTML={linkifyDescrip()} id="descrip">
+                <span className="tw-text-[15px] tw-pt-2" dangerouslySetInnerHTML={linkifyDescrip(post.description)} id="descrip">
                     {/* {description} */}
                 </span>
             </div>

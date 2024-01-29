@@ -1,4 +1,5 @@
 import { baseURL } from "@/env";
+import linkifyHtml from 'linkify-html';
 
 export const checkImageType = (ext: string) => {
   switch (ext) {
@@ -60,4 +61,8 @@ export const generateDate = (createdAt: string) => {
   const created = new Date(createdAt);
 
   return `${monthToString(created.getMonth())} ${created.getDate()}, ${created.getFullYear()}`
+}
+
+export const linkifyDescrip = (text: string) => {
+  return { __html: linkifyHtml(text, { defaultProtocol: 'https', target: '_blank' }) }
 }
