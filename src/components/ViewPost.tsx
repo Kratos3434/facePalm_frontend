@@ -66,12 +66,39 @@ const ViewPost = ({ currentUser, token, type }: Props) => {
             if (textboxRef.current) {
                 textboxRef.current.innerText = "";
             }
-            setView({ status: true, post: data.data.post, type });
+            setView({ status: true, post: data.data.post, type, userId: currentUser.id });
             commentRef.current?.scrollIntoView({behavior: "smooth"});
             router.refresh();
             queryClient.invalidateQueries('posts');
         }
     }
+
+    const likePost = async () => {
+        const res = await fetch(`${baseURL}/user/like/post`, {
+            method: 'PUT',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                email: currentUser.email,
+                postId: view.post?.id
+            })
+        });
+
+        const data = await res.json();
+
+        if (data.status) {
+            setView({ status: true, post: data.data.post, type, userId: currentUser.id });
+            // socket.emit("like", {
+            //     liker: currentUser.email,
+            //     to: post.author.email
+            // });
+            router.refresh();
+            queryClient.invalidateQueries('posts');
+        }
+    }
+
     return (
         view.post &&
         (
@@ -139,7 +166,7 @@ const ViewPost = ({ currentUser, token, type }: Props) => {
                             <div className="tw-px-[16px] tw-flex tw-flex-col tw-gap-2">
                                 <hr />
                                 <div className="tw-flex tw-justify-evenly tw-text-[#65676B] tw-text-[15px] tw-items-center">
-                                    <div className={`tw-flex tw-gap-2 tw-py-[6px] hover:tw-rounded-md tw-w-full tw-justify-center tw-items-center hover:tw-bg-gray-200 tw-cursor-pointer ${view.post.likes.some(e => e.userId === view.userId) && " tw-text-blue-600"}`}>
+                                    <div className={`tw-flex tw-gap-2 tw-py-[6px] hover:tw-rounded-md tw-w-full tw-justify-center tw-items-center hover:tw-bg-gray-200 tw-cursor-pointer ${view.post.likes.some(e => e.userId === view.userId) && " tw-text-blue-600"}`} onClick={likePost}>
                                         <ThumbUpOffAltIcon className="tw-w-[20px] tw-h-[20px]" />
                                         <span>Like</span>
                                     </div>
