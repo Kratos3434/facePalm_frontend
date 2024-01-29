@@ -80,12 +80,14 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
     const [showModal, setShowModal] = useState(false);
 
     const [openMenu, isOpenMenu] = useState(false);
+    const [openNotif, isOpenNotif] = useState(false);
 
     const [sideNavWidth, setSideNavWidth] = useState(0);
 
     // const [notif, setNotif] = useState([]);
 
     const handleNavClick = () => {
+        isOpenNotif(false);
         setShowModal(!showModal);
     }
 
@@ -108,6 +110,10 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
         }
     }
 
+    const handleCloseAllModal = () => {
+        isOpenNotif(false);
+        setShowModal(false);
+    }
     // useEffect(() => {
     //     const notifHandler = (data: any) => {
     //         console.log("Like notif data:", data.notifications);
@@ -150,7 +156,7 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
                             links.map((e, idx) => {
                                 return (
                                     <Link passHref href={e.path} className="tw-flex tw-justify-center tw-w-[111.59px] tw-h-full tw-items-center hover:tw-rounded-md hover:tw-bg-gray-200 tw-transition-all tw-border-b-[4px]" key={idx}
-                                        style={{ borderColor: `${pathName == e.path ? "#0866FF" : "#fff"}` }} title={e.name}>
+                                        style={{ borderColor: `${pathName == e.path ? "#0866FF" : "#fff"}` }} title={e.name} onClick={handleCloseAllModal}>
                                         {e.icon}
                                     </Link>
                                 )
@@ -168,7 +174,10 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
                         <ChatIcon className="tw-w-[20px] tw-h-[20px]" />
                     </div>
 
-                    <div className="tw-rounded-[50%] tw-bg-[#F0F2F5] tw-p-2 tw-cursor-pointer hover:tw-bg-gray-200 active:tw-scale-[.9] tw-overflow-hidden tw-transition-all nav-sm:tw-block tw-hidden">
+                    <div className="tw-rounded-[50%] tw-bg-[#F0F2F5] tw-p-2 tw-cursor-pointer hover:tw-bg-gray-200 active:tw-scale-[.9] tw-overflow-hidden tw-transition-all nav-sm:tw-block tw-hidden" onClick={() => {
+                        setShowModal(false);
+                        isOpenNotif(!openNotif)
+                    }}>
                         <NotificationsIcon className="tw-w-[20px] tw-h-[20px]" />
                     </div>
 
@@ -225,6 +234,18 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
                                         Log Out
                                     </span>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+            {
+                openNotif &&
+                (
+                    <div className="tw-fixed tw-left-0 tw-w-full tw-overflow-auto tw-px-3 tw-h-full tw-top-[58px]" onClick={() => isOpenNotif(false)}>
+                        <div className="tw-absolute tw-right-0 tw-top-[5px] tw-pr-4">
+                            <div className="tw-rounded-md tw-bg-white tw-w-[360px] tw-shadow-md tw-flex tw-flex-col tw-text-[15px] tw-text-black tw-font-bold tw-text-center tw-p-2">
+                                <span>No Notifications Yet</span>
                             </div>
                         </div>
                     </div>
