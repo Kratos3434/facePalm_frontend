@@ -12,9 +12,11 @@ export interface UserProps {
     updatedAt?: string,
     disabledAt?: string,
     posts: PostProps[],
-    likes: LikeProps[]
+    likes: LikeProps[],
     bio?: string,
-    addressFrom?: string
+    addressFrom?: string,
+    friendRequests: FriendRequestProps[],
+    friendRequestSent: FriendRequestProps[]
 }
 
 export interface CommentProps {

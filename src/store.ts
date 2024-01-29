@@ -14,7 +14,9 @@ export const userAtom = atom<UserProps>(
         updatedAt: "",
         disabledAt: "",
         posts: [],
-        likes: []
+        likes: [],
+        friendRequests: [],
+        friendRequestSent: []
     }
 );
 
@@ -31,7 +33,9 @@ export const userProfileAtom = atom<UserProps>(
         updatedAt: "",
         disabledAt: "",
         posts: [],
-        likes: []
+        likes: [],
+        friendRequests: [],
+        friendRequestSent: []
     }
 );
 
