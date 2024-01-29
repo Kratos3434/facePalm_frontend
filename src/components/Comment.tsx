@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { CommentProps } from "@/type";
+import { linkifyDescrip } from "@/helper";
 
 interface Props {
   comment: CommentProps
@@ -16,7 +17,9 @@ const Comment = ({ comment }: Props) => {
         <Link className="tw-text-[13px] tw-font-bold hover:tw-underline" href={`/${comment.author.firstName}.${comment.author.lastName}.${comment.author.id}`}>
           {comment.author.firstName} {comment.author.lastName}
         </Link>
-        <span className="tw-text-[15px]">{comment.comment}</span>
+        <span className="tw-text-[15px]" dangerouslySetInnerHTML={linkifyDescrip(comment.comment)} id="descrip">
+          {/* {comment.comment} */}
+        </span>
       </div>
     </div>
   )
