@@ -16,7 +16,9 @@ export interface UserProps {
     bio?: string,
     addressFrom?: string,
     friendRequests: FriendRequestProps[],
-    friendRequestSent: FriendRequestProps[]
+    friendRequestSent: FriendRequestProps[],
+    notifications: NotificationProps[],
+    notificationsSent: NotificationProps[]
 }
 
 export interface CommentProps {
@@ -25,7 +27,7 @@ export interface CommentProps {
     author: UserProps,
     post: PostProps,
     createdAt: string,
-    updatedAt: string
+    updatedAt?: string
 }
 export interface PostProps {
     id: number,
@@ -34,7 +36,9 @@ export interface PostProps {
     likes: LikeProps[],
     shares: number,
     author: UserProps,
-    comments: CommentProps[]
+    comments: CommentProps[],
+    createdAt: string,
+    updatedAt?: string
 }
 
 export interface LikeProps {
@@ -49,8 +53,23 @@ export interface LikeProps {
 export interface FriendRequestProps {
     id: number,
     user: UserProps,
+    userId: number,
     requester: UserProps,
+    requesterId: number,
     status: string,
+    createdAt: string,
+    updatedAt: string
+}
+
+export interface NotificationProps {
+    id: number,
+    description: string,
+    recipient: UserProps,
+    recipientId: number,
+    sender: UserProps,
+    senderId: number,
+    type: String,
+    isRead: boolean,
     createdAt: string,
     updatedAt: string
 }

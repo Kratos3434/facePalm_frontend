@@ -18,6 +18,7 @@ import { useRef } from "react";
 import { baseURL } from "@/env";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "react-query";
+import { generateDate } from "@/helper";
 
 interface Props {
     currentUser: UserProps,
@@ -67,7 +68,7 @@ const ViewPost = ({ currentUser, token, type }: Props) => {
                 textboxRef.current.innerText = "";
             }
             setView({ status: true, post: data.data.post, type, userId: currentUser.id });
-            commentRef.current?.scrollIntoView({behavior: "smooth"});
+            commentRef.current?.scrollIntoView({ behavior: "smooth" });
             router.refresh();
             queryClient.invalidateQueries('posts');
         }
@@ -129,9 +130,14 @@ const ViewPost = ({ currentUser, token, type }: Props) => {
                                         <Link href={`/${view.post.author.firstName}.${view.post.author.lastName}.${view.post.author.id}`}>
                                             <Image src={`${view.post.author.profilePicture ? view.post.author.profilePicture : "/images/placeholder.png"}`} width={40} height={40} alt="photo" className="tw-rounded-[1000px] tw-w-[40px] tw-h-[40px]" />
                                         </Link>
-                                        <Link className="tw-text-[15px] tw-font-bold hover:tw-underline" href={`/${view.post.author.firstName}.${view.post.author.lastName}.${view.post.author.id}`}>
-                                            {view.post.author.firstName} {view.post.author.lastName}
-                                        </Link>
+                                        <div className="tw-flex tw-flex-col">
+                                            <Link className="tw-text-[15px] tw-font-bold hover:tw-underline" href={`/${view.post.author.firstName}.${view.post.author.lastName}.${view.post.author.id}`}>
+                                                {view.post.author.firstName} {view.post.author.lastName}
+                                            </Link>
+                                            <span className="tw-text-[13px] tw-text-[#65676B]">
+                                                {generateDate(view.post.createdAt)}
+                                            </span>
+                                        </div>
                                     </div>
                                     <MoreHorizIcon className="tw-w-[36px] tw-h-[36px]" />
                                 </div>

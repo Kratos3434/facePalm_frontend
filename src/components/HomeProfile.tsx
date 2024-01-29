@@ -14,6 +14,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { baseURL } from "@/env";
 import { ViewPostAtom } from "@/store";
 import ViewPost from "./ViewPost";
+import { monthToString } from "@/helper";
 
 interface Props {
     user: UserProps,
@@ -28,35 +29,6 @@ const HomeProfile = ({ user, token }: Props) => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [bioCharacters, setBioCharacters] = useState(101);
     const [bio, setBio] = useState("");
-
-    const monthToString = (month: number) => {
-        switch (month) {
-            case 0:
-                return "January"
-            case 1:
-                return "February"
-            case 2:
-                return "March"
-            case 3:
-                return "April"
-            case 4:
-                return "May"
-            case 5:
-                return "June"
-            case 6:
-                return "July"
-            case 7:
-                return "August"
-            case 8:
-                return "September"
-            case 9:
-                return "October"
-            case 10:
-                return "November"
-            case 11:
-                return "December"
-        }
-    }
 
     const handleEditBio = async (e: any) => {
         e.preventDefault();

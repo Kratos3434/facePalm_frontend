@@ -5,6 +5,7 @@ import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import { useAtom } from "jotai";
 import { ViewPostAtom } from "@/store";
 import ViewPost from "./ViewPost";
+import { monthToString } from "@/helper";
 
 interface Props {
     user: UserProps,
@@ -14,35 +15,6 @@ interface Props {
 
 const OtherHomeProfile = ({ user, token, currentUser }: Props) => {
     const [viewPost, setViewPost] = useAtom(ViewPostAtom);
-
-    const monthToString = (month: number) => {
-        switch (month) {
-            case 0:
-                return "January"
-            case 1:
-                return "February"
-            case 2:
-                return "March"
-            case 3:
-                return "April"
-            case 4:
-                return "May"
-            case 5:
-                return "June"
-            case 6:
-                return "July"
-            case 7:
-                return "August"
-            case 8:
-                return "September"
-            case 9:
-                return "October"
-            case 10:
-                return "November"
-            case 11:
-                return "December"
-        }
-    }
 
     return (
         <div className="tw-flex tw-flex-col tw-items-center tw-mt-5 tw-w-full">

@@ -14,6 +14,7 @@ import { useAtom } from "jotai";
 import { ViewPostAtom, userAtom } from "@/store";
 import { useQueryClient } from "react-query";
 import { baseURL } from "@/env";
+import { generateDate } from "@/helper";
 // import { socket } from "@/socket";
 
 interface Props {
@@ -30,7 +31,7 @@ const PostCard = ({ post, currentUser, token, type }: Props) => {
     const router = useRouter();
 
     const linkifyDescrip = () => {
-        return { __html: linkifyHtml(post.description, {defaultProtocol: 'https', target: '_blank'})}
+        return { __html: linkifyHtml(post.description, { defaultProtocol: 'https', target: '_blank' }) }
     }
 
     const likePost = async () => {
@@ -67,9 +68,14 @@ const PostCard = ({ post, currentUser, token, type }: Props) => {
                     </Link>
                     <div className="tw-flex tw-justify-between tw-flex-1">
                         {/* <span className="tw-text-[15px] tw-font-bold tw-whitespace-nowrapp">{`${author.firstName} ${author.lastName}`}</span> */}
-                        <Link href={`${post.author.firstName}.${post.author.lastName}.${post.author.id}`} className="tw-text-[15px] tw-font-bold tw-whitespace-nowrapp hover:tw-underline">
-                            {`${post.author.firstName} ${post.author.lastName}`}
-                        </Link>
+                        <div className="tw-flex tw-flex-col">
+                            <Link href={`${post.author.firstName}.${post.author.lastName}.${post.author.id}`} className="tw-text-[15px] tw-font-bold tw-whitespace-nowrapp hover:tw-underline">
+                                {`${post.author.firstName} ${post.author.lastName}`}
+                            </Link>
+                            <span className="tw-text-[13px] tw-text-[#65676B]">
+                                {generateDate(post.createdAt)}
+                            </span>
+                        </div>
                         <div className="tw-flex tw-gap-4">
                             <MoreHorizIcon className="tw-w-[20px] tw-h-[20px] tw-cursor-pointer" />
                             <CloseIcon className="tw-w-[20px] tw-h-[20px] tw-cursor-pointer" />
@@ -82,14 +88,14 @@ const PostCard = ({ post, currentUser, token, type }: Props) => {
             </div>
             {
                 post.featureImage.substring(post.featureImage.lastIndexOf('.')) === '.mp4' ?
-                (
-                    <video width={680} height={680} controls loop>
-                        <source src={`https${post.featureImage.substring(post.featureImage.indexOf(':'))}`} type="video/mp4" />
-                    </video>
-                ):
-                (
-                    <Image src={post.featureImage} width={680} height={680} alt="photo" className="tw-max-w-[680px] tw-max-h-[680px] tw-w-full tw-h-full" priority />
-                )
+                    (
+                        <video width={680} height={680} controls loop>
+                            <source src={`https${post.featureImage.substring(post.featureImage.indexOf(':'))}`} type="video/mp4" />
+                        </video>
+                    ) :
+                    (
+                        <Image src={post.featureImage} width={680} height={680} alt="photo" className="tw-max-w-[680px] tw-max-h-[680px] tw-w-full tw-h-full" priority />
+                    )
             }
             <div className="tw-flex tw-justify-between tw-px-5 tw-text-[#65676B] tw-text-[15px] tw-py-2">
                 <span>
@@ -114,7 +120,7 @@ const PostCard = ({ post, currentUser, token, type }: Props) => {
                 </div>
 
                 <div className="tw-flex tw-gap-2 tw-items-center hover:tw-bg-gray-200 tw-cursor-pointer hover:tw-rounded-md tw-w-full tw-justify-center tw-py-3"
-                onClick={() => setViewPost({ status: true, post: post, userId: currentUser.id, type })}>
+                    onClick={() => setViewPost({ status: true, post: post, userId: currentUser.id, type })}>
                     <ChatBubbleOutlineIcon className="tw-w-[20px] tw-h-[20px]" />
                     Comment
                 </div>
