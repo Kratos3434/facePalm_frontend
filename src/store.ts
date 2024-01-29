@@ -16,7 +16,9 @@ export const userAtom = atom<UserProps>(
         posts: [],
         likes: [],
         friendRequests: [],
-        friendRequestSent: []
+        friendRequestSent: [],
+        notifications: [],
+        notificationsSent: []
     }
 );
 
@@ -35,7 +37,9 @@ export const userProfileAtom = atom<UserProps>(
         posts: [],
         likes: [],
         friendRequests: [],
-        friendRequestSent: []
+        friendRequestSent: [],
+        notifications: [],
+        notificationsSent: []
     }
 );
 
