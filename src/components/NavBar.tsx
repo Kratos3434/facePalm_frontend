@@ -47,7 +47,7 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
     });
 
     const { data: notifications, status: notificationStatus } = useQuery<NotificationProps[]>('notifications', async () => {
-        const res = await fetch(`http://localhost:8080/user/notification/${userData.id}`, {
+        const res = await fetch(`${baseURL}/user/notification/${userData.id}`, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
