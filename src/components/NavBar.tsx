@@ -130,16 +130,16 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
         setShowModal(false);
     }
 
-    // useEffect(() => {
-    //     const notifHandler = (_data: any) => {
-    //         queryClient.invalidateQueries('notifications');
-    //     }
-    //     socket.on("notifications", notifHandler);
+    useEffect(() => {
+        const notifHandler = (_data: any) => {
+            queryClient.invalidateQueries('notifications');
+        }
+        socket.on("notifications", notifHandler);
 
-    //     return () => {
-    //         socket.off("notifications", notifHandler);
-    //     }
-    // }, [queryClient]);
+        return () => {
+            socket.off("notifications", notifHandler);
+        }
+    }, [queryClient]);
 
     return (
         <nav className="tw-fixed tw-top-0 tw-w-full tw-px-[16px] tw-bg-white tw-pt-[6px] tw-shadow-md tw-z-[1000]">
@@ -259,7 +259,7 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
                                                 (
                                                     notifications.map((e, idx) => {
                                                         return (
-                                                            <span key={idx}>
+                                                            <span key={idx} className="tw-py-2 tw-cursor-pointer hover:tw-rounded-md hover:tw-bg-gray-200 tw-px-1">
                                                                 <span className="tw-font-bold">
                                                                     {e.sender.firstName} {e.sender.lastName}
                                                                 </span>&nbsp;

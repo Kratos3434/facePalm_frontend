@@ -45,14 +45,14 @@ const PostCard = ({ post, currentUser, token, type }: Props) => {
         const data = await res.json();
 
         if (data.status) {
-            // socket.emit("like", {
-            //     sender: currentUser.email,
-            //     recipient: post.author.email,
-            //     senderId: currentUser.id,
-            //     recipientId: post.author.id,
-            //     type: `like_${post.id}`,
-            //     postId: post.id
-            // });
+            socket.emit("like", {
+                sender: currentUser.email,
+                recipient: post.author.email,
+                senderId: currentUser.id,
+                recipientId: post.author.id,
+                type: `like_${post.id}`,
+                postId: post.id
+            });
             router.refresh();
             queryClient.invalidateQueries('posts');
         }
