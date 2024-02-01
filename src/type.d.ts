@@ -70,6 +70,8 @@ export interface NotificationProps {
     senderId: number,
     type: String,
     isRead: boolean,
+    postId: number,
+    post: PostProps,
     createdAt: string,
-    updatedAt: string
+    updatedAt?: string
 }

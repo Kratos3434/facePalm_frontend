@@ -7,7 +7,6 @@ import Link from "next/link";
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import ReplyIcon from '@mui/icons-material/Reply';
-import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";
 import { useAtom } from "jotai";
 import { ViewPostAtom, userAtom } from "@/store";
@@ -16,7 +15,7 @@ import { baseURL } from "@/env";
 import { generateDate } from "@/helper";
 import { linkifyDescrip } from "@/helper";
 
-// import { socket } from "@/socket";
+import { socket } from "@/socket";
 
 interface Props {
     post: PostProps,
@@ -26,7 +25,6 @@ interface Props {
 }
 const PostCard = ({ post, currentUser, token, type }: Props) => {
     const queryClient = useQueryClient();
-    const [cookies, setCookie, removeCookie] = useCookies();
     const [user] = useAtom(userAtom);
     const [viewPost, setViewPost] = useAtom(ViewPostAtom);
     const router = useRouter();
@@ -48,8 +46,12 @@ const PostCard = ({ post, currentUser, token, type }: Props) => {
 
         if (data.status) {
             // socket.emit("like", {
-            //     liker: currentUser.email,
-            //     to: post.author.email
+            //     sender: currentUser.email,
+            //     recipient: post.author.email,
+            //     senderId: currentUser.id,
+            //     recipientId: post.author.id,
+            //     type: `like_${post.id}`,
+            //     postId: post.id
             // });
             router.refresh();
             queryClient.invalidateQueries('posts');
@@ -99,7 +101,7 @@ const PostCard = ({ post, currentUser, token, type }: Props) => {
                     {post.likes.length} likes
                 </span>
                 <div className="tw-flex tw-gap-3">
-                    <span>
+                    <span className="tw-cursor-pointer hover:tw-underline" onClick={() => setViewPost({ status: true, post: post, userId: currentUser.id, type })}>
                         {post.comments.length} comments
                     </span>
                     <span>

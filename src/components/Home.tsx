@@ -1,8 +1,7 @@
 "use client"
 import Image from "next/image";
 import { useAtom } from "jotai";
-import { AddPostModalAtom, ViewPostAtom, userAtom } from "@/store";
-import { useHydrateAtoms } from 'jotai/utils';
+import { AddPostModalAtom, ViewPostAtom } from "@/store";
 import WhatsOnYourMind from "./WhatsOnYourMind";
 import { PostProps, UserProps } from "@/type";
 import AddPost from "./AddPost";
@@ -17,7 +16,7 @@ import Groups2Icon from '@mui/icons-material/Groups2';
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 import { baseURL } from "@/env";
 import ViewPost from "./ViewPost";
-// import { socket } from "@/socket";
+import { socket } from "@/socket";
 
 interface Props {
     user: UserProps,
@@ -40,17 +39,17 @@ const Home = ({ user, posts, token }: Props) => {
         return data.data;
     }
 
-    // socket.connect();
-    // socket.emit("join", {
-    //     email: user.email
-    // });
-
     const { data, status } = useQuery({
         queryKey: ['posts'],
         queryFn: getPosts,
         initialData: posts
     });
 
+    // socket.connect();
+    // socket.emit("join", {
+    //     email: user.email
+    // });
+    
     const sideBar = [
         {
             image: {
@@ -87,6 +86,7 @@ const Home = ({ user, posts, token }: Props) => {
             name: `Video`
         },
     ]
+
     return (
         <main className="flex flex-col">
             <div className="tw-flex tw-justify-center tw-gap-[32px]">
@@ -100,12 +100,12 @@ const Home = ({ user, posts, token }: Props) => {
                                         <Link className="tw-flex tw-items-center tw-gap-2 tw-rounded-md hover:tw-bg-gray-200 tw-px-[8px] tw-py-3" key={idx} href={e.path}>
                                             {
                                                 e.image ?
-                                                (
-                                                    <Image src={e.image.source} width={e.image.width} height={e.image.height} alt="Feature Image" className="tw-rounded-[50%] tw-w-[36px] tw-h-[36px]" />
-                                                ):
-                                                (
-                                                    e.icon
-                                                )
+                                                    (
+                                                        <Image src={e.image.source} width={e.image.width} height={e.image.height} alt="Feature Image" className="tw-rounded-[50%] tw-w-[36px] tw-h-[36px]" />
+                                                    ) :
+                                                    (
+                                                        e.icon
+                                                    )
                                             }
                                             <span>
                                                 {e.name}
@@ -122,21 +122,21 @@ const Home = ({ user, posts, token }: Props) => {
                     {
                         openAddPost && <AddPost type="HOME" user={user} token={token} />
                     }
-                    <WhatsOnYourMind user={user} type="HOME"/>
+                    <WhatsOnYourMind user={user} type="HOME" />
                     {
                         status === "loading" ?
-                        (
-                            <LoadingScreen />
-                        ):
-                        (
-                            data.map((e: any, idx: number) => {
-                                return (
-                                    <span key={idx}>
-                                        <PostCard post={e} currentUser={user} token={token} type="Home" />
-                                    </span>
-                                )
-                            })
-                        )
+                            (
+                                <LoadingScreen />
+                            ) :
+                            (
+                                data.map((e: any, idx: number) => {
+                                    return (
+                                        <span key={idx}>
+                                            <PostCard post={e} currentUser={user} token={token} type="Home" />
+                                        </span>
+                                    )
+                                })
+                            )
                     }
                     <hr />
                     <small className="tw-text-center tw-mb-3">
