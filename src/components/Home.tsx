@@ -45,10 +45,10 @@ const Home = ({ user, posts, token }: Props) => {
         initialData: posts
     });
 
-    // socket.connect();
-    // socket.emit("join", {
-    //     email: user.email
-    // });
+    socket.connect();
+    socket.emit("join", {
+        email: user.email
+    });
     
     const sideBar = [
         {
