@@ -146,15 +146,18 @@ const ViewPost = ({ currentUser, token, type }: Props) => {
                                 </span>
                             </div>
                             {
-                                view.post.featureImage.substring(view.post.featureImage.lastIndexOf('.')) === '.mp4' ?
-                                    (
-                                        <video width={700} height={700} controls loop>
-                                            <source src={`https${view.post.featureImage.substring(view.post.featureImage.indexOf(':'))}`} type="video/mp4" />
-                                        </video>
-                                    ) :
-                                    (
-                                        <Image src={view.post.featureImage} width={700} height={700} alt="photo" className="tw-max-w-[700px] tw-w-full" priority />
-                                    )
+                                view.post.featureImage &&
+                                (
+                                    view.post.featureImage.substring(view.post.featureImage.lastIndexOf('.')) === '.mp4' ?
+                                        (
+                                            <video width={700} height={700} controls loop>
+                                                <source src={`https${view.post.featureImage.substring(view.post.featureImage.indexOf(':'))}`} type="video/mp4" />
+                                            </video>
+                                        ) :
+                                        (
+                                            <Image src={view.post.featureImage} width={700} height={700} alt="photo" className="tw-max-w-[700px] tw-w-full" priority />
+                                        )
+                                )
                             }
                             <div className="tw-px-[16px] tw-flex tw-justify-between tw-text-[#65676B] tw-text-[15px] tw-items-center">
                                 <span>

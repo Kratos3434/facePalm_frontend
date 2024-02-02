@@ -1,11 +1,10 @@
 "use client"
 import { useAtom } from "jotai";
-import { AddPostProfileAtom, userAtom } from "@/store";
+import { AddPostAtom, AddPostProfileAtom, AddStatusAtom } from "@/store";
 import Image from "next/image";
 import VideoCameraBackIcon from '@mui/icons-material/VideoCameraBack';
 import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
-import { AddPostModalAtom } from "@/store";
 import { UserProps } from "@/type";
 import Link from "next/link";
 
@@ -15,8 +14,8 @@ interface Props {
 }
 
 const WhatsOnYourMind = ({ user, type }: Props) => {
-    const [openAddPost, setOpenAddPost] = useAtom(AddPostModalAtom);
-    const [openAddPostProfile, setOpenAddPostProfile] = useAtom(AddPostProfileAtom);
+    const [openAddPost, setOpenAddPost] = useAtom(AddPostAtom);
+    const [openAddStatus, setOpenAddStatus] = useAtom(AddStatusAtom);
 
     const postType = [
         {
@@ -38,7 +37,8 @@ const WhatsOnYourMind = ({ user, type }: Props) => {
                 <Link href={`/${user.firstName}.${user.lastName}.${user.id}`}>
                 <Image src={user.profilePicture ? user.profilePicture : "/images/placeholder.png"} width={40} height={40} alt="profile pic" className="tw-rounded-[1000px] tw-w-[40px] tw-h-[40px]" />
                 </Link>
-                <div className="tw-rounded-[20px] tw-py-[8px] tw-px-[12px] tw-w-full tw-cursor-pointer tw-bg-[#F0F2F5] hover:tw-bg-gray-300">
+                <div className="tw-rounded-[20px] tw-py-[8px] tw-px-[12px] tw-w-full tw-cursor-pointer tw-bg-[#F0F2F5] hover:tw-bg-gray-300"
+                onClick={() => setOpenAddStatus({ status: true, type })}>
                     <span className="tw-text-[17px] tw-text-[#65676B]">What{"'"}s on your mind, {user.firstName} {user.lastName}?</span>
                 </div>
             </div>
@@ -48,7 +48,7 @@ const WhatsOnYourMind = ({ user, type }: Props) => {
                     postType.map((e, idx) => {
                         return(
                             <div key={idx} className="tw-w-full tw-flex tw-justify-center tw-items-center tw-gap-1 hover:tw-rounded-md hover:tw-bg-gray-200 tw-p-[8px] tw-transition-all tw-cursor-pointer" onClick={() => {
-                                idx == 1 && type == "HOME" ? setOpenAddPost(true) : setOpenAddPostProfile(true) 
+                                idx == 1 && setOpenAddPost({ status: true, type }) 
                             }}>
                                 {e.icon}
                                 <span className="tw-text-[15px] tw-text-[#65676B]">

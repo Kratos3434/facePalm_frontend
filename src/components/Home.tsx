@@ -1,7 +1,7 @@
 "use client"
 import Image from "next/image";
 import { useAtom } from "jotai";
-import { AddPostModalAtom, ViewPostAtom } from "@/store";
+import { AddPostAtom, AddStatusAtom, ViewLikesAtom, ViewPostAtom } from "@/store";
 import WhatsOnYourMind from "./WhatsOnYourMind";
 import { PostProps, UserProps } from "@/type";
 import AddPost from "./AddPost";
@@ -17,6 +17,8 @@ import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 import { baseURL } from "@/env";
 import ViewPost from "./ViewPost";
 import { socket } from "@/socket";
+import ViewLikes from "./ViewLikes";
+import AddStatus from "./AddStatus";
 
 interface Props {
     user: UserProps,
@@ -25,8 +27,11 @@ interface Props {
 };
 
 const Home = ({ user, posts, token }: Props) => {
-    const [openAddPost, setOpenAddPost] = useAtom(AddPostModalAtom);
+    const [openAddPost, setOpenAddPost] = useAtom(AddPostAtom);
     const [viewPost, setViewPost] = useAtom(ViewPostAtom);
+    const [viewLikes, setViewLikes] = useAtom(ViewLikesAtom);
+    const [openAddStatus, setOpenAddStatus] = useAtom(AddStatusAtom);
+
     const getPosts = async () => {
         const res = await fetch(`${baseURL}/admin/post/list`, {
             method: "GET",
@@ -120,7 +125,7 @@ const Home = ({ user, posts, token }: Props) => {
                 {/** Main Content Driver Area */}
                 <div className="tw-flex tw-flex-col tw-w-[680px] tw-gap-4 home-lg:tw-pl-0 tw-pl-5 home-xxl:tw-pl-0">
                     {
-                        openAddPost && <AddPost type="HOME" user={user} token={token} />
+                        openAddPost.status && openAddPost.type === "HOME" && <AddPost user={user} token={token} />
                     }
                     <WhatsOnYourMind user={user} type="HOME" />
                     {
@@ -149,6 +154,8 @@ const Home = ({ user, posts, token }: Props) => {
                 </div>
             </div>
             {viewPost.status && viewPost.type === "Home" && <ViewPost currentUser={user} token={token} type="Home" />}
+            { viewLikes.status && viewLikes.type === "Home" && <ViewLikes /> }
+            { openAddStatus.status && openAddStatus.type === "HOME" && <AddStatus token={token} user={user} /> }
         </main>
     )
 }
