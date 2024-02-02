@@ -3,13 +3,12 @@ import { useAtom } from "jotai";
 import PostCard from "./PostCard";
 import WhatsOnYourMind from "./WhatsOnYourMind";
 import { UserProps } from "@/type";
-import { AddPostProfileAtom } from "@/store";
+import { AddPostAtom } from "@/store";
 import AddPost from "./AddPost";
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import { useState } from "react";
-import { useForm, FieldValues } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useRouter } from "next/navigation";
-import { useCookies } from "react-cookie";
 import EditIcon from '@mui/icons-material/Edit';
 import { baseURL } from "@/env";
 import { ViewPostAtom } from "@/store";
@@ -24,7 +23,8 @@ interface Props {
 const HomeProfile = ({ user, token }: Props) => {
     const router = useRouter();
     const [viewPost, setViewPost] = useAtom(ViewPostAtom);
-    const [openAddPostProfile, setOpenAddPostProfile] = useAtom(AddPostProfileAtom);
+    // const [openAddPostProfile, setOpenAddPostProfile] = useAtom(AddPostProfileAtom);
+    const [openAddPost, setOpenAddPost] = useAtom(AddPostAtom);
     const [editBio, setEditBio] = useState(false);
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [bioCharacters, setBioCharacters] = useState(101);
@@ -175,8 +175,8 @@ const HomeProfile = ({ user, token }: Props) => {
                 {/* Right side end */}
             </div>
             {
-                openAddPostProfile &&
-                <AddPost type="PROFILE" user={user} token={token} />
+                openAddPost.status && openAddPost.type === "PROFILE" &&
+                <AddPost user={user} token={token} />
             }
             {viewPost.status && viewPost.type === "HomeProfile" && <ViewPost currentUser={user} token={token} type="HomeProfile" />}
         </div>

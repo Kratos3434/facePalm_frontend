@@ -9,7 +9,7 @@ import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import ReplyIcon from '@mui/icons-material/Reply';
 import { useRouter } from "next/navigation";
 import { useAtom } from "jotai";
-import { ViewPostAtom, userAtom } from "@/store";
+import { ViewLikesAtom, ViewPostAtom, userAtom } from "@/store";
 import { useQueryClient } from "react-query";
 import { baseURL } from "@/env";
 import { generateDate } from "@/helper";
@@ -27,6 +27,7 @@ const PostCard = ({ post, currentUser, token, type }: Props) => {
     const queryClient = useQueryClient();
     const [user] = useAtom(userAtom);
     const [viewPost, setViewPost] = useAtom(ViewPostAtom);
+    const [viewLikes, setViewLikes] = useAtom(ViewLikesAtom);
     const router = useRouter();
 
     const likePost = async () => {
@@ -86,18 +87,21 @@ const PostCard = ({ post, currentUser, token, type }: Props) => {
                 </span>
             </div>
             {
-                post.featureImage.substring(post.featureImage.lastIndexOf('.')) === '.mp4' ?
-                    (
-                        <video width={680} height={680} controls loop>
-                            <source src={`https${post.featureImage.substring(post.featureImage.indexOf(':'))}`} type="video/mp4" />
-                        </video>
-                    ) :
-                    (
-                        <Image src={post.featureImage} width={680} height={680} alt="photo" className="tw-max-w-[680px] tw-max-h-[680px] tw-w-full tw-h-full" priority />
-                    )
+                post.featureImage &&
+                (
+                    post.featureImage.substring(post.featureImage.lastIndexOf('.')) === '.mp4' ?
+                        (
+                            <video width={680} height={680} controls loop>
+                                <source src={`https${post.featureImage.substring(post.featureImage.indexOf(':'))}`} type="video/mp4" />
+                            </video>
+                        ) :
+                        (
+                            <Image src={post.featureImage} width={680} height={680} alt="photo" className="tw-max-w-[680px] tw-max-h-[680px] tw-w-full tw-h-full" priority />
+                        )
+                )
             }
             <div className="tw-flex tw-justify-between tw-px-5 tw-text-[#65676B] tw-text-[15px] tw-py-2">
-                <span>
+                <span className="tw-cursor-pointer hover:tw-underline" onClick={() => setViewLikes({ status: true, likes: post.likes, userId: currentUser.id, type })}>
                     {post.likes.length} likes
                 </span>
                 <div className="tw-flex tw-gap-3">

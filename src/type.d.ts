@@ -31,7 +31,7 @@ export interface CommentProps {
 }
 export interface PostProps {
     id: number,
-    featureImage: string,
+    featureImage?: string,
     description: string,
     likes: LikeProps[],
     shares: number,
@@ -45,7 +45,9 @@ export interface LikeProps {
     id: number,
     userId: number,
     post: PostProps,
+    postId: number,
     user: UserProps,
+    userId: number,
     createdAt: string,
     updatedAt?: string
 }

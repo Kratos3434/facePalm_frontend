@@ -1,7 +1,7 @@
 "use client"
 import Modal from "./Modal"
 import { useAtom } from "jotai";
-import { userAtom, AddPostModalAtom, AddPostProfileAtom } from "@/store";
+import { AddPostAtom } from "@/store";
 import Image from "next/image";
 import PublicIcon from '@mui/icons-material/Public';
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
@@ -13,22 +13,21 @@ import { useQueryClient } from "react-query";
 import { useRouter } from "next/navigation";
 import { UserProps } from "@/type";
 import { baseURL } from "@/env";
+import Link from "next/link";
 
 interface Props {
-    type: string,
     user: UserProps,
     token: string
 }
-const AddPost = ({ type, user, token }: Props) => {
+
+const AddPost = ({ user, token }: Props) => {
     const queryClient = useQueryClient();
     const router = useRouter();
     const [openConfModal, setOpenConfModal] = useState(false);
-    const [openAddPost, setOpenAddPost] = useAtom(AddPostModalAtom);
-    const [openAddPostProfile, setAddPostProfile] = useAtom(AddPostProfileAtom);
+    const [openAddPost, setOpenAddPost] = useAtom(AddPostAtom);
     const [description, setDescription] = useState("");
     const textboxRef = useRef<HTMLSpanElement>(null);
     const [photo, setPhoto] = useState<File | null>();
-    const [cookies] = useCookies();
     const [loading, isLoading] = useState(false);
     const [error, setError] = useState({ status: false, msg: "" });
 
@@ -95,7 +94,7 @@ const AddPost = ({ type, user, token }: Props) => {
         } else {
             router.refresh();
             queryClient.invalidateQueries('posts');
-            type == "HOME" ? setOpenAddPost(false) : setAddPostProfile(false);
+            setOpenAddPost({ status: false, type: "" });
         }
 
     }
@@ -104,9 +103,14 @@ const AddPost = ({ type, user, token }: Props) => {
         if (textboxRef.current)
             setDescription(textboxRef.current?.innerText);
     }
+
+    const closeAddPost = () => {
+        setOpenAddPost({ status: false, type: "" })
+    }
+
     return (
         <>
-            <Modal className='tw-flex tw-flex-col tw-h-[100vh] tw-justify-center'>
+            <Modal className='tw-flex tw-flex-col tw-max-h-[100vh] tw-h-full tw-justify-center'>
                 <div className='tw-flex tw-justify-center'>
                     <div className="tw-flex tw-flex-col tw-rounded-md tw-bg-white tw-max-w-[500px] tw-w-full">
                         <div className="tw-flex tw-justify-center tw-items-center tw-relative">
@@ -120,11 +124,13 @@ const AddPost = ({ type, user, token }: Props) => {
                         <hr />
                         <div className="tw-flex tw-flex-col tw-p-4 tw-gap-3">
                             <div className="tw-flex tw-justify-start tw-gap-2 tw-items-center">
-                                <Image src={`${user.profilePicture ? user.profilePicture : "/images/placeholder.png"}`} width={40} height={40} className="tw-w-[40px] tw-h-[40px] tw-rounded-[1234px]" alt="profile" />
+                                <Link href={`${user.firstName}.${user.lastName}.${user.id}`}>
+                                    <Image src={`${user.profilePicture ? user.profilePicture : "/images/placeholder.png"}`} width={40} height={40} className="tw-w-[40px] tw-h-[40px] tw-rounded-[1234px]" alt="profile" />
+                                </Link>
                                 <div className="tw-flex tw-flex-col">
-                                    <span className="tw-text-[15px] tw-text-black tw-font-[500]">
+                                    <Link className="tw-text-[15px] tw-text-black tw-font-[500] hover:tw-underline" href={`${user.firstName}.${user.lastName}.${user.id}`}>
                                         {user.firstName} {user.lastName}
-                                    </span>
+                                    </Link>
                                     <div className="tw-flex tw-px-[8px] tw-py-[4px] tw-items-center tw-rounded-md tw-bg-gray-200">
                                         <PublicIcon className="tw-w-[12px] tw-h-[12px]" />
                                         <span className="tw-text-[13px]">Public</span>
@@ -220,7 +226,7 @@ const AddPost = ({ type, user, token }: Props) => {
                             </div>
                             <hr />
                             <div className="tw-flex tw-justify-center tw-gap-2 tw-p-3">
-                                <span className="tw-p-1 tw-rounded-md tw-bg-green-500 tw-font-bold tw-px-3 tw-text-[18px] tw-cursor-pointer hover:tw-brightness-75" onClick={() => type == "HOME" ? setOpenAddPost(false) : setAddPostProfile(false)}>
+                                <span className="tw-p-1 tw-rounded-md tw-bg-green-500 tw-font-bold tw-px-3 tw-text-[18px] tw-cursor-pointer hover:tw-brightness-75" onClick={closeAddPost}>
                                     Yes
                                 </span>
                                 <span className="tw-p-1 tw-rounded-md tw-bg-red-600 tw-font-bold tw-px-3 tw-text-[18px] tw-cursor-pointer hover:tw-brightness-75" onClick={() => setOpenConfModal(false)}>
