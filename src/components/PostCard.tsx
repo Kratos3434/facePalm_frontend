@@ -61,7 +61,7 @@ const PostCard = ({ post, currentUser, token, type }: Props) => {
 
     return (
         <div className="tw-rounded-md tw-shadow-md tw-max-w-[680px] tw-w-full tw-bg-white tw-flex tw-flex-col">
-            <div className="tw-flex tw-flex-col tw-px-[16px] tw-pt-[12px] tw-pb-[16px]">
+            <div className={`tw-flex tw-flex-col tw-px-[16px] tw-pt-[12px] ${post.featureImage && "tw-pb-[16px]"}`}>
                 <div className="tw-flex tw-gap-2">
                     <Link href={`${post.author.firstName}.${post.author.lastName}.${post.author.id}`} className="tw-max-w-[40px] tw-max-h-[40px] tw-w-full tw-h-full tw-rounded-[1000px]">
                         <Image src={`${post.author.profilePicture ? post.author.profilePicture : "/images/placeholder.png"}`} width={40} height={40} alt="profile pic" className="tw-max-w-[40px] tw-h-[40px] tw-w-full tw-rounded-[1000px]" />
@@ -82,7 +82,7 @@ const PostCard = ({ post, currentUser, token, type }: Props) => {
                         </div>
                     </div>
                 </div>
-                <span className="tw-text-[15px] tw-pt-2" dangerouslySetInnerHTML={linkifyDescrip(post.description)} id="descrip">
+                <span className={`tw-text-[15px] ${!post.featureImage && "tw-font-bold"} tw-pt-2`} dangerouslySetInnerHTML={linkifyDescrip(post.description)} id="descrip">
                     {/* {description} */}
                 </span>
             </div>
