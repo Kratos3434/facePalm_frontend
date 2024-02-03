@@ -7,7 +7,6 @@ import PublicIcon from '@mui/icons-material/Public';
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
 import CloseIcon from '@mui/icons-material/Close';
 import { useState, useRef } from "react";
-import { useCookies } from "react-cookie";
 import CircularProgress from '@mui/material/CircularProgress';
 import { useQueryClient } from "react-query";
 import { useRouter } from "next/navigation";
@@ -139,7 +138,7 @@ const AddPost = ({ user, token }: Props) => {
                             </div>
                             <form onSubmit={handlePost}>
                                 <div className="tw-flex tw-flex-col tw-gap-5">
-                                    <span contentEditable={true} spellCheck={false} className="tw-w-full tw-outline-none tw-resize-none tw-relative statusBox tw-cursor-text" aria-label={`What's on your mind ${user.lastName}`} tabIndex={0} role="textbox" placeholder={`What's on your mind, ${user.lastName}?`}
+                                    <span contentEditable={true} spellCheck={false} className="tw-w-full tw-outline-none tw-resize-none tw-relative statusBox tw-cursor-text" aria-label={`What's on your mind ${user.lastName}`} tabIndex={0} role="textbox" placeholder={`What's on your mind, ${user.firstName}?`}
                                         ref={textboxRef} onInput={handleDescription}>
 
                                     </span>
