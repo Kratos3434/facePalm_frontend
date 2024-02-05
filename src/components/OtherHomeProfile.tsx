@@ -3,9 +3,10 @@ import PostCard from "./PostCard";
 import { UserProps } from "@/type";
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import { useAtom } from "jotai";
-import { ViewPostAtom } from "@/store";
+import { ViewLikesAtom, ViewPostAtom } from "@/store";
 import ViewPost from "./ViewPost";
 import { monthToString } from "@/helper";
+import ViewLikes from "./ViewLikes";
 
 interface Props {
     user: UserProps,
@@ -15,6 +16,7 @@ interface Props {
 
 const OtherHomeProfile = ({ user, token, currentUser }: Props) => {
     const [viewPost, setViewPost] = useAtom(ViewPostAtom);
+    const [viewLikes, setViewLikes] = useAtom(ViewLikesAtom);
 
     return (
         <div className="tw-flex tw-flex-col tw-items-center tw-mt-5 tw-w-full">
@@ -81,6 +83,7 @@ const OtherHomeProfile = ({ user, token, currentUser }: Props) => {
                 {/* Right side end */}
             </div>
             {viewPost.status && viewPost.type === "OtherHomeProfile" && <ViewPost currentUser={currentUser} token={token} type="OtherHomeProfile" />}
+            { viewLikes.status && viewLikes.type === "OtherHomeProfile" && <ViewLikes /> }
         </div>
     )
 }

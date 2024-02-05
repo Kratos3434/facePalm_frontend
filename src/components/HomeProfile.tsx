@@ -3,7 +3,7 @@ import { useAtom } from "jotai";
 import PostCard from "./PostCard";
 import WhatsOnYourMind from "./WhatsOnYourMind";
 import { UserProps } from "@/type";
-import { AddPostAtom } from "@/store";
+import { AddPostAtom, ViewLikesAtom } from "@/store";
 import AddPost from "./AddPost";
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import { useState } from "react";
@@ -14,6 +14,7 @@ import { baseURL } from "@/env";
 import { ViewPostAtom } from "@/store";
 import ViewPost from "./ViewPost";
 import { monthToString } from "@/helper";
+import ViewLikes from "./ViewLikes";
 
 interface Props {
     user: UserProps,
@@ -23,6 +24,7 @@ interface Props {
 const HomeProfile = ({ user, token }: Props) => {
     const router = useRouter();
     const [viewPost, setViewPost] = useAtom(ViewPostAtom);
+    const [viewLikes, setViewLikes] = useAtom(ViewLikesAtom);
     // const [openAddPostProfile, setOpenAddPostProfile] = useAtom(AddPostProfileAtom);
     const [openAddPost, setOpenAddPost] = useAtom(AddPostAtom);
     const [editBio, setEditBio] = useState(false);
@@ -179,6 +181,7 @@ const HomeProfile = ({ user, token }: Props) => {
                 <AddPost user={user} token={token} />
             }
             {viewPost.status && viewPost.type === "HomeProfile" && <ViewPost currentUser={user} token={token} type="HomeProfile" />}
+            { viewLikes.status && viewLikes.type === "HomeProfile" && <ViewLikes /> }
         </div>
     )
 }
