@@ -46,8 +46,8 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
         queryFn: getUser
     });
 
-    const { data: notifications, status: notificationStatus } = useQuery<NotificationProps[]>('notifications', async () => {
-        const res = await fetch(`${baseURL}/user/notification/${userData.id}`, {
+    const { data: notifications, status: notificationStatus } = useQuery('notifications', async () => {
+        const res = await fetch(`${baseURL}/user/post/notifications`, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
@@ -56,7 +56,7 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
         })
 
         const data = await res.json();
-        // console.log("Not Data:", data.data)
+        console.log("Not Data:", data.data)
         return data.data;
     })
 
@@ -257,19 +257,30 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
                                         (
                                             notifications && notifications.length > 0 ?
                                                 (
-                                                    notifications.map((e, idx) => {
+                                                    notifications.map((e: any, idx: number) => {
                                                         return (
-                                                            <span key={idx} className="tw-py-2 tw-cursor-pointer hover:tw-rounded-md hover:tw-bg-gray-200 tw-px-1">
-                                                                <span className="tw-font-bold">
-                                                                    {e.sender.firstName} {e.sender.lastName}
-                                                                </span>&nbsp;
-                                                                has liked your post
-                                                            </span>
+                                                            e.notifications.length === 1 ?
+                                                                (
+                                                                    <span key={idx} className="tw-py-2 tw-cursor-pointer hover:tw-rounded-md hover:tw-bg-gray-200 tw-px-1">
+                                                                        <span className="tw-font-bold">
+                                                                            {e.notifications[0].sender.firstName} {e.notifications[0].sender.lastName}
+                                                                        </span>&nbsp;
+                                                                        has liked your post
+                                                                    </span>
+                                                                ) :
+                                                                (
+                                                                    <span key={idx} className="tw-py-2 tw-cursor-pointer hover:tw-rounded-md hover:tw-bg-gray-200 tw-px-1">
+                                                                        <span className="tw-font-bold">
+                                                                            {e.notifications[0].sender.firstName} {e.notifications[0].sender.lastName} and {e.notifications.length - 1} others
+                                                                        </span>&nbsp;
+                                                                        has liked your post
+                                                                    </span>
+                                                                )
                                                         )
                                                     })
                                                 ) :
                                                 (
-                                                    <span>No Notifications Yet</span>
+                                                    <span>No notifications</span>
                                                 )
                                         )
                                 }
@@ -281,5 +292,12 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
         </nav>
     )
 }
+
+{/* <span key={idx} className="tw-py-2 tw-cursor-pointer hover:tw-rounded-md hover:tw-bg-gray-200 tw-px-1">
+    <span className="tw-font-bold">
+        {e.sender.firstName} {e.sender.lastName}
+    </span>&nbsp;
+    has liked your post
+</span> */}
 
 export default NavBar;
