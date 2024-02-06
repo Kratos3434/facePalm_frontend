@@ -57,7 +57,7 @@ const Profile = ({ User, token }: { User: UserProps, token: string }) => {
             <div className="tw-shadow-md tw-w-full tw-bg-white">
                 <div className="tw-flex tw-justify-center tw-w-full">
                     <div className="tw-relative tw-flex tw-flex-col tw-h-full">
-                        <Image src={User.coverPicture ? User.coverPicture : "/images/temp_cover.png"} width={1250} height={462.95} alt="cover photo" className="tw-h-[462.95px]  tw-rounded-t-[0px] tw-rounded-b-md" />
+                        <Image src={User.coverPicture ? User.coverPicture : "/images/temp_cover.png"} width={1250} height={462.95} alt="cover photo" className="tw-h-[462.95px]  tw-rounded-t-[0px] tw-rounded-b-md" priority />
                         <div className="tw-absolute tw-flex tw-justify-end tw-top-[400px] tw-w-full tw-px-[20px] tw-pb-5">
                             <div className="tw-flex tw-rounded-md tw-h-full tw-items-center tw-text-white tw-bg-[rgba(0,0,0,0.5)] tw-px-[12px] tw-gap-1 tw-py-2 tw-cursor-pointer hover:tw-brightness-95" 
                             onClick={() => setOpenCoverPicModal(true)}>
