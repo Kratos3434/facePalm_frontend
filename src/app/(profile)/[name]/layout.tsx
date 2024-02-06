@@ -14,32 +14,42 @@ interface Props {
 const getUserProfile = async (name: string) => {
     const cookie = cookies();
     const token = cookie.get('token')?.value;
-
-    if(!token) {
+    let result: any = [];
+    if (!token) {
         redirect("/login");
     }
-    
-    const res = await fetch(`${baseURL}/public/user/${name}`, {
-        cache: 'no-store'
-    });
 
-    const data = await res.json();
-
-    if(data.status) {
-        const verify = await fetch(`${baseURL}/user/validate/current/${name}`, {
+    try {
+        const res = await fetch(`${baseURL}/public/user/${name}`, {
             cache: 'no-store',
             headers: {
-                "Content-Type": 'application/json',
                 "Authorization": `Bearer ${token}`
             }
         });
 
-        const verifyData = await verify.json();
+        const data = await res.json();
 
-        return [data.data, verifyData.status, token];
-    } else {
-        notFound();
+        if (data.status) {
+            const verify = await fetch(`${baseURL}/user/validate/current/${name}`, {
+                cache: 'no-store',
+                headers: {
+                    "Content-Type": 'application/json',
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            const verifyData = await verify.json();
+
+            result = [data.data, verifyData.status, token];
+        } else {
+            notFound();
+        }
+    } catch (err) {
+        console.log(err)
+        redirect("/login")
     }
+
+    return result;
 }
 
 const ProfileLayout = async ({ children, params }: Props) => {
