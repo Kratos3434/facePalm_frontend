@@ -92,7 +92,7 @@ const OtherProfile = ({ User, token }: { User: UserProps, token: string }) => {
             <div className="tw-shadow-md tw-w-full tw-bg-white">
                 <div className="tw-flex tw-justify-center tw-w-full">
                     <div className="tw-relative tw-flex tw-flex-col tw-h-full">
-                        <Image src={User.coverPicture ? User.coverPicture : "/images/temp_cover.png"} width={1250} height={462.95} alt="cover photo" className="tw-h-[462.95px]  tw-rounded-t-[0px] tw-rounded-b-md" />
+                        <Image src={User.coverPicture ? User.coverPicture : "/images/temp_cover.png"} width={1250} height={462.95} alt="cover photo" className="tw-h-[462.95px]  tw-rounded-t-[0px] tw-rounded-b-md" priority />
                         <div className="tw-absolute tw-top-[390px] tw-pl-5">
                             <div className="tw-relative">
                                 <Image src={User.profilePicture ? User.profilePicture : "/images/placeholder.png"} width={168} height={168} className="tw-rounded-[1000px] tw-border-white tw-border-[5px] tw-w-[168px] tw-h-[168px] hover:tw-brightness-95" alt="Profile Pic" />
