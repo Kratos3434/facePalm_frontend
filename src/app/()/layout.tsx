@@ -7,16 +7,20 @@ import { redirect } from "next/navigation";
 const getUser = async () => {
     const store = cookies();
     const token = store.get('token')?.value;
-    const res = await fetch(`${baseURL}/user/current`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-    })
-  
-    const data = await res.json();
-    return [data.data, token];
+    try {
+        const res = await fetch(`${baseURL}/user/current`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+
+        const data = await res.json();
+        return [data.data, token];
+    } catch (err) {
+        redirect("/login");
+    }
 }
 
 interface Props {

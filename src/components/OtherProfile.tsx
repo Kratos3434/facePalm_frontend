@@ -3,7 +3,7 @@ import { UserProps } from "@/type";
 import { userProfileAtom } from "@/store";
 import { useHydrateAtoms } from "jotai/utils";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
@@ -17,6 +17,8 @@ const OtherProfile = ({ User, token }: { User: UserProps, token: string }) => {
     useHydrateAtoms([[userProfileAtom, User]], {
         dangerouslyForceHydrate: true
     });
+
+    const router = useRouter();
 
     // const [user, setUser] = useAtom(userProfileAtom);
     const params = useParams();
@@ -54,6 +56,23 @@ const OtherProfile = ({ User, token }: { User: UserProps, token: string }) => {
     const sendFriendRequest = async () => {
         isLoading(true);
         const res = await fetch(`${baseURL}/user/send/request/${User.id}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+
+        if (data.status) {
+            router.refresh();
+        }
+        isLoading(false);
+    }
+
+    const cancelRequest = async () => {
+        const res = await fetch(`${baseURL}/user/cancel/request/${User.id}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -64,7 +83,7 @@ const OtherProfile = ({ User, token }: { User: UserProps, token: string }) => {
         const data = await res.json();
 
         if (data.status) {
-
+            router.refresh();
         }
     }
 
@@ -104,11 +123,21 @@ const OtherProfile = ({ User, token }: { User: UserProps, token: string }) => {
                                             </div>
                                         ) :
                                         (
-                                            <div className="tw-rounded-md tw-text-white tw-flex tw-items-center tw-font-bold tw-bg-[#0866FF] tw-px-[12px] tw-py-[10px] tw-gap-2 hover:tw-brightness-95 tw-cursor-pointer">
-                                                <PersonAddIcon className="tw-w-[16px] tw-h-[16px]" />
-                                                {/* <CircularProgress className="tw-w-[16px] tw-h-[16px]" size={16} color="inherit" /> */}
-                                                <span className="tw-text-[15px]">Add friend</span>
-                                            </div>
+                                            User.friendRequests.length === 0 ?
+                                                (
+                                                    <div className="tw-rounded-md tw-text-white tw-flex tw-items-center tw-font-bold tw-bg-[#0866FF] tw-px-[12px] tw-py-[10px] tw-gap-2 hover:tw-brightness-95 tw-cursor-pointer" onClick={sendFriendRequest}>
+                                                        <PersonAddIcon className="tw-w-[16px] tw-h-[16px]" />
+                                                        {/* <CircularProgress className="tw-w-[16px] tw-h-[16px]" size={16} color="inherit" /> */}
+                                                        <span className="tw-text-[15px]">Add friend</span>
+                                                    </div>
+                                                ) :
+                                                (
+                                                    <div className="tw-rounded-md tw-text-white tw-flex tw-items-center tw-font-bold tw-bg-[#0866FF] tw-px-[12px] tw-py-[10px] tw-gap-2 hover:tw-brightness-95 tw-cursor-pointer" onClick={cancelRequest}>
+                                                        {/* <PersonAddIcon className="tw-w-[16px] tw-h-[16px]" /> */}
+                                                        <PersonRemoveIcon className="tw-w-[16px] tw-h-[16px]" />
+                                                        <span className="tw-text-[15px]">Cancel request</span>
+                                                    </div>
+                                                )
                                         )
                                 }
 

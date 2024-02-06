@@ -9,17 +9,17 @@ const getUserProfile = async (name: string) => {
     const cookie = cookies();
     const token = cookie.get('token')?.value;
 
-    if(!token) {
+    if (!token) {
         redirect("/login");
     }
-    
+
     const res = await fetch(`${baseURL}/public/user/${name}`, {
         cache: 'no-store'
     });
 
     const data = await res.json();
 
-    if(data.status) {
+    if (data.status) {
         const verify = await fetch(`${baseURL}/user/validate/current/${name}`, {
             cache: 'no-store',
             headers: {
