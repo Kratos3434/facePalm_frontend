@@ -246,7 +246,7 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
                 (
                     <div className="tw-fixed tw-left-0 tw-w-full tw-overflow-auto tw-px-3 tw-h-full tw-top-[58px]" onClick={() => isOpenNotif(false)}>
                         <div className="tw-absolute tw-right-0 tw-top-[5px] tw-pr-4">
-                            <div className="tw-rounded-md tw-bg-white tw-w-[360px] tw-shadow-md tw-flex tw-flex-col tw-text-[15px] tw-text-black tw-p-2" onClick={(e) => {
+                            <div className="tw-rounded-md tw-bg-white tw-w-[360px] tw-shadow-md tw-flex tw-flex-col tw-text-[15px] tw-text-black tw-p-2 tw-h-[430px] tw-overflow-y-auto viewpost" onClick={(e) => {
                                 e.stopPropagation();
                             }}>
                                 {
