@@ -246,7 +246,7 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
                 (
                     <div className="tw-fixed tw-left-0 tw-w-full tw-overflow-auto tw-px-3 tw-h-full tw-top-[58px]" onClick={() => isOpenNotif(false)}>
                         <div className="tw-absolute tw-right-0 tw-top-[5px] tw-pr-4">
-                            <div className="tw-rounded-md tw-bg-white tw-w-[360px] tw-shadow-md tw-flex tw-flex-col tw-text-[15px] tw-text-black tw-p-2 tw-h-[430px] tw-overflow-y-auto viewpost" onClick={(e) => {
+                            <div className="tw-rounded-md tw-bg-white tw-w-[360px] tw-shadow-md tw-flex tw-flex-col tw-text-[15px] tw-text-black tw-p-2 tw-max-h-[430px] tw-h-full tw-overflow-y-auto viewpost" onClick={(e) => {
                                 e.stopPropagation();
                             }}>
                                 {
@@ -261,20 +261,21 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
                                                         return (
                                                             e.notifications.length === 1 ?
                                                                 (
-                                                                    <span key={idx} className="tw-py-2 tw-cursor-pointer hover:tw-rounded-md hover:tw-bg-gray-200 tw-px-1">
+                                                                    <Link key={idx} className="tw-py-2 tw-cursor-pointer hover:tw-rounded-md hover:tw-bg-gray-200 tw-px-1"
+                                                                    href={`/${userData.firstName}.${userData.lastName}.${userData.id}/posts/${e.id}`}>
                                                                         <span className="tw-font-bold">
                                                                             {e.notifications[0].sender.firstName} {e.notifications[0].sender.lastName}
                                                                         </span>&nbsp;
                                                                         has liked your post
-                                                                    </span>
+                                                                    </Link>
                                                                 ) :
                                                                 (
-                                                                    <span key={idx} className="tw-py-2 tw-cursor-pointer hover:tw-rounded-md hover:tw-bg-gray-200 tw-px-1">
+                                                                    <Link href={`/${userData.firstName}.${userData.lastName}.${userData.id}/posts/${e.id}`} key={idx} className="tw-py-2 tw-cursor-pointer hover:tw-rounded-md hover:tw-bg-gray-200 tw-px-1">
                                                                         <span className="tw-font-bold">
                                                                             {e.notifications[0].sender.firstName} {e.notifications[0].sender.lastName} and {e.notifications.length - 1} others
                                                                         </span>&nbsp;
                                                                         has liked your post
-                                                                    </span>
+                                                                    </Link>
                                                                 )
                                                         )
                                                     })

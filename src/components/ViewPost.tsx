@@ -225,7 +225,7 @@ const ViewPost = ({ currentUser, token, type }: Props) => {
                         <div className="tw-flex tw-px-[16px] tw-py-[9px] tw-max-w-[700px] tw-w-full tw-bg-white tw-rounded-b-md tw-gap-[4px] tw-shadow-2xl tw-border-t-[1px]">
                             <Image src={currentUser.profilePicture ? currentUser.profilePicture : "/images/placeholder.png"} width={32} height={32} alt={`${currentUser.firstName} ${currentUser.lastName}`} className="tw-rounded-[1000px] tw-w-[32px] tw-h-[32px]" />
                             <form onSubmit={handlePostComment} className="tw-w-full tw-rounded-md tw-bg-gray-200 tw-break-words tw-flex tw-flex-col tw-px-[12px] tw-py-[8px]">
-                                <div contentEditable={true} className="tw-outline-none tw-whitespace-pre-wrap commentBox tw-cursor-text" role="textbox" tabIndex={0} placeholder="Write a comment..." onInput={handleComment} ref={textboxRef}>
+                                <div contentEditable={true} className="tw-outline-none tw-whitespace-pre-wrap commentBox tw-cursor-text tw-break-all" role="textbox" tabIndex={0} placeholder="Write a comment..." onInput={handleComment} ref={textboxRef}>
 
                                 </div>
                                 <div className="tw-flex tw-justify-end">

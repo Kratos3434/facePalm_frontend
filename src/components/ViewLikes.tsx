@@ -37,12 +37,12 @@ const ViewLikes = () => {
                         //   {e.user.firstName} {e.user.lastName}
                         // </span>
                         <div key={idx} className="tw-flex tw-text-[15px] tw-font-bold tw-px-[8px] tw-items-center tw-gap-3">
-                          <Link href={`${e.user.firstName}.${e.user.lastName}.${e.user.id}`}>
+                          <Link href={`/${e.user.firstName}.${e.user.lastName}.${e.user.id}`}>
                             <Image src={e.user.profilePicture ? e.user.profilePicture : "/images/placeholder.png"} width={40} height={40} alt={`${e.user.firstName} ${e.user.lastName}`} className="tw-rounded-[1000px] tw-h-[40px] tw-w-[40px]" />
                           </Link>
                           <div className="tw-flex tw-flex-1 tw-justify-between tw-h-full">
                             <div className="tw-flex tw-items-center">
-                              <Link href={`${e.user.firstName}.${e.user.lastName}.${e.user.id}`} className="hover:tw-underline">
+                              <Link href={`/${e.user.firstName}.${e.user.lastName}.${e.user.id}`} className="hover:tw-underline">
                                 {e.user.id === view.userId ? "You" : `${e.user.firstName} ${e.user.lastName}`}
                               </Link>
                             </div>
