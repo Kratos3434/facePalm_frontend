@@ -24,7 +24,7 @@
 }
 
 .viewpost::-webkit-scrollbar {
-  width: 16px;
+  width: 10px;
 }
 
 .viewpost::-webkit-scrollbar-track {
