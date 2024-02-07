@@ -4,20 +4,30 @@ import { cookies } from "next/headers";
 import { baseURL } from "@/env";
 
 const getUsersPost = async (postId: string, userId: string) => {
+  const cookie = cookies();
+  const token = cookie.get('token')?.value;
   const res = await fetch(`${baseURL}/public/post?authorId=${userId}&postId=${postId}`);
   const data = await res.json();
   if (!data.status) {
     return notFound();
   } else {
-    return data.data;
+    const currentUser = await fetch(`${baseURL}/user/current`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    })
+    const userData = await currentUser.json();
+
+    return [data.data, userData.data, token];
   }
 }
 
 const Page = async ({ params }: any) => {
-  const cookie = cookies();
-  const post = await getUsersPost(params.id, params.name.split(".")[2]);
+  const [post, currentUser, token] = await getUsersPost(params.id, params.name.split(".")[2]);
 
-  return <Post post={post} token={cookie.get('token')?.value} />;
+  return <Post post={post} token={token} currentUser={currentUser} />;
 }
 
 export default Page;

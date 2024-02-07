@@ -26,6 +26,7 @@ export interface CommentProps {
     comment: string,
     author: UserProps,
     post: PostProps,
+    replies: CommentProps[],
     createdAt: string,
     updatedAt?: string
 }
