@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import { useAtom } from "jotai";
 import { ViewLikesAtom, ViewPostAtom, userAtom } from "@/store";
 import { useQueryClient } from "react-query";
-import { baseURL } from "@/env";
+import { userBaseURL } from "@/env";
 import { generateDate } from "@/helper";
 import { linkifyDescrip } from "@/helper";
 
@@ -31,16 +31,12 @@ const PostCard = ({ post, currentUser, token, type }: Props) => {
     const router = useRouter();
 
     const likePost = async () => {
-        const res = await fetch(`${baseURL}/user/like/post`, {
+        const res = await fetch(`${userBaseURL}/like/post/${post.id}`, {
             method: 'PUT',
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                email: currentUser.email,
-                postId: post.id
-            })
+            } 
         });
 
         const data = await res.json();

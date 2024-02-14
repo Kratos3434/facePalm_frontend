@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import PublicIcon from '@mui/icons-material/Public';
 import { useRef, useState } from "react";
-import { baseURL } from "@/env";
+import { userBaseURL } from "@/env";
 import LoadingScreen from "./LoadingScreen";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "react-query";
@@ -43,7 +43,7 @@ const AddStatus = ({ user, token }: Props) => {
     const formdata: any = new FormData();
     formdata.append("description", description);
 
-    const res = await fetch(`${baseURL}/user/add/post`, {
+    const res = await fetch(`${userBaseURL}/add/post`, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${token}`

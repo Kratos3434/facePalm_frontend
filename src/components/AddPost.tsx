@@ -11,7 +11,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { useQueryClient } from "react-query";
 import { useRouter } from "next/navigation";
 import { UserProps } from "@/type";
-import { baseURL } from "@/env";
+import { userBaseURL } from "@/env";
 import Link from "next/link";
 
 interface Props {
@@ -78,7 +78,7 @@ const AddPost = ({ user, token }: Props) => {
         formdata.append("email", user.email);
         formdata.append("description", description);
         formdata.append("featureImage", photo);
-        const res = await fetch(`${baseURL}/user/add/post`, {
+        const res = await fetch(`${userBaseURL}/add/post`, {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${token}`

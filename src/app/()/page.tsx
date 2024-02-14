@@ -2,7 +2,7 @@
 import Home from '@/components/Home';
 import { cookies } from 'next/headers';
 import { unstable_noStore as noStore } from 'next/cache';
-import { baseURL } from '@/env';
+import { publicBaseURL, userBaseURL } from '@/env';
 import { redirect } from 'next/navigation';
 
 
@@ -10,7 +10,7 @@ const getUser = async () => {
   const store = cookies();
   const token = store.get('token')?.value;
   try {
-    const res = await fetch(`${baseURL}/user/current`, {
+    const res = await fetch(`${userBaseURL}/current`, {
       cache: 'no-store',
       method: 'GET',
       headers: {
@@ -29,7 +29,7 @@ const getUser = async () => {
 
 const getPosts = async () => {
   try {
-    const res = await fetch(`${baseURL}/admin/post/list`, {
+    const res = await fetch(`${publicBaseURL}/post/list`, {
       cache: 'no-store',
       method: "GET",
       headers: {

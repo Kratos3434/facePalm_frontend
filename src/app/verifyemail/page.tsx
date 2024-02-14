@@ -1,5 +1,5 @@
 import VerifyEmail from "@/components/VerifyEmail";
-import { baseURL } from "@/env";
+import { publicBaseURL } from "@/env";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -9,7 +9,7 @@ const getUser = async () => {
     if(!retrieveToken) {
         redirect("/login");
     }
-    const res = await fetch(`${baseURL}/admin/user/validating/${retrieveToken}`, {
+    const res = await fetch(`${publicBaseURL}/validating/${retrieveToken}`, {
         method: "GET",
         headers: {
             "Authorization": `Bearer dfsdfsdsdfsfssfvgthgbh`

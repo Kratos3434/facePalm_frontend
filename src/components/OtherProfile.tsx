@@ -11,7 +11,7 @@ import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import { useState } from "react";
 import { CircularProgress } from "@mui/material";
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import { baseURL } from "@/env";
+import { baseURL, userBaseURL } from "@/env";
 
 const OtherProfile = ({ User, token }: { User: UserProps, token: string }) => {
     useHydrateAtoms([[userProfileAtom, User]], {
@@ -55,7 +55,7 @@ const OtherProfile = ({ User, token }: { User: UserProps, token: string }) => {
 
     const sendFriendRequest = async () => {
         isLoading(true);
-        const res = await fetch(`${baseURL}/user/send/request/${User.id}`, {
+        const res = await fetch(`${userBaseURL}/send/request/${User.id}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -72,8 +72,8 @@ const OtherProfile = ({ User, token }: { User: UserProps, token: string }) => {
     }
 
     const cancelRequest = async () => {
-        const res = await fetch(`${baseURL}/user/cancel/request/${User.id}`, {
-            method: "GET",
+        const res = await fetch(`${userBaseURL}/cancel/request/${User.id}`, {
+            method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`

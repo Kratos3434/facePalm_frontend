@@ -8,7 +8,7 @@ import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import ReplyIcon from '@mui/icons-material/Reply';
 import { socket } from "@/socket";
-import { baseURL } from "@/env";
+import { baseURL, userBaseURL } from "@/env";
 import { useRouter } from "next/navigation";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import SendIcon from '@mui/icons-material/Send';
@@ -27,7 +27,7 @@ const Post = ({ post, token, currentUser }: { post: PostProps, token?: string, c
   const [loading, isLoading] = useState(false);
 
   const likePost = async () => {
-    const res = await fetch(`${baseURL}/user/like/post`, {
+    const res = await fetch(`${userBaseURL}/like/post`, {
       method: 'PUT',
       headers: {
         "Content-Type": "application/json",
@@ -62,7 +62,7 @@ const Post = ({ post, token, currentUser }: { post: PostProps, token?: string, c
   const handlePostComment = async (e: any) => {
     e.preventDefault();
     isLoading(true);
-    const res = await fetch(`${baseURL}/user/add/comment`, {
+    const res = await fetch(`${userBaseURL}/add/comment`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

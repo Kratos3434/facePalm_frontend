@@ -15,7 +15,7 @@ import ForumIcon from '@mui/icons-material/Forum';
 import Comment from "./Comment";
 import React, { useState } from "react";
 import { useRef } from "react";
-import { baseURL } from "@/env";
+import { baseURL, userBaseURL } from "@/env";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "react-query";
 import { generateDate } from "@/helper";
@@ -47,7 +47,7 @@ const ViewPost = ({ currentUser, token, type }: Props) => {
     const handlePostComment = async (e: any) => {
         e.preventDefault();
         isLoading(true);
-        const res = await fetch(`${baseURL}/user/add/comment`, {
+        const res = await fetch(`${userBaseURL}/add/comment`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

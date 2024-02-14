@@ -1,5 +1,5 @@
 import NavBar from "@/components/NavBar";
-import { baseURL } from "@/env";
+import { userBaseURL } from "@/env";
 import { authenticate } from "@/helper";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -8,7 +8,7 @@ const getUser = async () => {
     const store = cookies();
     const token = store.get('token')?.value;
     try {
-        const res = await fetch(`${baseURL}/user/current`, {
+        const res = await fetch(`${userBaseURL}/current`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

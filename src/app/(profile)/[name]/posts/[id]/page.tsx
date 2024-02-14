@@ -1,7 +1,7 @@
 import Post from "@/components/Post";
 import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
-import { baseURL } from "@/env";
+import { baseURL, userBaseURL } from "@/env";
 
 const getUsersPost = async (postId: string, userId: string) => {
   const cookie = cookies();
@@ -11,7 +11,7 @@ const getUsersPost = async (postId: string, userId: string) => {
   if (!data.status) {
     return notFound();
   } else {
-    const currentUser = await fetch(`${baseURL}/user/current`, {
+    const currentUser = await fetch(`${userBaseURL}/current`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
