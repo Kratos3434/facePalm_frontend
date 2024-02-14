@@ -10,7 +10,7 @@ import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
 import { useCookies } from "react-cookie";
 import LoadingScreen from "./LoadingScreen";
 import { useRouter } from "next/navigation";
-import { baseURL } from "@/env";
+import { baseURL, userBaseURL } from "@/env";
 import { checkImageType } from "@/helper";
 
 interface Props {
@@ -41,7 +41,7 @@ const ChangeProfilePhoto = ({ token }: Props) => {
         const formdata: any = new FormData();
         formdata.append("email", user.email);
         formdata.append("profilepicture", photo);
-        const res = await fetch(`${baseURL}/user/update/profilepicture`, {
+        const res = await fetch(`${userBaseURL}/update/profilepicture`, {
             method: 'PATCH',
             headers: {
                 "Authorization": `Bearer ${token}`

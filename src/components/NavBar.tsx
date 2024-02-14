@@ -20,7 +20,7 @@ import { useRouter } from "next/navigation";
 import { NotificationProps, UserProps } from "@/type";
 import { useQuery, useQueryClient } from "react-query";
 import CloseIcon from '@mui/icons-material/Close';
-import { baseURL } from "@/env";
+import { baseURL, userBaseURL } from "@/env";
 import { socket } from "@/socket";
 
 const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
@@ -28,7 +28,7 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
     const [cookies, setCookie, removeCookie] = useCookies();
     const getUser = async () => {
         // const token = cookies.token;
-        const res = await fetch(`${baseURL}/user/current`, {
+        const res = await fetch(`${userBaseURL}/current`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
     });
 
     const { data: notifications, status: notificationStatus } = useQuery('notifications', async () => {
-        const res = await fetch(`${baseURL}/user/post/notifications`, {
+        const res = await fetch(`${userBaseURL}/post/notifications`, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",

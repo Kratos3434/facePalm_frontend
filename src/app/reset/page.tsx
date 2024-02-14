@@ -1,11 +1,11 @@
 import Reset from "@/components/Reset";
-import { baseURL } from "@/env";
+import { baseURL, publicBaseURL } from "@/env";
 import { redirect } from "next/navigation";
 
 const validateResetToken = async (token: any) => {
   if (!token) redirect("/login");
   else {
-    const res = await fetch(`${baseURL}/public/token/verify/${token}`, {
+    const res = await fetch(`${publicBaseURL}/token/verify/${token}`, {
       cache: 'no-store'
     });
 

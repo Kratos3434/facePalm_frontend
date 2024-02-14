@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import OtherProfile from "@/components/OtherProfile";
-import { baseURL } from "@/env";
+import { baseURL, publicBaseURL, userBaseURL } from "@/env";
 
 interface Props {
     children: React.ReactNode,
@@ -20,7 +20,7 @@ const getUserProfile = async (name: string) => {
     }
 
     try {
-        const res = await fetch(`${baseURL}/public/user/${name}`, {
+        const res = await fetch(`${publicBaseURL}/user/${name}`, {
             cache: 'no-store',
             headers: {
                 "Authorization": `Bearer ${token}`
@@ -30,7 +30,7 @@ const getUserProfile = async (name: string) => {
         const data = await res.json();
 
         if (data.status) {
-            const verify = await fetch(`${baseURL}/user/validate/current/${name}`, {
+            const verify = await fetch(`${userBaseURL}/validate/current/${name}`, {
                 cache: 'no-store',
                 headers: {
                     "Content-Type": 'application/json',

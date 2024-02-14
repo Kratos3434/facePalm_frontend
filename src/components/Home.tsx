@@ -14,11 +14,12 @@ import TurnedInIcon from '@mui/icons-material/TurnedIn';
 import RestoreIcon from '@mui/icons-material/Restore';
 import Groups2Icon from '@mui/icons-material/Groups2';
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
-import { baseURL } from "@/env";
+import { baseURL, publicBaseURL } from "@/env";
 import ViewPost from "./ViewPost";
 import { socket } from "@/socket";
 import ViewLikes from "./ViewLikes";
 import AddStatus from "./AddStatus";
+import { useEffect } from "react";
 
 interface Props {
     user: UserProps,
@@ -33,7 +34,7 @@ const Home = ({ user, posts, token }: Props) => {
     const [openAddStatus, setOpenAddStatus] = useAtom(AddStatusAtom);
 
     const getPosts = async () => {
-        const res = await fetch(`${baseURL}/admin/post/list`, {
+        const res = await fetch(`${publicBaseURL}/post/list`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -50,11 +51,7 @@ const Home = ({ user, posts, token }: Props) => {
         initialData: posts
     });
 
-    socket.connect();
-    socket.emit("join", {
-        email: user.email
-    });
-    
+
     const sideBar = [
         {
             image: {
@@ -91,6 +88,15 @@ const Home = ({ user, posts, token }: Props) => {
             name: `Video`
         },
     ]
+
+    useEffect(() => {
+        socket.connect();
+        console.log("Socket connected");
+
+        socket.emit("join", {
+            email: user.email
+        });
+    }, []);
 
     return (
         <main className="flex flex-col">
@@ -154,8 +160,8 @@ const Home = ({ user, posts, token }: Props) => {
                 </div>
             </div>
             {viewPost.status && viewPost.type === "Home" && <ViewPost currentUser={user} token={token} type="Home" />}
-            { viewLikes.status && viewLikes.type === "Home" && <ViewLikes /> }
-            { openAddStatus.status && openAddStatus.type === "HOME" && <AddStatus token={token} user={user} /> }
+            {viewLikes.status && viewLikes.type === "Home" && <ViewLikes />}
+            {openAddStatus.status && openAddStatus.type === "HOME" && <AddStatus token={token} user={user} />}
         </main>
     )
 }

@@ -21,7 +21,7 @@ const Login = () => {
     const signin = async (data: FieldValues) => {
         isLoading(true);
         try {
-            const res = await fetch("/api/public/signin", {
+            const res = await fetch("/api/v1/public/signin", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
