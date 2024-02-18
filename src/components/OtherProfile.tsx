@@ -1,20 +1,25 @@
 "use client"
 import { UserProps } from "@/type";
-import { ViewPostAtom, userProfileAtom } from "@/store";
+import { userProfileAtom } from "@/store";
 import { useHydrateAtoms } from "jotai/utils";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
+import { useState } from "react";
+import { CircularProgress } from "@mui/material";
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import { baseURL, userBaseURL } from "@/env";
 
-const OtherProfile = ({ User }: { User: UserProps }) => {
+const OtherProfile = ({ User, token }: { User: UserProps, token: string }) => {
     useHydrateAtoms([[userProfileAtom, User]], {
         dangerouslyForceHydrate: true
     });
 
-    useHydrateAtoms([[ViewPostAtom, { status: false, post: null }]] as const, {
-        dangerouslyForceHydrate: true
-    });
+    const router = useRouter();
+
     // const [user, setUser] = useAtom(userProfileAtom);
     const params = useParams();
     const pathName = usePathname();
@@ -46,12 +51,48 @@ const OtherProfile = ({ User }: { User: UserProps }) => {
         // }
     ]
 
+    const [loading, isLoading] = useState(false);
+
+    const sendFriendRequest = async () => {
+        isLoading(true);
+        const res = await fetch(`${userBaseURL}/send/request/${User.id}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+
+        if (data.status) {
+            router.refresh();
+        }
+        isLoading(false);
+    }
+
+    const cancelRequest = async () => {
+        const res = await fetch(`${userBaseURL}/cancel/request/${User.id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+
+        if (data.status) {
+            router.refresh();
+        }
+    }
+
     return (
         <div className="tw-w-full tw-h-full">
             <div className="tw-shadow-md tw-w-full tw-bg-white">
                 <div className="tw-flex tw-justify-center tw-w-full">
                     <div className="tw-relative tw-flex tw-flex-col tw-h-full">
-                        <Image src={User.coverPicture ? User.coverPicture : "/images/temp_cover.png"} width={1250} height={462.95} alt="cover photo" className="tw-h-[462.95px]  tw-rounded-t-[0px] tw-rounded-b-md" />
+                        <Image src={User.coverPicture ? User.coverPicture : "/images/temp_cover.png"} width={1250} height={462.95} alt="cover photo" className="tw-h-[462.95px]  tw-rounded-t-[0px] tw-rounded-b-md" priority />
                         <div className="tw-absolute tw-top-[390px] tw-pl-5">
                             <div className="tw-relative">
                                 <Image src={User.profilePicture ? User.profilePicture : "/images/placeholder.png"} width={168} height={168} className="tw-rounded-[1000px] tw-border-white tw-border-[5px] tw-w-[168px] tw-h-[168px] hover:tw-brightness-95" alt="Profile Pic" />
@@ -69,6 +110,40 @@ const OtherProfile = ({ User }: { User: UserProps }) => {
                                     <span className="tw-text-[15px] tw-text-[#65676B] tw-font-bold">
                                         0 friends
                                     </span>
+                                </div>
+                            </div>
+                            <div className="tw-flex tw-gap-2">
+                                {
+                                    loading ?
+                                        (
+                                            <div className="tw-rounded-md tw-text-white tw-flex tw-items-center tw-font-bold tw-bg-[#0866FF] tw-px-[12px] tw-py-[10px] tw-gap-2 hover:tw-brightness-95 tw-cursor-pointer">
+                                                {/* <PersonAddIcon className="tw-w-[16px] tw-h-[16px]" /> */}
+                                                <CircularProgress className="tw-w-[16px] tw-h-[16px]" size={16} color="inherit" />
+                                                <span className="tw-text-[15px]">Cancel request</span>
+                                            </div>
+                                        ) :
+                                        (
+                                            User.friendRequests.length === 0 ?
+                                                (
+                                                    <div className="tw-rounded-md tw-text-white tw-flex tw-items-center tw-font-bold tw-bg-[#0866FF] tw-px-[12px] tw-py-[10px] tw-gap-2 hover:tw-brightness-95 tw-cursor-pointer" onClick={sendFriendRequest}>
+                                                        <PersonAddIcon className="tw-w-[16px] tw-h-[16px]" />
+                                                        {/* <CircularProgress className="tw-w-[16px] tw-h-[16px]" size={16} color="inherit" /> */}
+                                                        <span className="tw-text-[15px]">Add friend</span>
+                                                    </div>
+                                                ) :
+                                                (
+                                                    <div className="tw-rounded-md tw-text-white tw-flex tw-items-center tw-font-bold tw-bg-[#0866FF] tw-px-[12px] tw-py-[10px] tw-gap-2 hover:tw-brightness-95 tw-cursor-pointer" onClick={cancelRequest}>
+                                                        {/* <PersonAddIcon className="tw-w-[16px] tw-h-[16px]" /> */}
+                                                        <PersonRemoveIcon className="tw-w-[16px] tw-h-[16px]" />
+                                                        <span className="tw-text-[15px]">Cancel request</span>
+                                                    </div>
+                                                )
+                                        )
+                                }
+
+                                <div className="tw-rounded-md tw-text-white tw-flex tw-items-center tw-font-bold tw-bg-[#0866FF] tw-px-[12px] tw-py-[10px] tw-gap-2 hover:tw-brightness-95 tw-cursor-pointer">
+                                    <LibraryAddIcon className="tw-w-[16px] tw-h-[16px]" />
+                                    <span className="tw-text-[15px]">Follow</span>
                                 </div>
                             </div>
                         </div>

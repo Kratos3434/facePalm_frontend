@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { PostProps, UserProps } from "./type";
+import { LikeProps, PostProps, UserProps } from "./type";
 
 export const userAtom = atom<UserProps>(
     {
@@ -14,7 +14,11 @@ export const userAtom = atom<UserProps>(
         updatedAt: "",
         disabledAt: "",
         posts: [],
-        likes: []
+        likes: [],
+        friendRequests: [],
+        friendRequestSent: [],
+        notifications: [],
+        notificationsSent: []
     }
 );
 
@@ -31,7 +35,11 @@ export const userProfileAtom = atom<UserProps>(
         updatedAt: "",
         disabledAt: "",
         posts: [],
-        likes: []
+        likes: [],
+        friendRequests: [],
+        friendRequestSent: [],
+        notifications: [],
+        notificationsSent: []
     }
 );
 
@@ -43,7 +51,24 @@ export const ChangeCoverPicModalAtom = atom(false);
 interface ViewPostProps {
     status: boolean,
     post: PostProps | null,
-    userId?: number
+    userId?: number,
+    type?: string
 }
 
-export const ViewPostAtom = atom<ViewPostProps>({status: false, post: null, userId: 0});
+interface ViewLikesProps {
+    status: boolean,
+    likes: LikeProps[] | null,
+    userId?: number,
+    type?: string
+}
+
+export const ViewPostAtom = atom<ViewPostProps>({status: false, post: null, userId: 0, type: ""});
+export const ViewLikesAtom = atom<ViewLikesProps>({ status: false, likes: null, userId: 0, type: ""});
+
+interface AddPostProps {
+    status: boolean,
+    type?: string
+}
+
+export const AddPostAtom = atom<AddPostProps>({ status: false, type: "" });
+export const AddStatusAtom = atom<AddPostProps>({ status: false, type: "" });

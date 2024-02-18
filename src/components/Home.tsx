@@ -1,8 +1,7 @@
 "use client"
 import Image from "next/image";
 import { useAtom } from "jotai";
-import { AddPostModalAtom, ViewPostAtom, userAtom } from "@/store";
-import { useHydrateAtoms } from 'jotai/utils';
+import { AddPostAtom, AddStatusAtom, ViewLikesAtom, ViewPostAtom } from "@/store";
 import WhatsOnYourMind from "./WhatsOnYourMind";
 import { PostProps, UserProps } from "@/type";
 import AddPost from "./AddPost";
@@ -15,8 +14,12 @@ import TurnedInIcon from '@mui/icons-material/TurnedIn';
 import RestoreIcon from '@mui/icons-material/Restore';
 import Groups2Icon from '@mui/icons-material/Groups2';
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
-import { baseURL } from "@/env";
+import { baseURL, publicBaseURL } from "@/env";
 import ViewPost from "./ViewPost";
+import { socket } from "@/socket";
+import ViewLikes from "./ViewLikes";
+import AddStatus from "./AddStatus";
+import { useEffect } from "react";
 
 interface Props {
     user: UserProps,
@@ -25,13 +28,13 @@ interface Props {
 };
 
 const Home = ({ user, posts, token }: Props) => {
-    useHydrateAtoms([[userAtom, user]]);
-
-    // const [User] = useAtom(userAtom);
-    const [openAddPost, setOpenAddPost] = useAtom(AddPostModalAtom);
+    const [openAddPost, setOpenAddPost] = useAtom(AddPostAtom);
     const [viewPost, setViewPost] = useAtom(ViewPostAtom);
+    const [viewLikes, setViewLikes] = useAtom(ViewLikesAtom);
+    const [openAddStatus, setOpenAddStatus] = useAtom(AddStatusAtom);
+
     const getPosts = async () => {
-        const res = await fetch(`${baseURL}/admin/post/list`, {
+        const res = await fetch(`${publicBaseURL}/post/list`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -47,6 +50,7 @@ const Home = ({ user, posts, token }: Props) => {
         queryFn: getPosts,
         initialData: posts
     });
+
 
     const sideBar = [
         {
@@ -84,6 +88,16 @@ const Home = ({ user, posts, token }: Props) => {
             name: `Video`
         },
     ]
+
+    useEffect(() => {
+        socket.connect();
+        console.log("Socket connected");
+
+        socket.emit("join", {
+            email: user.email
+        });
+    }, []);
+
     return (
         <main className="flex flex-col">
             <div className="tw-flex tw-justify-center tw-gap-[32px]">
@@ -97,12 +111,12 @@ const Home = ({ user, posts, token }: Props) => {
                                         <Link className="tw-flex tw-items-center tw-gap-2 tw-rounded-md hover:tw-bg-gray-200 tw-px-[8px] tw-py-3" key={idx} href={e.path}>
                                             {
                                                 e.image ?
-                                                (
-                                                    <Image src={e.image.source} width={e.image.width} height={e.image.height} alt="Feature Image" className="tw-rounded-[50%] tw-w-[36px] tw-h-[36px]" />
-                                                ):
-                                                (
-                                                    e.icon
-                                                )
+                                                    (
+                                                        <Image src={e.image.source} width={e.image.width} height={e.image.height} alt="Feature Image" className="tw-rounded-[50%] tw-w-[36px] tw-h-[36px]" />
+                                                    ) :
+                                                    (
+                                                        e.icon
+                                                    )
                                             }
                                             <span>
                                                 {e.name}
@@ -117,23 +131,23 @@ const Home = ({ user, posts, token }: Props) => {
                 {/** Main Content Driver Area */}
                 <div className="tw-flex tw-flex-col tw-w-[680px] tw-gap-4 home-lg:tw-pl-0 tw-pl-5 home-xxl:tw-pl-0">
                     {
-                        openAddPost && <AddPost type="HOME" user={user} token={token} />
+                        openAddPost.status && openAddPost.type === "HOME" && <AddPost user={user} token={token} />
                     }
-                    <WhatsOnYourMind user={user} type="HOME"/>
+                    <WhatsOnYourMind user={user} type="HOME" />
                     {
                         status === "loading" ?
-                        (
-                            <LoadingScreen />
-                        ):
-                        (
-                            data.map((e: any, idx: number) => {
-                                return (
-                                    <span key={idx}>
-                                        <PostCard post={e} userId={user.id} token={token} />
-                                    </span>
-                                )
-                            })
-                        )
+                            (
+                                <LoadingScreen />
+                            ) :
+                            (
+                                data.map((e: any, idx: number) => {
+                                    return (
+                                        <span key={idx}>
+                                            <PostCard post={e} currentUser={user} token={token} type="Home" />
+                                        </span>
+                                    )
+                                })
+                            )
                     }
                     <hr />
                     <small className="tw-text-center tw-mb-3">
@@ -145,7 +159,9 @@ const Home = ({ user, posts, token }: Props) => {
                     <span className="tw-text-[17px] tw-text-[#65676B]">Friends</span>
                 </div>
             </div>
-            {viewPost.status && <ViewPost currentUser={user} token={token} />}
+            {viewPost.status && viewPost.type === "Home" && <ViewPost currentUser={user} token={token} type="Home" />}
+            {viewLikes.status && viewLikes.type === "Home" && <ViewLikes />}
+            {openAddStatus.status && openAddStatus.type === "HOME" && <AddStatus token={token} user={user} />}
         </main>
     )
 }

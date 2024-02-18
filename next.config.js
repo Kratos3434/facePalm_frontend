@@ -19,7 +19,7 @@ module.exports = {
       return [
         {
           source: '/api/:path*',
-          destination: 'https://extinct-teal-coveralls.cyclic.app/:path*'
+          destination: 'https://lh1u4bi3l7.execute-api.ca-central-1.amazonaws.com/dev/:path*'
         }
       ]
     }

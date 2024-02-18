@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import OtherProfile from "@/components/OtherProfile";
-import { baseURL } from "@/env";
+import { baseURL, publicBaseURL, userBaseURL } from "@/env";
 
 interface Props {
     children: React.ReactNode,
@@ -14,32 +14,42 @@ interface Props {
 const getUserProfile = async (name: string) => {
     const cookie = cookies();
     const token = cookie.get('token')?.value;
-
-    if(!token) {
+    let result: any = [];
+    if (!token) {
         redirect("/login");
     }
-    
-    const res = await fetch(`${baseURL}/public/user/${name}`, {
-        cache: 'no-store'
-    });
 
-    const data = await res.json();
-
-    if(data.status) {
-        const verify = await fetch(`${baseURL}/user/validate/current/${name}`, {
+    try {
+        const res = await fetch(`${publicBaseURL}/user/${name}`, {
             cache: 'no-store',
             headers: {
-                "Content-Type": 'application/json',
                 "Authorization": `Bearer ${token}`
             }
         });
 
-        const verifyData = await verify.json();
+        const data = await res.json();
 
-        return [data.data, verifyData.status, token];
-    } else {
-        notFound();
+        if (data.status) {
+            const verify = await fetch(`${userBaseURL}/validate/current/${name}`, {
+                cache: 'no-store',
+                headers: {
+                    "Content-Type": 'application/json',
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            const verifyData = await verify.json();
+
+            result = [data.data, verifyData.status, token];
+        } else {
+            notFound();
+        }
+    } catch (err) {
+        console.log(err)
+        redirect("/login")
     }
+
+    return result;
 }
 
 const ProfileLayout = async ({ children, params }: Props) => {
@@ -49,7 +59,7 @@ const ProfileLayout = async ({ children, params }: Props) => {
             <NavBar token={token} />
             <main className="tw-bg-[#F0F2F5] tw-pt-[52px]">
                 {
-                    verify ? <Profile User={user} token={token} /> : <OtherProfile User={user} />
+                    verify ? <Profile User={user} token={token} /> : <OtherProfile User={user} token={token} />
                 }
                 {children}
             </main>

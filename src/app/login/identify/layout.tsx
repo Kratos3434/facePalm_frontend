@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { cookies } from "next/headers";
-import { baseURL } from "@/env";
+import { userBaseURL } from "@/env";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
@@ -17,7 +17,7 @@ const verifyIfLoggedIn = async () => {
     const token = cookie.get('token')?.value;
 
     if (token) {
-        const res = await fetch(`${baseURL}/admin/user/authenticate`, {
+        const res = await fetch(`${userBaseURL}/authenticate`, {
             method: "GET",
             headers: {
                 "Content-Type": 'application/json',
@@ -33,10 +33,10 @@ const verifyIfLoggedIn = async () => {
     }
 }
 
-const LoginLayout = async ( { children }: Props ) => {
+const LoginLayout = async ({ children }: Props) => {
     await verifyIfLoggedIn();
-    
-    return(
+
+    return (
         <div className="tw-bg-[#F0F2F5]">
             {children}
         </div>

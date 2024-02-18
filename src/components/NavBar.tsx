@@ -14,19 +14,21 @@ import { usePathname } from "next/navigation";
 import MenuIcon from '@mui/icons-material/Menu';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";
-import { UserProps } from "@/type";
-import { useQuery } from "react-query";
+import { NotificationProps, UserProps } from "@/type";
+import { useQuery, useQueryClient } from "react-query";
 import CloseIcon from '@mui/icons-material/Close';
-import { baseURL } from "@/env";
+import { baseURL, userBaseURL } from "@/env";
+import { socket } from "@/socket";
 
 const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
+    const queryClient = useQueryClient();
     const [cookies, setCookie, removeCookie] = useCookies();
     const getUser = async () => {
         // const token = cookies.token;
-        const res = await fetch(`${baseURL}/user/current`, {
+        const res = await fetch(`${userBaseURL}/current`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -38,11 +40,25 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
         return data.data;
     }
 
-    const { data, status } = useQuery({
+    const { data: userData, status } = useQuery({
         queryKey: ['user'],
         initialData: User,
         queryFn: getUser
     });
+
+    const { data: notifications, status: notificationStatus } = useQuery('notifications', async () => {
+        const res = await fetch(`${userBaseURL}/post/notifications`, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        })
+
+        const data = await res.json();
+        console.log("Not Data:", data.data)
+        return data.data;
+    })
 
     const pathName = usePathname();
 
@@ -79,10 +95,14 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
     const [showModal, setShowModal] = useState(false);
 
     const [openMenu, isOpenMenu] = useState(false);
+    const [openNotif, isOpenNotif] = useState(false);
 
     const [sideNavWidth, setSideNavWidth] = useState(0);
 
+    // const [notif, setNotif] = useState<NotificationProps[]>([]);
+
     const handleNavClick = () => {
+        isOpenNotif(false);
         setShowModal(!showModal);
     }
 
@@ -96,9 +116,30 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
             }
         })
         const data = await res.json();
-        if (data.status)
+        if (data.status) {
+            socket.emit("disjoin", {
+                email: userData.email
+            })
+            socket.disconnect();
             router.replace("/login");
+        }
     }
+
+    const handleCloseAllModal = () => {
+        isOpenNotif(false);
+        setShowModal(false);
+    }
+
+    useEffect(() => {
+        const notifHandler = (_data: any) => {
+            queryClient.invalidateQueries('notifications');
+        }
+        socket.on("notifications", notifHandler);
+
+        return () => {
+            socket.off("notifications", notifHandler);
+        }
+    }, [queryClient]);
 
     return (
         <nav className="tw-fixed tw-top-0 tw-w-full tw-px-[16px] tw-bg-white tw-pt-[6px] tw-shadow-md tw-z-[1000]">
@@ -106,7 +147,7 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
                 <div className="tw-flex tw-gap-[8px] tw-items-center tw-absolute tw-left-0">
                     <Link href="/" className="tw-w-[40px] tw-h-[40px] ">
                         <Image src="/images/fb_logo.png"
-                            width={40} height={40} alt="faceClam logo" unoptimized className="tw-w-[40px] tw-h-[40px]"/>
+                            width={40} height={40} alt="faceClam logo" unoptimized className="tw-w-[40px] tw-h-[40px]" />
                     </Link>
                     <form>
                         <div className="tw-flex tw-items-center tw-rounded-[1000px] tw-bg-[#F0F2F5] nav-ssm:tw-pl-2 nav-ssm:tw-w-full nav-ssm:tw-h-full tw-w-[40px] tw-py-[7px] tw-justify-center nav-ssm:tw-py-0">
@@ -129,7 +170,7 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
                             links.map((e, idx) => {
                                 return (
                                     <Link passHref href={e.path} className="tw-flex tw-justify-center tw-w-[111.59px] tw-h-full tw-items-center hover:tw-rounded-md hover:tw-bg-gray-200 tw-transition-all tw-border-b-[4px]" key={idx}
-                                        style={{ borderColor: `${pathName == e.path ? "#0866FF" : "#fff"}` }} title={e.name}>
+                                        style={{ borderColor: `${pathName == e.path ? "#0866FF" : "#fff"}` }} title={e.name} onClick={handleCloseAllModal}>
                                         {e.icon}
                                     </Link>
                                 )
@@ -147,30 +188,21 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
                         <ChatIcon className="tw-w-[20px] tw-h-[20px]" />
                     </div>
 
-                    <div className="tw-rounded-[50%] tw-bg-[#F0F2F5] tw-p-2 tw-cursor-pointer hover:tw-bg-gray-200 active:tw-scale-[.9] tw-overflow-hidden tw-transition-all nav-sm:tw-block tw-hidden">
+                    <div className="tw-rounded-[50%] tw-bg-[#F0F2F5] tw-p-2 tw-cursor-pointer hover:tw-bg-gray-200 active:tw-scale-[.9] tw-overflow-hidden tw-transition-all nav-sm:tw-block tw-hidden" onClick={() => {
+                        setShowModal(false);
+                        isOpenNotif(!openNotif)
+                    }}>
                         <NotificationsIcon className="tw-w-[20px] tw-h-[20px]" />
                     </div>
 
                     <div className="tw-relative" onClick={handleNavClick}>
-                        <Image src={status == "success" && data.profilePicture ? data.profilePicture : "/images/placeholder.png"} width={36} height={40} alt="profile pic" className="tw-rounded-[50%] tw-bg-[#F0F2F5] tw-cursor-pointer hover:tw-bg-gray-200 active:tw-scale-[.9] tw-overflow-hidden tw-transition-all tw-h-[40px]" />
+                        <Image src={status == "success" && userData.profilePicture ? userData.profilePicture : "/images/placeholder.png"} width={36} height={40} alt="profile pic" className="tw-rounded-[50%] tw-bg-[#F0F2F5] tw-cursor-pointer hover:tw-bg-gray-200 active:tw-scale-[.9] tw-overflow-hidden tw-transition-all tw-h-[40px]" />
                         <KeyboardArrowDownIcon className="tw-w-[14px] tw-h-[14px] tw-absolute tw-bottom-0 tw-right-0 tw-rounded-[1000px] tw-bg-gray-300 tw-cursor-pointer" />
                     </div>
                 </div>
-                {/* <div className="tw-absolute tw-right-0 tw-top-[52px] tw-pr-5">
-                    <div className="tw-rounded-md tw-bg-white tw-w-[360px] tw-shadow-md tw-flex tw-flex-col tw-text-[15px] tw-text-black tw-font-bold">
-                        <div className="tw-px-[8px] tw-flex tw-py-[12px] tw-items-center tw-gap-2 hover:tw-rounded-md hover:tw-bg-gray-200 tw-cursor-pointer" onClick={handleLogOut}>
-                            <div className="tw-rounded-[1000px] tw-bg-[#F0F2F5] tw-p-1">
-                                <LogoutIcon className="tw-w-[20px] tw-h-[20px]" />
-                            </div>
-                            <span>
-                                Log Out
-                            </span>
-                        </div>
-                    </div>
-                </div> */}
             </div>
-            <div className={`tw-fixed  tw-left-0 tw-top-0 tw-w-full tw-h-full tw-overflow-auto tw-bg-[rgb(0,0,0)] tw-bg-[rgba(0,0,0,0.4)] ${openMenu ? 'tw-hidden nav-xxl:tw-block' : 'tw-hidden'}`}>
-                <div className="tw-bg-white tw-shadow-2xl tw-h-full tw-p-5 tw-pr-0 tw-flex tw-flex-col tw-ease-out tw-duration-[0.5s] tw-gap-10" style={{ width: sideNavWidth }}>
+            <div className={`tw-fixed  tw-left-0 tw-top-0 tw-w-full tw-h-full tw-overflow-auto tw-bg-[rgb(0,0,0)] tw-bg-[rgba(0,0,0,0.4)] ${openMenu ? 'tw-hidden nav-xxl:tw-block' : 'tw-hidden'}`} onClick={() => isOpenMenu(false)}>
+                <div className="tw-bg-white tw-shadow-2xl tw-h-full tw-p-5 tw-pr-0 tw-flex tw-flex-col tw-ease-out tw-duration-[0.5s] tw-gap-10" style={{ width: sideNavWidth }} onClick={(e) => e.stopPropagation()}>
                     <div className="tw-flex tw-justify-end tw-p-5">
                         <span onClick={() => {
                             isOpenMenu(false);
@@ -209,8 +241,64 @@ const NavBar = ({ User, token }: { User?: UserProps, token?: string }) => {
                     </div>
                 )
             }
+            {
+                openNotif &&
+                (
+                    <div className="tw-fixed tw-left-0 tw-w-full tw-overflow-auto tw-px-3 tw-h-full tw-top-[58px]" onClick={() => isOpenNotif(false)}>
+                        <div className="tw-absolute tw-right-0 tw-top-[5px] tw-pr-4">
+                            <div className="tw-rounded-md tw-bg-white tw-w-[360px] tw-shadow-md tw-flex tw-flex-col tw-text-[15px] tw-text-black tw-p-2 tw-max-h-[430px] tw-h-full tw-overflow-y-auto viewpost" onClick={(e) => {
+                                e.stopPropagation();
+                            }}>
+                                {
+                                    notificationStatus === "loading" ?
+                                        (
+                                            <span>loading...</span>
+                                        ) :
+                                        (
+                                            notifications && notifications.length > 0 ?
+                                                (
+                                                    notifications.map((e: any, idx: number) => {
+                                                        return (
+                                                            e.notifications.length === 1 ?
+                                                                (
+                                                                    <Link key={idx} className="tw-py-2 tw-cursor-pointer hover:tw-rounded-md hover:tw-bg-gray-200 tw-px-1"
+                                                                    href={`/${userData.firstName}.${userData.lastName}.${userData.id}/posts/${e.id}`}>
+                                                                        <span className="tw-font-bold">
+                                                                            {e.notifications[0].sender.firstName} {e.notifications[0].sender.lastName}
+                                                                        </span>&nbsp;
+                                                                        has liked your post
+                                                                    </Link>
+                                                                ) :
+                                                                (
+                                                                    <Link href={`/${userData.firstName}.${userData.lastName}.${userData.id}/posts/${e.id}`} key={idx} className="tw-py-2 tw-cursor-pointer hover:tw-rounded-md hover:tw-bg-gray-200 tw-px-1">
+                                                                        <span className="tw-font-bold">
+                                                                            {e.notifications[0].sender.firstName} {e.notifications[0].sender.lastName} and {e.notifications.length - 1} others
+                                                                        </span>&nbsp;
+                                                                        has liked your post
+                                                                    </Link>
+                                                                )
+                                                        )
+                                                    })
+                                                ) :
+                                                (
+                                                    <span>No notifications</span>
+                                                )
+                                        )
+                                }
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
         </nav>
     )
 }
+
+{/* <span key={idx} className="tw-py-2 tw-cursor-pointer hover:tw-rounded-md hover:tw-bg-gray-200 tw-px-1">
+    <span className="tw-font-bold">
+        {e.sender.firstName} {e.sender.lastName}
+    </span>&nbsp;
+    has liked your post
+</span> */}
 
 export default NavBar;

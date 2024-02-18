@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from 'next/server';
 import { baseURL } from "./env";
 
-const protectedRoutes = ["/", "/:name"];
+const protectedRoutes = ["/", "/:name", "/watch"];
 
 export default async function middleware(req: NextRequest) {
     const token = req.cookies.get('token')?.value;

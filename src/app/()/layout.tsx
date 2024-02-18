@@ -1,26 +1,37 @@
 import NavBar from "@/components/NavBar";
-import { baseURL } from "@/env";
+import { userBaseURL } from "@/env";
+import { authenticate } from "@/helper";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 const getUser = async () => {
     const store = cookies();
     const token = store.get('token')?.value;
-    const res = await fetch(`${baseURL}/user/current`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-    })
-  
-    const data = await res.json();
-    return [data.data, token];
+    try {
+        const res = await fetch(`${userBaseURL}/current`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+
+        const data = await res.json();
+        return [data.data, token];
+    } catch (err) {
+        redirect("/login");
+    }
 }
 
 interface Props {
     children: React.ReactNode
 }
 const HomeLayout = async ({ children }: Props) => {
+    const cookie = cookies();
+    const res = await authenticate(cookie.get('token')?.value);
+    if (!res) {
+        redirect("/login");
+    }
     const [user, token] = await getUser();
     return (
         <>

@@ -12,9 +12,13 @@ export interface UserProps {
     updatedAt?: string,
     disabledAt?: string,
     posts: PostProps[],
-    likes: LikeProps[]
+    likes: LikeProps[],
     bio?: string,
-    addressFrom?: string
+    addressFrom?: string,
+    friendRequests: FriendRequestProps[],
+    friendRequestSent: FriendRequestProps[],
+    notifications: NotificationProps[],
+    notificationsSent: NotificationProps[]
 }
 
 export interface CommentProps {
@@ -22,24 +26,55 @@ export interface CommentProps {
     comment: string,
     author: UserProps,
     post: PostProps,
+    replies: CommentProps[],
     createdAt: string,
-    updatedAt: string
+    updatedAt?: string
 }
 export interface PostProps {
     id: number,
-    featureImage: string,
+    featureImage?: string,
     description: string,
     likes: LikeProps[],
     shares: number,
     author: UserProps,
-    comments: CommentProps[]
+    comments: CommentProps[],
+    createdAt: string,
+    updatedAt?: string
 }
 
 export interface LikeProps {
     id: number,
     userId: number,
     post: PostProps,
+    postId: number,
     user: UserProps,
+    userId: number,
+    createdAt: string,
+    updatedAt?: string
+}
+
+export interface FriendRequestProps {
+    id: number,
+    user: UserProps,
+    userId: number,
+    requester: UserProps,
+    requesterId: number,
+    status: string,
+    createdAt: string,
+    updatedAt: string
+}
+
+export interface NotificationProps {
+    id: number,
+    description: string,
+    recipient: UserProps,
+    recipientId: number,
+    sender: UserProps,
+    senderId: number,
+    type: String,
+    isRead: boolean,
+    postId: number,
+    post: PostProps,
     createdAt: string,
     updatedAt?: string
 }

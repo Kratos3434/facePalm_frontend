@@ -8,6 +8,7 @@ const NotFound = () => {
         <div className="tw-flex tw-justify-center tw-h-[94.5vh]">
             <div className="tw-flex tw-flex-col tw-justify-center">
                 <div className="tw-flex tw-flex-col tw-text-center tw-max-w-[500px] tw-w-full tw-gap-5">
+                    <span className="tw-text-[#0866FF] sm:tw-text-[60px] tw-text-[50px] tw-font-bold">faceClam</span>
                     <span className="tw-text-[20px] tw-text-[#65676B] tw-font-bold">
                         This content isn{"'"}t available right now
                     </span>

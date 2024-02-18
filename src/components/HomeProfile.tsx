@@ -3,15 +3,18 @@ import { useAtom } from "jotai";
 import PostCard from "./PostCard";
 import WhatsOnYourMind from "./WhatsOnYourMind";
 import { UserProps } from "@/type";
-import { AddPostProfileAtom } from "@/store";
+import { AddPostAtom, ViewLikesAtom } from "@/store";
 import AddPost from "./AddPost";
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import { useState } from "react";
-import { useForm, FieldValues } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useRouter } from "next/navigation";
-import { useCookies } from "react-cookie";
 import EditIcon from '@mui/icons-material/Edit';
 import { baseURL } from "@/env";
+import { ViewPostAtom } from "@/store";
+import ViewPost from "./ViewPost";
+import { monthToString } from "@/helper";
+import ViewLikes from "./ViewLikes";
 
 interface Props {
     user: UserProps,
@@ -20,41 +23,14 @@ interface Props {
 
 const HomeProfile = ({ user, token }: Props) => {
     const router = useRouter();
-    const [openAddPostProfile, setOpenAddPostProfile] = useAtom(AddPostProfileAtom);
+    const [viewPost, setViewPost] = useAtom(ViewPostAtom);
+    const [viewLikes, setViewLikes] = useAtom(ViewLikesAtom);
+    // const [openAddPostProfile, setOpenAddPostProfile] = useAtom(AddPostProfileAtom);
+    const [openAddPost, setOpenAddPost] = useAtom(AddPostAtom);
     const [editBio, setEditBio] = useState(false);
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [bioCharacters, setBioCharacters] = useState(101);
     const [bio, setBio] = useState("");
-    const [cookies, setCookie, removeCookie] = useCookies();
-
-    const monthToString = (month: number) => {
-        switch (month) {
-            case 0:
-                return "January"
-            case 1:
-                return "February"
-            case 2:
-                return "March"
-            case 3:
-                return "April"
-            case 4:
-                return "May"
-            case 5:
-                return "June"
-            case 6:
-                return "July"
-            case 7:
-                return "August"
-            case 8:
-                return "September"
-            case 9:
-                return "October"
-            case 10:
-                return "November"
-            case 11:
-                return "December"
-        }
-    }
 
     const handleEditBio = async (e: any) => {
         e.preventDefault();
@@ -188,7 +164,7 @@ const HomeProfile = ({ user, token }: Props) => {
                         user.posts.map((e, idx) => {
                             return (
                                 <span key={idx}>
-                                    <PostCard post={e} userId={user.id} token={token} />
+                                    <PostCard post={e} currentUser={user} token={token} type="HomeProfile" />
                                 </span>
                             )
                         })
@@ -201,9 +177,11 @@ const HomeProfile = ({ user, token }: Props) => {
                 {/* Right side end */}
             </div>
             {
-                openAddPostProfile &&
-                <AddPost type="PROFILE" user={user} token={token} />
+                openAddPost.status && openAddPost.type === "PROFILE" &&
+                <AddPost user={user} token={token} />
             }
+            {viewPost.status && viewPost.type === "HomeProfile" && <ViewPost currentUser={user} token={token} type="HomeProfile" />}
+            { viewLikes.status && viewLikes.type === "HomeProfile" && <ViewLikes /> }
         </div>
     )
 }

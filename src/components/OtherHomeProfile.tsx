@@ -2,41 +2,21 @@
 import PostCard from "./PostCard";
 import { UserProps } from "@/type";
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
+import { useAtom } from "jotai";
+import { ViewLikesAtom, ViewPostAtom } from "@/store";
+import ViewPost from "./ViewPost";
+import { monthToString } from "@/helper";
+import ViewLikes from "./ViewLikes";
 
 interface Props {
     user: UserProps,
-    token: string
+    token: string,
+    currentUser: UserProps
 }
 
-const OtherHomeProfile = ({ user, token }: Props) => {
-    const monthToString = (month: number) => {
-        switch (month) {
-            case 0:
-                return "January"
-            case 1:
-                return "February"
-            case 2:
-                return "March"
-            case 3:
-                return "April"
-            case 4:
-                return "May"
-            case 5:
-                return "June"
-            case 6:
-                return "July"
-            case 7:
-                return "August"
-            case 8:
-                return "September"
-            case 9:
-                return "October"
-            case 10:
-                return "November"
-            case 11:
-                return "December"
-        }
-    }
+const OtherHomeProfile = ({ user, token, currentUser }: Props) => {
+    const [viewPost, setViewPost] = useAtom(ViewPostAtom);
+    const [viewLikes, setViewLikes] = useAtom(ViewLikesAtom);
 
     return (
         <div className="tw-flex tw-flex-col tw-items-center tw-mt-5 tw-w-full">
@@ -64,30 +44,11 @@ const OtherHomeProfile = ({ user, token }: Props) => {
                                         <div className="tw-py-2 tw-break-words">
                                             {user.bio}
                                         </div>
-                                        {/* <div className="tw-flex tw-justify-end">
-                                        <div className="tw-rounded-md tw-bg-gray-200 tw-px-[12px] tw-py-2 tw-text-[12px] tw-font-bold tw-cursor-pointer hover:tw-brightness-95 tw-flex tw-items-center tw-gap-1" onClick={() => setEditBio(true)}>
-                                            <EditIcon className="tw-w-[12px] tw-h-[12px]" />
-                                            <span>
-                                                Edit Bio
-                                            </span>
-                                        </div>
-                                    </div> */}
                                     </div>
                                     <hr />
                                 </div>
                             )
                     }
-                    {/* <div className="tw-w-full tw-rounded-md tw-text-center tw-bg-gray-200 hover:tw-brightness-95 tw-px-[12px] tw-py-2 tw-cursor-pointer">
-                        <span className="tw-text-[15px] tw-text-[#050505] tw-font-[600]">
-                            Add current city
-                        </span>
-                    </div>
-
-                    <div className="tw-w-full tw-rounded-md tw-text-center tw-bg-gray-200 hover:tw-brightness-95 tw-px-[12px] tw-py-2 tw-cursor-pointer">
-                        <span className="tw-text-[15px] tw-text-[#050505] tw-font-[600]">
-                            Add where you from
-                        </span>
-                    </div> */}
 
                     <div className="tw-flex tw-gap-2 tw-items-center">
                         <WatchLaterIcon className="tw-text-gray-400" />
@@ -109,7 +70,7 @@ const OtherHomeProfile = ({ user, token }: Props) => {
                         user.posts.map((e, idx) => {
                             return (
                                 <span key={idx}>
-                                    <PostCard post={e} userId={user.id} token={token} />
+                                    <PostCard post={e} currentUser={currentUser} token={token} type="OtherHomeProfile" />
                                 </span>
                             )
                         })
@@ -121,6 +82,8 @@ const OtherHomeProfile = ({ user, token }: Props) => {
                 </div>
                 {/* Right side end */}
             </div>
+            {viewPost.status && viewPost.type === "OtherHomeProfile" && <ViewPost currentUser={currentUser} token={token} type="OtherHomeProfile" />}
+            { viewLikes.status && viewLikes.type === "OtherHomeProfile" && <ViewLikes /> }
         </div>
     )
 }

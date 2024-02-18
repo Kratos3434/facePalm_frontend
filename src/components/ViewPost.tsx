@@ -15,16 +15,18 @@ import ForumIcon from '@mui/icons-material/Forum';
 import Comment from "./Comment";
 import React, { useState } from "react";
 import { useRef } from "react";
-import { baseURL } from "@/env";
+import { baseURL, userBaseURL } from "@/env";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "react-query";
+import { generateDate } from "@/helper";
 
 interface Props {
     currentUser: UserProps,
-    token: string
+    token: string,
+    type: string
 }
 
-const ViewPost = ({ currentUser, token }: Props) => {
+const ViewPost = ({ currentUser, token, type }: Props) => {
     const queryClient = useQueryClient();
     const router = useRouter();
     const [view, setView] = useAtom(ViewPostAtom);
@@ -45,7 +47,7 @@ const ViewPost = ({ currentUser, token }: Props) => {
     const handlePostComment = async (e: any) => {
         e.preventDefault();
         isLoading(true);
-        const res = await fetch(`${baseURL}/user/add/comment`, {
+        const res = await fetch(`${userBaseURL}/add/comment`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -65,12 +67,39 @@ const ViewPost = ({ currentUser, token }: Props) => {
             if (textboxRef.current) {
                 textboxRef.current.innerText = "";
             }
-            setView({ status: true, post: data.data.post });
-            commentRef.current?.scrollIntoView({behavior: "smooth"});
+            setView({ status: true, post: data.data.post, type, userId: currentUser.id });
+            commentRef.current?.scrollIntoView({ behavior: "smooth" });
             router.refresh();
             queryClient.invalidateQueries('posts');
         }
     }
+
+    const likePost = async () => {
+        const res = await fetch(`${baseURL}/user/like/post`, {
+            method: 'PUT',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                email: currentUser.email,
+                postId: view.post?.id
+            })
+        });
+
+        const data = await res.json();
+
+        if (data.status) {
+            setView({ status: true, post: data.data.post, type, userId: currentUser.id });
+            // socket.emit("like", {
+            //     liker: currentUser.email,
+            //     to: post.author.email
+            // });
+            router.refresh();
+            queryClient.invalidateQueries('posts');
+        }
+    }
+
     return (
         view.post &&
         (
@@ -101,9 +130,14 @@ const ViewPost = ({ currentUser, token }: Props) => {
                                         <Link href={`/${view.post.author.firstName}.${view.post.author.lastName}.${view.post.author.id}`}>
                                             <Image src={`${view.post.author.profilePicture ? view.post.author.profilePicture : "/images/placeholder.png"}`} width={40} height={40} alt="photo" className="tw-rounded-[1000px] tw-w-[40px] tw-h-[40px]" />
                                         </Link>
-                                        <Link className="tw-text-[15px] tw-font-bold hover:tw-underline" href={`/${view.post.author.firstName}.${view.post.author.lastName}.${view.post.author.id}`}>
-                                            {view.post.author.firstName} {view.post.author.lastName}
-                                        </Link>
+                                        <div className="tw-flex tw-flex-col">
+                                            <Link className="tw-text-[15px] tw-font-bold hover:tw-underline" href={`/${view.post.author.firstName}.${view.post.author.lastName}.${view.post.author.id}`}>
+                                                {view.post.author.firstName} {view.post.author.lastName}
+                                            </Link>
+                                            <span className="tw-text-[13px] tw-text-[#65676B]">
+                                                {generateDate(view.post.createdAt)}
+                                            </span>
+                                        </div>
                                     </div>
                                     <MoreHorizIcon className="tw-w-[36px] tw-h-[36px]" />
                                 </div>
@@ -112,15 +146,18 @@ const ViewPost = ({ currentUser, token }: Props) => {
                                 </span>
                             </div>
                             {
-                                view.post.featureImage.substring(view.post.featureImage.lastIndexOf('.')) === '.mp4' ?
-                                    (
-                                        <video width={700} height={700} controls loop>
-                                            <source src={`https${view.post.featureImage.substring(view.post.featureImage.indexOf(':'))}`} type="video/mp4" />
-                                        </video>
-                                    ) :
-                                    (
-                                        <Image src={view.post.featureImage} width={700} height={700} alt="photo" className="tw-max-w-[700px] tw-w-full" priority />
-                                    )
+                                view.post.featureImage &&
+                                (
+                                    view.post.featureImage.substring(view.post.featureImage.lastIndexOf('.')) === '.mp4' ?
+                                        (
+                                            <video width={700} height={700} controls loop>
+                                                <source src={`https${view.post.featureImage.substring(view.post.featureImage.indexOf(':'))}`} type="video/mp4" />
+                                            </video>
+                                        ) :
+                                        (
+                                            <Image src={view.post.featureImage} width={700} height={700} alt="photo" className="tw-max-w-[700px] tw-w-full" priority />
+                                        )
+                                )
                             }
                             <div className="tw-px-[16px] tw-flex tw-justify-between tw-text-[#65676B] tw-text-[15px] tw-items-center">
                                 <span>
@@ -138,7 +175,7 @@ const ViewPost = ({ currentUser, token }: Props) => {
                             <div className="tw-px-[16px] tw-flex tw-flex-col tw-gap-2">
                                 <hr />
                                 <div className="tw-flex tw-justify-evenly tw-text-[#65676B] tw-text-[15px] tw-items-center">
-                                    <div className={`tw-flex tw-gap-2 tw-py-[6px] hover:tw-rounded-md tw-w-full tw-justify-center tw-items-center hover:tw-bg-gray-200 tw-cursor-pointer ${view.post.likes.some(e => e.userId === view.userId) && " tw-text-blue-600"}`}>
+                                    <div className={`tw-flex tw-gap-2 tw-py-[6px] hover:tw-rounded-md tw-w-full tw-justify-center tw-items-center hover:tw-bg-gray-200 tw-cursor-pointer ${view.post.likes.some(e => e.userId === view.userId) && " tw-text-blue-600"}`} onClick={likePost}>
                                         <ThumbUpOffAltIcon className="tw-w-[20px] tw-h-[20px]" />
                                         <span>Like</span>
                                     </div>
@@ -188,7 +225,7 @@ const ViewPost = ({ currentUser, token }: Props) => {
                         <div className="tw-flex tw-px-[16px] tw-py-[9px] tw-max-w-[700px] tw-w-full tw-bg-white tw-rounded-b-md tw-gap-[4px] tw-shadow-2xl tw-border-t-[1px]">
                             <Image src={currentUser.profilePicture ? currentUser.profilePicture : "/images/placeholder.png"} width={32} height={32} alt={`${currentUser.firstName} ${currentUser.lastName}`} className="tw-rounded-[1000px] tw-w-[32px] tw-h-[32px]" />
                             <form onSubmit={handlePostComment} className="tw-w-full tw-rounded-md tw-bg-gray-200 tw-break-words tw-flex tw-flex-col tw-px-[12px] tw-py-[8px]">
-                                <div contentEditable={true} className="tw-outline-none tw-whitespace-pre-wrap commentBox tw-cursor-text" role="textbox" tabIndex={0} placeholder="Write a comment..." onInput={handleComment} ref={textboxRef}>
+                                <div contentEditable={true} className="tw-outline-none tw-whitespace-pre-wrap commentBox tw-cursor-text tw-break-all" role="textbox" tabIndex={0} placeholder="Write a comment..." onInput={handleComment} ref={textboxRef}>
 
                                 </div>
                                 <div className="tw-flex tw-justify-end">

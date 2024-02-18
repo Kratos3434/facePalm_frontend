@@ -1,17 +1,13 @@
 "use client"
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import CloseIcon from '@mui/icons-material/Close';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
-import Modal from '@/components/Modal';
+import { useState } from 'react';
 import { useForm, FieldValues } from 'react-hook-form';
-import CircularProgress from '@mui/material/CircularProgress';
 import { useRouter } from 'next/navigation';
 import useCookies from 'react-cookie/es6/useCookies';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import Signup from './Signup';
 import LoadingScreen from './LoadingScreen';
-import axios from 'axios';
 
 const Login = () => {
     const [cookies, setCookie, removeCookie] = useCookies();
@@ -25,7 +21,7 @@ const Login = () => {
     const signin = async (data: FieldValues) => {
         isLoading(true);
         try {
-            const res = await fetch("/api/public/signin", {
+            const res = await fetch("/api/v1/public/signin", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
